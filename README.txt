@@ -6,7 +6,7 @@ This is part of a subversion source code repository. To check the
 code out onto your machine, check you've got subversion installed
 <http://subversion.tigris.org/> and then type:
 
-svn co http://svn.citeulike.org:81/svn citeulike
+svn co http://svn.citeulike.org/svn citeulike
 
 into your terminal (Terminal.app on OS X, or an XTerm on Linux.
 For Windows users, this probably translates into "DOS Box",
