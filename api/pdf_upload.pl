@@ -72,7 +72,6 @@ sub status {
 
 __END__
 
-
 Run this as
 
 $ perl pdf_upload.pl < myfile.json
@@ -81,10 +80,7 @@ $ perl pdf_upload.pl < myfile.json
 "basepath" [optional]: default location for PDFs
 "post_username" [optional] : if you want to post everything to a group
 	by default, set this to "group:nnnn"
-
-
 "files":
-
 	"article_id" : citeulike article_id (i.e., from URL)
 	"path" : PDF file name.  "basepath" (above) gives default location
 	"username" [optional]: overrides "username" or "post_username" (see above)
@@ -98,7 +94,30 @@ Example.
 ========
 
 The format is JSON (http://json.org/).  The options are set to "relaxed" to
-be less strict so extra commas allows, and "#" comments
+be less strict so extra commas allowed, and "#" comments
+
+Simple example:
+
+{
+	"username" : "johnsmith",
+	"password" : "mypassword",
+	"files" : [
+		{
+			"article_id": "54321",
+			"path" : "/home/johnsmith/Desktop/file1.pdf"
+		},
+		{
+			"article_id": "54322",
+			"path" : "/home/johnsmith/Desktop/file2.pdf"
+		},
+		{
+			"article_id": "54323",
+			"path" : "/home/johnsmith/Desktop/file3.pdf"
+		}
+	]
+}
+
+More complicated:
 
 {
 	"username" : "johnsmith",
@@ -108,14 +127,21 @@ be less strict so extra commas allows, and "#" comments
 	"files" : [
 		{
 			"title" : "An article title",
-			"article_id": "3787533",
+			"article_id": "54321",
 			"path" : "file1.pdf"
 		},
 		{
+			# Interesting article
+			"username" : "johnsmith", # need to "reset" because
+			                          # post_username is set to a group
+			"article_id": "987654321",
+			"path" : "file2.pdf"
+		},
+		{
 			# this is a comment
-			"username" : "group:3134",
-			"article_id": "3753568",
-			"path" : "/home/johnsmith/Desktop/file2.pdf",
+			"username" : "group:12345", # a different group
+			"article_id": "12345",
+			"path" : "/home/johnsmith/Desktop/file3.pdf",
 			"rightsholder" : "true"
 		}
 	]
