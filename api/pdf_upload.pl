@@ -13,7 +13,11 @@ $/=$old;
 
 print $DATA;
 
-my $DATA = from_json($DATA);
+my $json = JSON->new;
+
+$json = $json->relaxed(1);
+
+my $DATA = $json->decode($DATA);
 
 my $ua = LWP::UserAgent->new;
 
@@ -24,7 +28,11 @@ my $basepath = $DATA->{basepath} || ".";
 
 my $post_username = $DATA->{post_username} || $DATA->{username};
 
-my $res = $ua->request(POST $base."/login.json", [username => $DATA->{username}, password => $DATA->{password}]);
+my $res = $ua->request(POST $base."/login.json", [
+	username => $DATA->{username},
+	password => $DATA->{password}
+]);
+
 status($res);
 
 my @files = @{$DATA->{files}};
@@ -42,7 +50,8 @@ foreach my $f (@files) {
 				article_id => $f->{article_id},
 				file => [$abs_path],
 				rightsholder => $f->{rightsholder}
-		]);
+		]
+	);
 
 	status($res);
 }
@@ -53,8 +62,7 @@ sub status {
 	if ($res->is_success) {
 		print ">>>>> ".$res->base."\n";
 		print $res->content;
-	}
-	else {
+	} else {
 		print ">>>>> ERROR: ".$res->base."\n";
 		print $res->status_line, "\n";
 		print $res->content;
@@ -76,6 +84,7 @@ $ perl pdf_upload.pl < myfile.json
 
 
 "files":
+
 	"article_id" : citeulike article_id (i.e., from URL)
 	"path" : PDF file name.  "basepath" (above) gives default location
 	"username" [optional]: overrides "username" or "post_username" (see above)
@@ -87,6 +96,9 @@ in the example below there's a title field to remind you which actual article it
 
 Example.
 ========
+
+The format is JSON (http://json.org/).  The options are set to "relaxed" to
+be less strict so extra commas allows, and "#" comments
 
 {
 	"username" : "johnsmith",
@@ -100,6 +112,7 @@ Example.
 			"path" : "file1.pdf"
 		},
 		{
+			# this is a comment
 			"username" : "group:3134",
 			"article_id": "3753568",
 			"path" : "/home/johnsmith/Desktop/file2.pdf",
