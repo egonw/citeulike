@@ -43,13 +43,14 @@ foreach my $f (@files) {
 
 	print "Uploading: ".$abs_path." to ".$user."/".$f->{article_id}."\n";
 
-	my $res = $ua->request(POST $base."/personal_pdf_upload_json",
+	my $res = $ua->request(POST $base."/personal_pdf_upload.json",
 		Content_Type => 'multipart/form-data',
 		Content => [
 				username => $user,
 				article_id => $f->{article_id},
 				file => [$abs_path],
-				rightsholder => $f->{rightsholder}
+				rightsholder => $f->{rightsholder} || $DATA->{rightsholder},
+				md5 => $f->{md5}
 		]
 	);
 
@@ -80,12 +81,16 @@ $ perl pdf_upload.pl < myfile.json
 "basepath" [optional]: default location for PDFs
 "post_username" [optional] : if you want to post everything to a group
 	by default, set this to "group:nnnn"
+"rightsholder" [needed for uploading to groups]: "true" - just a legal
+		thing, same as on website.
+
 "files":
 	"article_id" : citeulike article_id (i.e., from URL)
 	"path" : PDF file name.  "basepath" (above) gives default location
 	"username" [optional]: overrides "username" or "post_username" (see above)
-	"rightsholder" [needed for uploading to groups]: "true" - just a legal
-		thing, same as on website.
+	"rightsholder": see above - set per file.
+	"md5" : hex md5 (lowercase) of PDF.   If there's an existing remote PDF
+		with same checksum, get status=not_changed
 
 Any other fields are ignored, so you can "annotate" the file with extra stuff, e.g.,
 in the example below there's a title field to remind you which actual article it is.
@@ -124,6 +129,7 @@ More complicated:
 	"password" : "mypassword",
 	"basepath" : "/home/johnsmith/pdfs/",
 	"post_username" : "group:1234",
+	"rightsholder" : "true",
 	"files" : [
 		{
 			"title" : "An article title",
@@ -135,14 +141,14 @@ More complicated:
 			"username" : "johnsmith", # need to "reset" because
 			                          # post_username is set to a group
 			"article_id": "987654321",
-			"path" : "file2.pdf"
+			"path" : "file2.pdf",
+			"md5":"0351b9502c906ec9383368f07c45c4fc"
 		},
 		{
 			# this is a comment
 			"username" : "group:12345", # a different group
 			"article_id": "12345",
-			"path" : "/home/johnsmith/Desktop/file3.pdf",
-			"rightsholder" : "true"
+			"path" : "/home/johnsmith/Desktop/file3.pdf"
 		}
 	]
 }
