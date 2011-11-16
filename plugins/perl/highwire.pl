@@ -100,13 +100,89 @@ $abstract_part = "abstract";
 if ($url =~ m{http://([^/]+)/content/}) {
 	($journal_site) = ($1);
 	$url =~ s/\.([a-z]+)$/.abstract/;
-	($url_abstract, $doi, $pmid, $body) = get_abstract_url($url);
+	($url_abstract, $doi, $pmid, $body, $meta) = get_abstract_url($url);
 	if ($url_abstract) {
 		$source_abstract = $body;
 		$hiwire = $url_abstract;
 		$hiwire =~ s/\.abstract$//;
 		$hiwire =~ s|^http://||;
 	}
+	print "begin_tsv\n";
+
+	foreach $m (@$meta) {
+
+		$name = $m->attr("name");
+		$content = $m->attr("content");
+
+		next if (!$name || !$content);
+
+		$name = lc $name;
+		$content =~ s/^\s+//;
+		$content =~ s/\s+$//;
+
+		if ($name eq "dc.title") {
+			print "title\t$content\n";
+		}
+		if ($name eq "dc.identifier") {
+			print "linkout\tDOI\t\t$content\t\t\n";
+		}
+		if ($name eq "citation_pmid") {
+			print "linkout\tPMID\t$content\t\t\t\n";
+		}
+		if ($name eq "dc.publisher") {
+			print "publisher\t$content\n";
+		}
+		if ($name eq "dc.contributor") {
+			print "author\t$content\n";
+		}
+		if ($name eq "citation_journal_title") {
+			print "journal\t$content\n";
+		}
+		if ($name eq "citation_issn") {
+			print "issn\t$content\n";
+		}
+		if ($name eq "dc.date") {
+			$content =~ m/^(\d\d\d\d)-(\d\d)-(\d\d)$/ and do {
+				print "year\t$1\n";
+				print "month\t$2\n";
+				print "day\t$3\n";
+			};
+			$content =~ m/^(\d\d\d\d)-(\d\d)$/ and do {
+				print "year\t$1\n";
+				print "month\t$2\n";
+			};
+			$content =~ m/^(\d\d\d\d)$/ and do {
+				print "year\t$1\n";
+			};
+		}
+		if ($name eq "citation_volume") {
+			print "volume\t$content\n";
+		}
+		if ($name eq "citation_issue") {
+			print "issue\t$content\n";
+		}
+		if ($name eq "citation_firstpage") {
+			print "start_page\t$content\n";
+		}
+		if ($name eq "citation_lastpage") {
+			print "end_page\t$content\n";
+		}
+		if ($name eq "description") {
+			print "abstract\t$content\n";
+		}
+		if ($name eq "") {
+			print "\t$content\n";
+		}
+		if ($name eq "") {
+			print "\t$content\n";
+		}
+	}
+
+	print "end_tsv\n";
+	print "status\tok\n";
+
+	exit 0;
+
 }
 
 if (!$url_abstract) {
@@ -243,6 +319,8 @@ if ($mjid) {
 
 $refman = $ua->get("$link_refman1") || (print "status\terr\t (5)Could not retrieve the citation for this article, Try posting the article from the abstract page.\n" and exit);
 $ris = get_content($refman);
+
+#print $ris;
 
 if ($ris !~ m{ER\s+-}) {
 	$refman = $ua->get("$link_refman2") || (print "status\terr\t (6)Could not retrieve the citation for this article, Try posting the article from the abstract page.\n" and exit);
@@ -392,5 +470,10 @@ sub get_abstract_url {
 	if (!$citation_abstract_html_url) {
 		$citation_abstract_html_url = $citation_fulltext_html_url;
 	}
-	return ($citation_abstract_html_url, $citation_doi, $citation_pmid, $body);
+
+#	my @abs_div = $tree->look_down( "_tag", "div",
+#			sub { $_[0]->attr('class') =~ /abstract/ }
+#	);
+
+	return ($citation_abstract_html_url, $citation_doi, $citation_pmid, $body, \@meta);
 }

@@ -267,6 +267,10 @@ proc parse_ris {rec} {
 			}
 			set ret(date_other) $other
 		}
+		# Some highwire has "September 2004", grab any year for now
+		if {[info exists ret(year)] && $ret(year) eq ""} {
+			regexp {(\d\d\d\d)} $thedate -> ret(year)
+		}
 	}
 
 
