@@ -108,6 +108,7 @@ if ($url =~ m{http://([^/]+)/content/}) {
 		$hiwire =~ s|^http://||;
 	}
 	print "begin_tsv\n";
+	print "type\tJOUR\n";
 
 	foreach $m (@$meta) {
 
