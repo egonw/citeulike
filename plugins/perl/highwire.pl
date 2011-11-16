@@ -105,10 +105,17 @@ if ($url =~ m{http://([^/]+)/content/}) {
 		$source_abstract = $body;
 		$hiwire = $url_abstract;
 		$hiwire =~ s/\.abstract$//;
-		$hiwire =~ s|^http://||;
+		$hiwire =~ s{^http://}{};
+		$hiwire =~ s/\?.*//;
+
+	} else {
+		$hiwire = "";
 	}
 	print "begin_tsv\n";
 	print "type\tJOUR\n";
+	if ($hiwire) {
+		print "linkout\tHIWIRE\t\t$hiwire\t\t\n";
+	}
 
 	foreach $m (@$meta) {
 
@@ -450,6 +457,7 @@ sub get_abstract_url {
 	$citation_fulltext_html_url = "";
 	$citation_doi = "";
 	$citation_pmid = "";
+	$abstract = "";
 	foreach $m (@meta) {
 
 		$name = $m->attr("name");
@@ -467,14 +475,27 @@ sub get_abstract_url {
 		if ($name && $name eq "citation_pmid") {
 			$citation_pmid = $m->attr("content");
 		}
+		if ($name && $name eq "description") {
+			$abstract = $m->attr("content");
+		}
 	}
 	if (!$citation_abstract_html_url) {
 		$citation_abstract_html_url = $citation_fulltext_html_url;
 	}
 
-#	my @abs_div = $tree->look_down( "_tag", "div",
-#			sub { $_[0]->attr('class') =~ /abstract/ }
-#	);
+	if (!$abstract) {
+		my @abs_div = $tree->look_down( "_tag", "div",
+				sub { $_[0]->attr('itemprop') =~ /description/ }
+		)->find("p");
+
+		foreach $m (@abs_div) {
+			$abstract .= $m->as_text();
+			$abstract .= " ";
+
+		}
+		push (@meta, HTML::Element->new('meta', name => 'description', content => $abstract));
+
+	}
 
 	return ($citation_abstract_html_url, $citation_doi, $citation_pmid, $body, \@meta);
 }
