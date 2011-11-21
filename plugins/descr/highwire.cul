@@ -97,19 +97,20 @@ test {http://www.genetics.org/cgi/content/abstract/171/1/35} {
 test {http://www.bmj.com/content/329/7471/868} {
 	type JOUR
 	volume 329
+	linkout {HIWIRE {} www.bmj.com/content/329/7471/868 {} {}}
 	linkout {DOI {} 10.1136/bmj.329.7471.868 {} {}}
 	linkout {PMID 15485939 {} {} {}}
-	linkout {HIWIRE {} www.bmj.com/content/329/7471/868 {} {}}
 	year 2004
 	month 10
 	day 16
 	start_page 868
 	end_page 869
 	publisher {British Medical Journal Publishing Group}
+	formatted_url {HighWire http://www.bmj.com/content/329/7471/868.abstract}
+	formatted_url {{HighWire (PDF)} http://www.bmj.com/content/329/7471/868.full.pdf}
 	formatted_url {DOI http://dx.doi.org/10.1136/bmj.329.7471.868}
 	formatted_url {Pubmed http://view.ncbi.nlm.nih.gov/pubmed/15485939}
 	formatted_url {Hubmed http://www.hubmed.org/display.cgi?uids=15485939}
-	formatted_url {HighWire http://www.bmj.com/content/329/7471/868.abstract} {{HighWire (PDF)} http://www.bmj.com/content/329/7471/868.full.pdf}
 	issue 7471
 	title {The scandal of poor epidemiological research}
 	journal BMJ

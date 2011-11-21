@@ -485,11 +485,11 @@ sub get_abstract_url {
 
 	if (!$abstract) {
 		my @abs_div = $tree->look_down( "_tag", "div",
-				sub { $_[0]->attr('itemprop') =~ /description/ }
-		)->find("p");
+				sub { $_[0]->attr('itemprop') && $_[0]->attr('itemprop') =~ /description/ }
+		);
 
 		foreach $m (@abs_div) {
-			$abstract .= $m->as_text();
+			$abstract .= $m->find("p")->as_text();
 			$abstract .= " ";
 
 		}
