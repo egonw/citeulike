@@ -111,86 +111,101 @@ if ($url =~ m{http://([^/]+)/content/}) {
 	} else {
 		$hiwire = "";
 	}
-	print "begin_tsv\n";
-	print "type\tJOUR\n";
-	if ($hiwire) {
-		print "linkout\tHIWIRE\t\t$hiwire\t\t\n";
-	}
-
+	my $has_meta = 0;
 	foreach $m (@$meta) {
-
 		$name = $m->attr("name");
-		$content = $m->attr("content");
-
-		next if (!$name || !$content);
+		next if (!$name);
 
 		$name = lc $name;
-		$content =~ s/^\s+//;
-		$content =~ s/\s+$//;
-
 		if ($name eq "dc.title") {
-			print "title\t$content\n";
-		}
-		if ($name eq "dc.identifier") {
-			print "linkout\tDOI\t\t$content\t\t\n";
-		}
-		if ($name eq "citation_pmid") {
-			print "linkout\tPMID\t$content\t\t\t\n";
-		}
-		if ($name eq "dc.publisher") {
-			print "publisher\t$content\n";
-		}
-		if ($name eq "dc.contributor") {
-			print "author\t$content\n";
-		}
-		if ($name eq "citation_journal_title") {
-			print "journal\t$content\n";
-		}
-		if ($name eq "citation_issn") {
-			print "issn\t$content\n";
-		}
-		if ($name eq "dc.date") {
-			$content =~ m/^(\d\d\d\d)-(\d\d)-(\d\d)$/ and do {
-				print "year\t$1\n";
-				print "month\t$2\n";
-				print "day\t$3\n";
-			};
-			$content =~ m/^(\d\d\d\d)-(\d\d)$/ and do {
-				print "year\t$1\n";
-				print "month\t$2\n";
-			};
-			$content =~ m/^(\d\d\d\d)$/ and do {
-				print "year\t$1\n";
-			};
-		}
-		if ($name eq "citation_volume") {
-			print "volume\t$content\n";
-		}
-		if ($name eq "citation_issue") {
-			print "issue\t$content\n";
-		}
-		if ($name eq "citation_firstpage") {
-			print "start_page\t$content\n";
-		}
-		if ($name eq "citation_lastpage") {
-			print "end_page\t$content\n";
-		}
-		if ($name eq "description") {
-			print "abstract\t$content\n";
-		}
-		if ($name eq "") {
-			print "\t$content\n";
-		}
-		if ($name eq "") {
-			print "\t$content\n";
+			$has_meta = 1;
+			last;
 		}
 	}
 
-	print "end_tsv\n";
-	print "status\tok\n";
+	if ($has_meta) {
 
-	exit 0;
+		print "begin_tsv\n";
+		print "type\tJOUR\n";
+		if ($hiwire) {
+			print "linkout\tHIWIRE\t\t$hiwire\t\t\n";
+		}
 
+		foreach $m (@$meta) {
+
+			$name = $m->attr("name");
+			$content = $m->attr("content");
+
+			next if (!$name || !$content);
+
+			$name = lc $name;
+			$content =~ s/^\s+//;
+			$content =~ s/\s+$//;
+
+			if ($name eq "dc.title") {
+				print "title\t$content\n";
+			}
+			if ($name eq "dc.identifier") {
+				print "linkout\tDOI\t\t$content\t\t\n";
+			}
+			if ($name eq "citation_pmid") {
+				print "linkout\tPMID\t$content\t\t\t\n";
+			}
+			if ($name eq "dc.publisher") {
+				print "publisher\t$content\n";
+			}
+			if ($name eq "dc.contributor") {
+				print "author\t$content\n";
+			}
+			if ($name eq "citation_journal_title") {
+				print "journal\t$content\n";
+			}
+			if ($name eq "citation_issn") {
+				print "issn\t$content\n";
+			}
+			if ($name eq "dc.date") {
+				$content =~ m/^(\d\d\d\d)-(\d\d)-(\d\d)$/ and do {
+					print "year\t$1\n";
+					print "month\t$2\n";
+					print "day\t$3\n";
+				};
+				$content =~ m/^(\d\d\d\d)-(\d\d)$/ and do {
+					print "year\t$1\n";
+					print "month\t$2\n";
+				};
+				$content =~ m/^(\d\d\d\d)$/ and do {
+					print "year\t$1\n";
+				};
+			}
+			if ($name eq "citation_volume") {
+				print "volume\t$content\n";
+			}
+			if ($name eq "citation_issue") {
+				print "issue\t$content\n";
+			}
+			if ($name eq "citation_firstpage") {
+				print "start_page\t$content\n";
+			}
+			if ($name eq "citation_lastpage") {
+				print "end_page\t$content\n";
+			}
+			if ($name eq "description") {
+				print "abstract\t$content\n";
+			}
+			if ($name eq "") {
+				print "\t$content\n";
+			}
+			if ($name eq "") {
+				print "\t$content\n";
+			}
+		}
+
+		print "end_tsv\n";
+		print "status\tok\n";
+
+		exit 0;
+
+	}
 }
 
 if (!$url_abstract) {
