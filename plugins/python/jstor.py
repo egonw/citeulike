@@ -34,35 +34,54 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from urllib2 import urlopen
-import urllib2, urllib, re
-import socket
+import urllib, re
+import socket, subprocess
+from metaheaders import MetaHeaders
 
 socket.setdefaulttimeout(15)
 
+def url_to_id(url, page):
 
-def url_to_id(url):
+	metaheaders = MetaHeaders(page=page,name='scheme')
+
+	jstoreId = None
+	doi = None
+	if metaheaders.get_item("jstore-stable"):
+		jstoreId = metaheaders.get_item("jstore-stable")
+	if metaheaders.get_item("doi"):
+		doi = metaheaders.get_item("doi")
+
+	if doi and jstoreId:
+		print "doi=%s, id=%s" % (doi,jstoreId)
+		return (jstoreId, doi)
+
 
 	# If there's a DOI then we'll have that
-	m = re.search(r'doi=10.2307/(\d+)', url)
+	m = re.search(r'doi=(10.\d\d\d\d)/(\d+)', url)
 	if m:
-		return int(m.group(1))
+		return (int(m.group(2)),m.group(1))
 
 	# If it's the old style SICI then, annoyingly, we'll need to fetch it
 	if 'sici=' in url:
-		page = urlopen(url).read()
 		m = re.search(r'<a id="info" href="/stable/(\d+)">Article Information</a>', page)
 		if m:
-			return int(m.group(1))
+			return (int(m.group(1)), None)
 		else:
-			return None
+			return (None, None)
 
 	# Otherwise assume anything which looks like /123123/ is an ID
 	#m = re.search(r'https?://.*?jstor.+?/(\d{4,})(/|$|\?|#)', url)
-	m = re.search(r'https?://.*?jstor.+?/(\d{4,})', url)
+	m = re.search(r'/(10.\d\d\d\d/(\d+))', url)
 	if m:
-		return int(m.group(1))
-	return None
+		return (int(m.group(2)), m.group(1))
+	else:
+		doi = None
+
+	m = re.search(r'/(\d+)', url)
+	if m:
+		return (int(m.group(1)), None)
+
+	return (None,None)
 
 def grab_bibtex(id):
 	url = "http://www.jstor.org/action/downloadCitation?format=bibtex&include=abs"
@@ -72,7 +91,7 @@ def grab_bibtex(id):
 		'suffix' : id,
 		'downloadFileName' : id }
 
-	page = urlopen(url, urllib.urlencode(params)).read()
+	page = get_url("%s?%s" %  (url, urllib.urlencode(params)))
 
 	# Remove the random junk found in the record
 	m = re.search(r'@comment{{NUMBER OF CITATIONS : 1}}(.*)@comment{{ These records have been provided', page, re.M|re.DOTALL)
@@ -89,14 +108,21 @@ def grab_bibtex(id):
 def parse_citation(s):
 	re.compile(r'<li class="sourceInfo">\s+<cite>(.*?)</cite>, Vol. ([^,]+)')
 
-def main(id):
+# JSTOR barfs at normal python urllib, so spawn lynx, which seem to work
+def get_url(url):
+	#return subprocess.Popen(["lynx", "-source", "-read_timeout", "10", url],stdout=subprocess.PIPE).stdout.read()
+	return subprocess.Popen(["lynx", "-source", url],stdout=subprocess.PIPE).stdout.read()
+
+def main(id, doi):
 	if not id:
 		print "\t".join([ "status", "err", "Could not identify this as being a JSTOR article" ])
 		sys.exit(1)
 
 	print "begin_tsv"
 	print "\t".join([ "linkout", "JSTR2", "%d"%id, "", "", ""])
-	print "\t".join([ "linkout", "DOI", "", "10.2307/%d"%id, "", ""])
+	# Sometimes other prefixes
+	if doi:
+		print "\t".join([ "linkout", "DOI", "", doi, "", ""])
 	print "end_tsv"
 
 	print "begin_bibtex"
@@ -109,10 +135,8 @@ if __name__=="__main__":
 	import sys
 	url = sys.stdin.readline().strip()
 
-	# Cookie me.
-	opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())
-	urllib2.install_opener(opener)
-	urlopen("http://www.jstor.org/action/showCitFormats")
+	page = get_url(url)
 
-	jstor_id = url_to_id(url)
-	main(jstor_id)
+	(jstor_id, doi) = url_to_id(url, page)
+
+	main(jstor_id, doi)

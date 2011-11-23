@@ -25,8 +25,9 @@ class MetaHeaders:
 		self.meta = meta
 
 	def get_item(self, k):
-		if self.meta.has_key(k):
-			return self.meta[k][0]
+		items = self.get_multi_item(k)
+		if items:
+			return items[0]
 		else:
 			return None
 
