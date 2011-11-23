@@ -57,7 +57,7 @@ def url_to_id(url, page):
 
 
 	# If there's a DOI then we'll have that
-	m = re.search(r'doi=(10.\d\d\d\d)/(\d+)', url)
+	m = re.search(r'doi=(10.\d\d\d\d/(\d+))', url)
 	if m:
 		return (int(m.group(2)),m.group(1))
 
