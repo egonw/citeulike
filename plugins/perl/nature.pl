@@ -42,7 +42,7 @@ use Encode;
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-binmode STDOUT, ":utf8";
+#binmode STDOUT, ":utf8";
 
 # Scrape the RIS file from the Nature.com site
 
