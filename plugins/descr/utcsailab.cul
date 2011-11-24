@@ -6,7 +6,7 @@ plugin {
 	author {Jacob Schrum}
 	email {ai-lab@cs.utexas.edu}
 	language {python}
-	regexp {http://(z.|nn.|)cs.utexas.edu/(|users/ai-lab/|~ai-lab/)}
+	regexp {http://(z.|nn.|www.|)cs.utexas.edu/(|users/ai-lab/|~ai-lab/)}
 }
 
 format_linkout UTCSAI {
@@ -125,6 +125,28 @@ test {http://cs.utexas.edu/users/ai-lab/keyword?stanley:ec02} {
 }
 
 test {http://cs.utexas.edu/~ai-lab/pub-view.php?PubID=51465} {
+
+	formatted_url {UTCSAI1 http://z.cs.utexas.edu/users/ai-lab/pub-view.php?PubID=51465}
+	formatted_url {UTCSAI2 http://cs.utexas.edu/users/ai-lab/pub-view.php?PubID=51465}
+	formatted_url {UTCSAI3 http://cs.utexas.edu/~ai-lab/pub-view.php?PubID=51465}
+	formatted_url {UTCSNN http://nn.cs.utexas.edu/pub-view.php?PubID=51465}
+	linkout {UTCSAI 51465 {} {} {}}
+	year 2006
+	title {Learning Language from Perceptual Context: A Challenge Problem for AI}
+	title_secondary {Proceedings of the 2006 AAAI Fellows Symposium}
+	url {http://www.cs.utexas.edu/users/ai-lab/pub-view.php?PubID=51465}
+	type INCONF
+	cite {mooney:aaaifellows06}
+	month {July}
+	address {Boston, MA}
+	author {Mooney Raymond RJ {Raymond J. Mooney}}
+	abstract {We present the problem of learning to understand natural language from examples of utterances paired only with their relevant real-world context as an important challenge problem for AI.  Machine learning has been adopted as the most effective way of developing natural-language processing systems; however, currently, complex annotated corpora are required for training. By learning language from perceptual context, the need for laborious annotation is removed and the system's resulting understanding is grounded in its perceptual experience.}
+	plugin utcsailab
+	plugin_version 2
+	status ok
+}
+
+test {http://www.cs.utexas.edu/~ai-lab/pub-view.php?PubID=51465} {
 
 	formatted_url {UTCSAI1 http://z.cs.utexas.edu/users/ai-lab/pub-view.php?PubID=51465}
 	formatted_url {UTCSAI2 http://cs.utexas.edu/users/ai-lab/pub-view.php?PubID=51465}

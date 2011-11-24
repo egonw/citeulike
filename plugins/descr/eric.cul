@@ -78,7 +78,7 @@ plugin {
 	#
 	# Nature have two styles of URLs for their articles.. they seem to be slowly
 	# moving to the second.
-	regexp {http://www.eric.ed.gov/}
+	regexp {http://(www[.])?eric.ed.gov/}
 }
 
 
