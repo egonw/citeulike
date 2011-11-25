@@ -117,9 +117,14 @@ if not doi:
 
 print "begin_tsv"
 
-print "type\tJOUR"
-
 if True and metaheaders.get_item("citation_title"):
+	if metaheaders.get_item("citation_conference"):
+		print "type\tCONF"
+	elif metaheaders.get_item("citation_doi") and "IEEESTD" in metaheaders.get_item("citation_doi"):
+		print "type\tSTD"
+	else:
+		print "type\tJOUR"
+
 	metaheaders.print_item("title","citation_title")
 	metaheaders.print_item("publisher","citation_publisher")
 	authors = metaheaders.get_multi_item("citation_author")
@@ -132,14 +137,17 @@ if True and metaheaders.get_item("citation_title"):
 	metaheaders.print_item("issue","citation_issue")
 	metaheaders.print_item("start_page","citation_firstpage")
 	metaheaders.print_item("end_page","citation_lastpage")
+	metaheaders.print_item("title_secondary","citation_conference")
 	# "serial" or "issn".  Do both, to be safe
 	metaheaders.print_item("serial","citation_issn")
 	metaheaders.print_item("issn","citation_issn")
 	metaheaders.print_item("isbn","citation_isbn")
-	metaheaders.print_item("title_secondary","citation_conference")
 	metaheaders.print_date("citation_date")
 	metaheaders.print_item("journal","citation_journal_title")
 	metaheaders.print_item("publisher","citation_publisher")
+	metaheaders.print_item("institution","citation_author_institution")
+
+
 
 	# date is sometimes (always?) like "Oct. 2004"
 	date = metaheaders.get_item("citation_date")
