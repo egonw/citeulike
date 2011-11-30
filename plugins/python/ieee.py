@@ -119,7 +119,7 @@ print "begin_tsv"
 
 if True and metaheaders.get_item("citation_title"):
 	if metaheaders.get_item("citation_conference"):
-		print "type\tCONF"
+		print "type\tINCONF"
 	elif metaheaders.get_item("citation_doi") and "IEEESTD" in metaheaders.get_item("citation_doi"):
 		print "type\tSTD"
 	else:
