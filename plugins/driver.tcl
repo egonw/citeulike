@@ -406,7 +406,15 @@ namespace eval driver {
 				# Merge in. TSV data takes priority.
 				foreach {k v} [CROSSREF::parse_xml $crossref_xml] {
 					if {![info exists ret($k)]} {
-						set ret($k) $v
+						if {$k eq "authors" || $k eq "editors"} {
+							set au {}
+							foreach a $v {
+								lappend au [::author::parse_author $a]
+							}
+							set ret($k) $au
+						} else {
+							set ret($k) $v
+						}
 					}
 				}
 			} elseif {[info exists ret(linkout)] && $use_crossref} {
@@ -420,7 +428,16 @@ namespace eval driver {
 						}
 						set crossref_data [CROSSREF::parse_xml $crossref_xml]
 
+
 						foreach {k v} $crossref_data {
+							if {$k eq "authors"} {
+								# plugin returns "author" but xref -> "authors"
+								set k "author"
+							}
+							if {$k eq "editors"} {
+								# plugin returns "editor" but xref -> "editors"
+								set k "editor"
+							}
 							if {![info exists ret($k)] || $ret($k) eq ""} {
 								# puts "XREF::set $k -> $v"
 								set ret($k) $v
@@ -644,8 +661,10 @@ namespace eval driver {
 			if {[info exists x_actual(linkouts)]} {
 				foreach l $x_actual(linkouts) {
 					foreach {type ikey_1 ckey_1 ikey_2 ckey_2} $l {}
-					foreach {descr link} [format_linkout_$type $type [string trim $ikey_1] [string trim $ckey_1] [string trim $ikey_2] [string trim $ckey_2]] {
-						lappend x_actual(formatted_url) [list $descr $link]
+					if {[info procs format_linkout_$type] ne ""} {
+						foreach {descr link} [format_linkout_$type $type [string trim $ikey_1] [string trim $ckey_1] [string trim $ikey_2] [string trim $ckey_2]] {
+							lappend x_actual(formatted_url) [list $descr $link]
+						}
 					}
 				}
 			}
@@ -708,7 +727,6 @@ namespace eval driver {
 		# On startup from command line do stuff. Otherwise leave
 		# the decision to the main application.
 		read_descr
-
 
 		set ok 0
 		if {[llength $::argv]==2 && ([lindex $argv 0]=="test" || [lindex $argv 0]=="parse")} {
