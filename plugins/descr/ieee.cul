@@ -44,6 +44,7 @@ test {http://ieeexplore.ieee.org/xpls/freeabs_all.jsp?arnumber=1350729} {
 	end_page	72
 	issue	10
 	title	"Meaningful modeling: what's the semantics of semantics?"
+	institution {Fac. of Math. & Comput. Sci., Weizmann Inst. of Sci., Rehovot, Israel}
 	journal	"Computer"
 	abstract	"The Unified Modeling Language (UML) is a complex collection of mostly diagrammatic notations for software modeling, and its standardization has prompted an animated discussion about UML's semantics and how to represent it. We have thus set out to clarify some of the notions involved in defining modeling languages, with an eye toward the particular difficulties arising in defining UML. We are primarily interested in distinguishing a language's notation, or syntax, from its meaning, or semantics, as well as recognizing the differences between variants of syntax and semantics in their nature, purpose, style, and use."
 	status	ok
@@ -53,3 +54,5 @@ test {http://ieeexplore.ieee.org/xpls/freeabs_all.jsp?arnumber=1350729} {
 	issn 0018-9162
 	plugin	ieee
 }
+
+
