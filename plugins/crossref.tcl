@@ -11,6 +11,40 @@ proc CROSSREF::_get_text {node} {
 	return [string trim [$node asText]]
 }
 
+proc CROSSREF::nodes_to_names {a_nodes} {
+	set author_list [list]
+
+	foreach a_node $a_nodes {
+		#    - NB we use the 'sequence' attribute to get author order correct
+		set seq [$a_node getAttribute sequence]
+		if {$seq eq "first"} {
+			set seq A
+		} else {
+			set seq Z
+		}
+		set fname ""
+		set lname ""
+		catch {
+			set fname [[$a_node selectNodes given_name] text]
+		}
+		catch {
+			set lname [[$a_node selectNodes surname] text]
+		}
+
+		lappend author_list [list $seq "$lname, $fname"]
+	}
+
+	set ret {}
+
+	foreach a [lsort -ascii -index 0 $author_list] {
+		set r [lindex $a 1]
+		lappend ret $r
+	}
+
+	return $ret
+
+}
+
 #<JOURNALS>#####################################################################
 proc CROSSREF::parse_journal {doc} {
 	array set ret [list]
@@ -50,7 +84,7 @@ proc CROSSREF::parse_journal {doc} {
 	}
 
 	catch {
-		set ret(title) [_get_text [$doc selectNodes ${prefix}/journal_article/titles/title\[1\]]]
+		set ret(title) [_get_text [$doc selectNodes ${prefix}/journal_article/titles\[1\]/title\[1\]]]
 	}
 
 	#
@@ -58,31 +92,11 @@ proc CROSSREF::parse_journal {doc} {
 	#    - NB we use the 'sequence' attribute to get author order correct
 	#
 	set a_nodes [$doc selectNodes ${prefix}/journal_article/contributors/person_name\[@contributor_role='author'\]]
-
-	set author_list [list]
-
-	foreach a_node $a_nodes {
-		set seq [$a_node getAttribute sequence]
-		if {$seq eq "first"} {
-			set seq A
-		} else {
-			set seq Z
-		}
-		set fname ""
-		set lname ""
-		catch {
-			set fname [string trim [[$a_node selectNodes given_name] text]]
-		}
-		catch {
-			set lname [string trim [[$a_node selectNodes surname] text]]
-		}
-
-		lappend author_list [list $seq "$lname, $fname"]
+	set names [concat [nodes_to_names $a_nodes]]
+	if {[llength $names] > 0} {
+		set ret(authors) [concat [nodes_to_names $a_nodes]]
 	}
 
-	foreach a [lsort -ascii -index 0 $author_list] {
-		lappend ret(authors) [::author::parse_author [lindex $a 1]]
-	}
 
 	catch {
 		set ret(start_page) [[$doc selectNodes ${prefix}/journal_article/pages/first_page] text]
@@ -221,7 +235,7 @@ proc CROSSREF::parse_chapter {doc} {
 	}
 
 	foreach a [lsort -ascii -index 0 $author_list] {
-		lappend ret(authors) [::author::parse_author [lindex $a 1]]
+		lappend ret(authors) [lindex $a 1]
 	}
 
 	#
@@ -256,7 +270,7 @@ proc CROSSREF::parse_chapter {doc} {
 	}
 
 	foreach a [lsort -ascii -index 0 $author_list] {
-		lappend ret(editors) [::author::parse_author [lindex $a 1]]
+		lappend ret(editors) [lindex $a 1]
 	}
 
 	catch {
@@ -281,6 +295,7 @@ proc CROSSREF::parse_chapter {doc} {
 
 	return [array get ret]
 }
+
 
 #<CONFERENCE>###################################################################
 #
@@ -308,33 +323,19 @@ proc CROSSREF::parse_conf {doc} {
 	#    - NB we use the 'sequence' attribute to get author order correct
 	#
 	set a_nodes [$doc selectNodes ${prefix}/conference_paper/contributors/person_name\[@contributor_role='author'\]]
-
-
-	set author_list [list]
-
-	foreach a_node $a_nodes {
-		set seq [$a_node getAttribute sequence]
-		if {$seq eq "first"} {
-			set seq A
-		} else {
-			set seq Z
-		}
-		set fname ""
-		set lname ""
-		catch {
-			set fname [[$a_node selectNodes given_name] text]
-		}
-		catch {
-			set lname [[$a_node selectNodes surname] text]
-		}
-
-		lappend author_list [list $seq "$lname, $fname"]
+	set names [concat [nodes_to_names $a_nodes]]
+	if {[llength $names] > 0} {
+		set ret(authors) [concat [nodes_to_names $a_nodes]]
 	}
 
-	foreach a [lsort -ascii -index 0 $author_list] {
-		lappend ret(authors) [::author::parse_author [lindex $a 1]]
+	#
+	# Editors
+	#
+	set a_nodes [$doc selectNodes ${prefix}/conference_paper/contributors/person_name\[@contributor_role='editor'\]]
+	set names [concat [nodes_to_names $a_nodes]]
+	if {[llength $names] > 0} {
+		set ret(editors) [concat [nodes_to_names $a_nodes]]
 	}
-
 
 	catch {
 		set ret(year)  [[$doc selectNodes ${paper}/publication_date/year] text]
@@ -372,7 +373,6 @@ proc CROSSREF::parse_conf {doc} {
 	catch {
 		set ret(end_page) [[$doc selectNodes ${paper}/pages/last_page] text]
 	}
-
 
 	catch {
 		set ret(location) [[$doc selectNodes ${prefix}/event_metadata/conference_location] text]
