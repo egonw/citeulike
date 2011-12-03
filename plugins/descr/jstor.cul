@@ -116,16 +116,18 @@ test {http://www.jstor.org/action/showArticle?doi=10.2307/307641&Search=yes&term
 	linkout {JSTR2 307641 {} {} {}}
 	linkout {DOI {} 10.2307/307641 {} {}}
 	volume 28
+	month 24
 	year 1984
 	issue 4
-	author {Fiene Donald DM {Donald M. Fiene}}
+	author {Fiene Donald DM {Fiene, Donald M.}}
 	title {A Note on May Eve, Good Friday, and the Full Moon in Bulgakov's The Master and Margarita}
 	start_page 533
-	end_page 537
 	journal {The Slavic and East European Journal}
 	type JOUR
-	url {http://www.jstor.org/stable/307641}
-	publisher {American Association of Teachers of Slavic and East European Languages}
+	publisher {American Association of Teachers of Slavic and East European Languages AATSEEL of the U.S., Inc.}
+	use_crossref 1
+	doi 10.2307/307641
+	issn 00376752
 	status ok
 }
 
@@ -133,9 +135,7 @@ test {http://www.jstor.org/action/showArticle?doi=10.2307/307641&Search=yes&term
 
 test {http://www.jstor.org/stable/view/2580820?seq=1} {
 	formatted_url {JSTOR http://www.jstor.org/stable/2580820}
-	formatted_url {DOI http://dx.doi.org/10.2307/2580820}
 	linkout {JSTR2 2580820 {} {} {}}
-	linkout {DOI {} 10.2307/2580820 {} {}}
 	volume 31
 	year 1980
 	issue 6
@@ -148,22 +148,26 @@ test {http://www.jstor.org/stable/view/2580820?seq=1} {
 	abstract {This paper is concerned with the need for more interdisciplinary, systems oriented, research directed towards major problems encountered by decision makers in industry and government; a need which is more difficult to meet in the face of traditional methods of organising knowledge and research. It emphasises the need to acknowledge the true complexity of the problems and the interactive nature of any effective research procedure. As an illustration, both of the need and the problems involved in meeting it, the development of a new program of research into problems of Management and Technology at the International Institute of Applied Systems Analysis, which is supported by seventeen nations of all political complexions, is analysed. The implication is that we can do something about the future, but we must be prepared to do.}
 	url {http://www.jstor.org/stable/2580820}
 	publisher {Palgrave Macmillan Journals on behalf of the Operational Research Society}
+	issn 01605682
 	status ok
 }
 
-test {http://www.jstor.org/action/showArticle?doi=10.2307/187568} {
+#
+#  SKIP - not a valid DOI.
+#
+skiptest {http://www.jstor.org/action/showArticle?doi=10.2307/187568} {
 	formatted_url {JSTOR http://www.jstor.org/stable/187568}
 	formatted_url {DOI http://dx.doi.org/10.2307/187568}
 	linkout {JSTR2 187568 {} {} {}}
 	linkout {DOI {} 10.2307/187568 {} {}}
-	volume 50 
-	year 1983 
-	issue 4 
+	volume 50
+	year 1983
+	issue 4
 	author {Shrader Douglas D {Douglas Shrader}}
 	title {Review: [Scientific Knowledge: Causation, Explanation, and Corroboration]}
 	start_page 660
 	end_page 662
-	journal {Philosophy of Science} 
+	journal {Philosophy of Science}
 	type JOUR
 	url {http://www.jstor.org/stable/187568}
 	publisher {The University of Chicago Press on behalf of the Philosophy of Science Association}
@@ -176,16 +180,28 @@ test {http://www.jstor.org/action/showArticle?doi=10.2307/2703147} {
 	formatted_url {DOI http://dx.doi.org/10.2307/2703147}
 	linkout {JSTR2 2703147 {} {} {}}
 	linkout {DOI {} 10.2307/2703147 {} {}}
-	volume 20 
-	year 1992 
+	volume 20
+	year 1992
 	issue 3
 	type JOUR
-	author {Masur Louis LP {Louis P. Masur}}
+	author {Masur Louis LP {Masur, Louis P.}}
+	author {Kammen Michael M {Kammen, Michael}}
 	start_page 291
-	title {Review: You Must Remember this}
-	end_page 296
+	title {You Must Remember this}
 	journal {Reviews in American History}
-	url {http://www.jstor.org/stable/2703147}
-	publisher {The Johns Hopkins University Press}
+	publisher {Johns Hopkins University Press}
+	use_crossref 1
+	doi 10.2307/2703147
+	issn 00487511
+	month 09
 	status ok
 }
+
+
+
+
+
+
+
+
+
