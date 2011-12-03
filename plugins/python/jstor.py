@@ -34,32 +34,33 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import urllib, re
+import urllib, re, sys, codecs
 import socket, subprocess
 from metaheaders import MetaHeaders
 
 socket.setdefaulttimeout(15)
+sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 
 def url_to_id(url, page):
 
+
+	# first try meta headers
 	metaheaders = MetaHeaders(page=page,name='scheme')
 
-	jstoreId = None
-	doi = None
-	if metaheaders.get_item("jstore-stable"):
-		jstoreId = metaheaders.get_item("jstore-stable")
-	if metaheaders.get_item("doi"):
-		doi = metaheaders.get_item("doi")
+	jstoreId = metaheaders.get_item("jstore-stable")
+	doi = metaheaders.get_item("doi")
 
 	if doi and jstoreId:
 		print "doi=%s, id=%s" % (doi,jstoreId)
 		return (jstoreId, doi)
 
-
-	# If there's a DOI then we'll have that
+	# If there's a doi=DOI in the URL then we'll have that
 	m = re.search(r'doi=(10.\d\d\d\d/(\d+))', url)
 	if m:
 		return (int(m.group(2)),m.group(1))
+	m = re.search(r'doi=(10.\d\d\d\d/.+)', url)
+	if m:
+		return (None,m.group(1))
 
 	# If it's the old style SICI then, annoyingly, we'll need to fetch it
 	if 'sici=' in url:
@@ -74,20 +75,29 @@ def url_to_id(url, page):
 	m = re.search(r'/(10.\d\d\d\d/(\d+))', url)
 	if m:
 		return (int(m.group(2)), m.group(1))
-	else:
-		doi = None
 
-	m = re.search(r'/(\d+)', url)
+	# sometimes there's a general DOI, no jstore ID
+	m = re.search(r'/(10.\d\d\d\d/.+)', url)
+	if m:
+		return (None, m.group(1))
+
+
+	# plain old jstore ID, at least 4 digits
+	m = re.search(r'/(\d{4,})', url)
 	if m:
 		return (int(m.group(1)), None)
 
 	return (None,None)
 
-def grab_bibtex(id):
+def grab_bibtex(id, doi):
 	url = "http://www.jstor.org/action/downloadCitation?format=bibtex&include=abs"
+
+	if not doi:
+		doi = '10.2307/%s' % id
+
 	params = {
 		'noDoi' : 'yesDoi',
-		'doi' : '10.2307/%s' % id,
+		'doi' : doi,
 		'suffix' : id,
 		'downloadFileName' : id }
 
@@ -103,6 +113,9 @@ def grab_bibtex(id):
 		work_title = re.search(r'reviewedwork_1 = {(.+?)},', page).group(1)
 		page = page.replace('{Review: [untitled]}', "{Review: [%s]}" % work_title)
 
+	# pages have leading "pp. "
+	page = page.replace("{pp. ","{")
+
 	return page
 
 def parse_citation(s):
@@ -111,23 +124,63 @@ def parse_citation(s):
 # JSTOR barfs at normal python urllib, so spawn lynx, which seem to work
 def get_url(url):
 	#return subprocess.Popen(["lynx", "-source", "-read_timeout", "10", url],stdout=subprocess.PIPE).stdout.read()
-	return subprocess.Popen(["lynx", "-source", url],stdout=subprocess.PIPE).stdout.read()
+	page = subprocess.Popen(["lynx", "-source", url],stdout=subprocess.PIPE).stdout.read()
+	page = page.decode("utf-8")
+	return page
 
-def main(id, doi):
-	if not id:
-		print "\t".join([ "status", "err", "Could not identify this as being a JSTOR article" ])
-		sys.exit(1)
+
+def main(id, doi, page):
 
 	print "begin_tsv"
-	print "\t".join([ "linkout", "JSTR2", "%d"%id, "", "", ""])
+	if id:
+		print "\t".join([ "linkout", "JSTR2", "%d"%id, "", "", ""])
 	# Sometimes other prefixes
 	if doi:
 		print "\t".join([ "linkout", "DOI", "", doi, "", ""])
-	print "end_tsv"
 
-	print "begin_bibtex"
-	print grab_bibtex(id)
-	print "end_bibtex"
+
+
+	meta = MetaHeaders(page=page)
+	title = meta.get_item("dc.Title")
+
+	if doi:
+		abstract = meta.get_item("dc.Description")
+		if abstract:
+			print "abstract\t%s" % re.sub("^ABSTRACT.\s*", "", abstract)
+		meta.print_item("publisher","dc.Publisher")
+		print "use_crossref\t1"
+		print "end_tsv"
+	elif id:
+		print "end_tsv"
+		print "begin_bibtex"
+		print grab_bibtex(id, doi)
+		print "end_bibtex"
+	elif title:
+		# look for meta headers
+		meta = MetaHeaders(page=page)
+		meta.print_item("title","dc.Title")
+		abstract = meta.get_item("dc.Description")
+		if abstract:
+			print "abstract\t%s" % re.sub("^ABSTRACT.\s*", "", abstract)
+		meta.print_item("publisher","dc.Publisher")
+		# <meta name="dc.Date" scheme="WTN8601" content="Nov 17, 2011" />
+		meta.print_date("dc.Date");
+
+		authors = meta.get_multi_item("dc.Creator")
+		if authors:
+			for au in authors:
+				print "author\t%s" % au
+		article_type = meta.get_item("dc.Type")
+		if article_type:
+			if article_type == "book-review":
+				print "type\tBOOK"
+			else:
+				print "type\tJOUR"
+		else:
+			print "type\tJOUR"
+
+		print "end_tsv"
+
 
 	print "status\tok"
 
@@ -139,4 +192,4 @@ if __name__=="__main__":
 
 	(jstor_id, doi) = url_to_id(url, page)
 
-	main(jstor_id, doi)
+	main(jstor_id, doi, page)
