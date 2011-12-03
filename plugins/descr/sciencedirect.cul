@@ -97,9 +97,11 @@ plugin {
 format_linkout SD {
 	return [list ScienceDirect "http://www.sciencedirect.com/science/article/$ckey_1"]
 }
-format_linkout EVPII {
-	return [list ElsevierPII "http://linkinghub.elsevier.com/retrieve/pii/$ckey_1"]
-}
+
+# It seems there's no universal PII resolver - the elsevier one is just for elsevier registered ones.
+#format_linkout EVPII {
+#	return [list ElsevierPII "http://linkinghub.elsevier.com/retrieve/pii/$ckey_1"]
+#}
 
 
 #
@@ -117,7 +119,6 @@ format_linkout EVPII {
 
 test {http://www.sciencedirect.com/science?_ob=ArticleURL&_udi=B6TVK-40X8HYB-2&_user=10&_coverDate=09/01/2000&_rdoc=1&_fmt=high&_orig=search&_origin=search&_sort=d&_docanchor=&view=c&_acct=C000050221&_version=1&_urlVersion=0&_userid=10&md5=531972b99745c81a5807ce96b839fe5a&searchtype=a} {
 	formatted_url {DOI http://dx.doi.org/10.1016/S0167-2789(00)00094-4}
-	formatted_url {ElsevierPII http://linkinghub.elsevier.com/retrieve/pii/S0167-2789(00)00094-4}
 	linkout {DOI {} 10.1016/S0167-2789(00)00094-4 {} {}}
 	linkout {EVPII {} S0167-2789(00)00094-4 {} {}}
 	year 2000
@@ -142,7 +143,6 @@ test {http://www.sciencedirect.com/science?_ob=ArticleURL&_udi=B6TVK-40X8HYB-2&_
 
 test {http://www.sciencedirect.com/science?_ob=ArticleURL&_udi=B8CWT-4ST2RTK-H&_user=10&_rdoc=1&_fmt=&_orig=search&_sort=d&view=c&_acct=C000050221&_version=1&_urlVersion=0&_userid=10&md5=ccc8bb47c33c3cdf76706c7fd04e63bf} {
 	formatted_url {DOI http://dx.doi.org/10.1016/S1872-2423(08)00007-0}
-	formatted_url {ElsevierPII http://linkinghub.elsevier.com/retrieve/pii/S1872242308000070}
 	linkout {DOI {} 10.1016/S1872-2423(08)00007-0 {} {}}
 	linkout {EVPII {} S1872242308000070 {} {}}
 	year 2008
