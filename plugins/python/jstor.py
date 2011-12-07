@@ -74,7 +74,7 @@ def url_to_id(url, page):
 	#m = re.search(r'https?://.*?jstor.+?/(\d{4,})(/|$|\?|#)', url)
 	m = re.search(r'/(10.\d\d\d\d/(\d+))', url)
 	if m:
-		return (int(m.group(2)), m.group(1))
+		return (m.group(1), m.group(1))
 
 	# sometimes there's a general DOI, no jstore ID
 	m = re.search(r'/(10.\d\d\d\d/.+)', url)
@@ -133,7 +133,7 @@ def main(id, doi, page):
 
 	print "begin_tsv"
 	if id:
-		print "\t".join([ "linkout", "JSTR2", "%d"%id, "", "", ""])
+		print "\t".join([ "linkout", "JSTR2", "%s"%id, "", "", ""])
 	# Sometimes other prefixes
 	if doi:
 		print "\t".join([ "linkout", "DOI", "", doi, "", ""])
