@@ -42,7 +42,15 @@ use Encode;
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-#binmode STDOUT, ":utf8";
+# There's some encoding wierdness.  On some machines (a) & (b) with with binmode set,
+# on others (critically, citeulike.org) some chars get corrupted, but when unset,
+# get fatal encoding errors.  The occasional duff characters are better than nothing.
+#
+#	(a) http://www.nature.com/nsmb/journal/v18/n7/full/nsmb.2080.html
+#
+#	(b) http://www.nature.com/bjc/journal/v105/n2s/abs/bjc2011474a.html
+#
+binmode STDOUT, ":utf8";
 
 # Scrape the RIS file from the Nature.com site
 
@@ -91,6 +99,11 @@ my $doi = 0;
 foreach $m (@meta) {
 	my $name = $m->attr("name");
 	my $content = $m->attr("content");
+
+	$content =~ s/^\s//;
+	$content =~ s/\s$//;
+	$content =~ s/\s+/ /g;
+
 	#print "$name = $content\n";
 	$name =~ /dc.identifier/i and do {
 		$content =~ s/doi://;
