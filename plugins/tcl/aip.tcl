@@ -42,6 +42,9 @@ source "util.tcl"
 
 set url [gets stdin]
 
+# sloppy coding overwrites the source URL, so make a copy
+set original_url $url
+
 #
 # If the URL is of the form http://link.aip.org/link..., then it's a redirect to a proper URL
 #
@@ -56,7 +59,7 @@ foreach {page url} $x {break}
 # An alias
 set url [regsub -nocase {library.seg.org} $url {scitation.aip.org}]
 
-if {![regexp {aip.org} $url]} {
+if {![regexp {aip.org} $url] && ![regexp {medphys.org} $url]} {
 	puts "status\tredirect\t$url"
 	return
 }
@@ -92,7 +95,7 @@ proc aip_id {url abpage} {
 			puts "${url}"
 		}
 	}
-	if {[regexp {aip.org/(\w+)/v\d} $url] || [regexp {aip.org/resource/} $url]} {
+	if {[regexp {aip.org/(\w+)/v\d} $url] || [regexp {aip.org/resource/} $url] || [regexp {medphys.org/resource/} $url]} {
 		set temppage [url_get $url]
 		if {[regexp {(?:skuID|from_key)=([a-zA-Z0-9]+)&} $temppage -> m_id]} {
 			set id $m_id
@@ -181,7 +184,11 @@ puts "end_bibtex"
 
 # The linkout should be at the end of the page, and we can just use it--I need to figure out this linkout business
 puts "begin_tsv"
-puts "linkout\tAIP\t\t${id}\t\t"
+# AIP linkout doesn't work for medphys
+if {![regexp {medphys.org} $original_url]} {
+	puts "linkout\tAIP\t\t${id}\t\t"
+}
+
 if {[regexp {url = \{http://link\.(aps|aip)\.org/(.*)\}} $page -> domain toparse]} {
 	if {[string equal $domain "aps"]} {
 		if {[regexp {abstract/([A-Z]+)/v([0-9]+)/([ep]{1,2}[0-9]+)(?:.*?)} $toparse -> ckey_1 ikey_1 ckey_2]} {

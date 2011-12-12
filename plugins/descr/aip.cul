@@ -76,7 +76,7 @@ plugin {
 	# Note: Some universities provide mirrors of commericial publishers' sites
 	# with different hostnames, so you should provide some leeway in your
 	# regexp if that applies to you.
-	regexp {([lL]ibrary.seg.org|aip.org)/(resource|getabs|vsearch|link|(\w+/v\d))}
+	regexp {([lL]ibrary.seg.org|aip.org|medphys.org)/(resource|getabs|vsearch|link|(\w+/v\d))}
 }
 
 
@@ -120,6 +120,35 @@ format_linkout AIPP {
 # Please provide as comprehensive a set of tests as possible.
 # If you ever fix a bug in the parser, it is highly recommended that
 # you add the offending page as a test case.
+
+
+test {http://online.medphys.org/resource/1/mphya6/v38/i12/p6775_s1?bypassSSO=1} {
+	keywords {computer graphics; image reconstruction; image texture; list processing; medical image processing; optimisation; positron emission tomography}
+	volume 38
+	linkout {AIPP 38 MPH {} 6775}
+	linkout {DOI {} 10.1118/1.3661998 {} {}}
+	year 2011
+	start_page 6775
+	type JOUR
+	url http://link.aip.org/link/?MPH/38/6775/1
+	end_page 6786
+	doi 10.1118/1.3661998
+	publisher AAPM
+	formatted_url {{Scitation (AIP) (Permanent Link)} http://link.aip.org/link/?MPH/38/6775}
+	formatted_url {DOI http://dx.doi.org/10.1118/1.3661998}
+	issue 12
+	title {Fully 3D list-mode time-of-flight PET image reconstruction on GPUs using CUDA}
+	journal {Medical Physics}
+	abstract {Purpose: List-mode processing is an efficient way of dealing with the sparse nature of positron emission tomography (PET) data sets and is the processing method of choice for time-of-flight (ToF) PET image reconstruction. However, the massive amount of computation involved in forward projection and backprojection limits the application of list-mode reconstruction in practice, and makes it challenging to incorporate accurate system modeling.
+Methods: The authors present a novel formulation for computing line projection operations on graphics processing units (GPUs) using the compute unified device architecture (CUDA) framework, and apply the formulation to list-mode ordered-subsets expectation maximization (OSEM) image reconstruction. Our method overcomes well-known GPU challenges such as divergence of compute threads, limited bandwidth of global memory, and limited size of shared memory, while exploiting GPU capabilities such as fast access to shared memory and efficient linear interpolation of texture memory. Execution time comparison and image quality analysis of the GPU-CUDA method and the central processing unit (CPU) method are performed on several data sets acquired on a preclinical scanner and a clinical ToF scanner.
+Results: When applied to line projection operations for non-ToF list-mode PET, this new GPU-CUDA method is &gt;200 times faster than a single-threaded reference CPU implementation. For ToF reconstruction, we exploit a ToF-specific optimization to improve the efficiency of our parallel processing method, resulting in GPU reconstruction &gt;300 times faster than the CPU counterpart. For a typical whole-body scan with 75 × 75 × 26 image matrix, 40.7 million LORs, 33 subsets, and 3 iterations, the overall processing time is 7.7 s for GPU and 42 min for a single-threaded CPU. Image quality and accuracy are preserved for multiple imaging configurations and reconstruction parameters, with normalized root mean squared (RMS) deviation less than 1% between CPU and GPU-generated images for all cases.
+Conclusions: A list-mode ToF OSEM library was developed on the GPU-CUDA platform. Our studies show that the GPU reformulation is considerably faster than a single-threaded reference CPU method especially for ToF processing, while producing virtually identical images. This new method can be easily adapted to enable more advanced algorithms for high resolution PET reconstruction based on additional information such as depth of interaction (DoI), photon energy, and point spread functions (PSFs).}
+	author {Cui Jing JY {Jing yu Cui}}
+	author {Pratx Guillem G {Guillem Pratx}}
+	author {Prevrhal Sven S {Sven Prevrhal}}
+	author {Levin Craig CS {Craig S. Levin}}
+	status ok
+}
 
 # this one (now) redirects to an APS page
 test {http://scitation.aip.org/getabs/servlet/GetabsServlet?prog=normal&id=PRVDAQ000071000010103508000001&idtype=cvips&gifs=yes} {
