@@ -43,6 +43,7 @@
 
 proc parse_ris {rec} {
 	set last_tag ""
+	set seen_abstracts [list]
 
 	foreach l [split $rec "\n"] {
 
@@ -154,8 +155,14 @@ proc parse_ris {rec} {
 				{N1|AB|N2} {
 					# skip a leading DOI
 					regsub {^\s*10\.\d\d\d\d/[^\s]+} $v {} v
-					if {$v ne ""} {
+
+					# Some sites (e.g. informahealthcare) put the abstract in multiple
+					# fields.  Let's try and deal with that.
+					if {$v eq "" || [lsearch $seen_abstracts $v] != -1} {
+						# nothing
+					} else {
 						append ret(abstract) "$v "
+						lappend seen_abstracts $v
 					}
 				}
 
