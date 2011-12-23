@@ -455,7 +455,9 @@ namespace eval driver {
 
 			# Post-process what we've got from the plugin (TSV, which takes priority).
 			if {[info exists ret(author)]} {
-				unset ret(authors)
+				catch {
+					unset ret(authors)
+				}
 				foreach author $ret(author) {
 					lappend ret(authors) [::author::parse_author $author]
 				}
@@ -463,7 +465,9 @@ namespace eval driver {
 			}
 
 			if {[info exists ret(editor)]} {
-				unset ret(editors)
+				catch {
+					unset ret(editors)
+				}
 				foreach editor $ret(editor) {
 					lappend ret(editors) [::author::parse_author $editor]
 				}
