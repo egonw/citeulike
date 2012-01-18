@@ -151,7 +151,7 @@ bibtex = re.sub(r'^(@\w+{\S+)[ ](\S+)',r'\1\2',bibtex, re.MULTILINE)
 #
 # Look for the DOI in the bibtex - it's usually like doi = {http://doi.acm.org/10.1145/1141911.1141931}
 #
-doi_match = re.search('doi\s*=\s*\{http://[^/]+/(10\.[^/]+/.+?)\}', bibtex,  re.IGNORECASE)
+doi_match = re.search('doi\s*=\s*\{(?:http://[^/]+/)?(10\.[^/]+/.+?)\}', bibtex,  re.IGNORECASE)
 
 if doi_match:
 	doi = doi_match.group(1)
