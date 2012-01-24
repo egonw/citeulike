@@ -146,6 +146,10 @@ bibtex = bib_match.group(1).strip()
 # Sometime dodgy key (with space).  Replace that.   This is a quick hack and only
 # replaces a single space
 bibtex = re.sub(r'^(@\w+{\S+)[ ](\S+)',r'\1\2',bibtex, re.MULTILINE)
+#
+# Sometimes authors have spurious comma
+# http://dl.acm.org/citation.cfm?id=2076464 => author = {CACM Staff,}
+bibtex = re.sub(r',},',r'},',bibtex, re.MULTILINE)
 
 
 #
@@ -157,6 +161,7 @@ if doi_match:
 	doi = doi_match.group(1)
 else:
 	doi = ''
+
 
 #
 # Output plugin results
