@@ -20,9 +20,11 @@ import socket, re
 
 socket.setdefaulttimeout(15)
 
-
-CITATION_SERVER_ROOT = 'http://www.rsc.org/delivery/_ArticleLinking/refdownload.asp'
-REQ_STR = '?ManuscriptId=%(article_id)s&type=refman'
+# "http://pubs.rsc.org/en/content/formatedresult?markedids=c2an15930a&downloadtype=article&managertype=endnote"
+#CITATION_SERVER_ROOT = 'http://www.rsc.org/delivery/_ArticleLinking/refdownload.asp'
+#REQ_STR = '?ManuscriptId=%(article_id)s&type=refman'
+CITATION_SERVER_ROOT = "http://pubs.rsc.org/en/content/formatedresult"
+REQ_STR = "?markedids=%(article_id)s&downloadtype=article&managertype=endnote"
 QUERY=4;
 REQ_DATA = {}
 
