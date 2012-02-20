@@ -35,6 +35,7 @@
 #
 
 use LWP::Simple;
+use HTML::TreeBuilder;
 use strict;
 
 my $unclean_url = <>;
@@ -45,27 +46,93 @@ my $unclean_url = <>;
 
 my $clean_url;
 my $doi;
-if ($unclean_url !~ m,^https?://citeseerx.ist.psu.edu(\.[^/]+)?/viewdoc/[^/]*?(?:\?doi=)?([0-9.]+),) {
-  print "status\tnot_interested\n";
-  exit;
+if ($unclean_url !~ m,^https?://citeseerx?.ist.psu.edu(\.[^/]+)?/viewdoc/[^/]*?(?:\?doi=)?([0-9.]+),) {
+	print "status\tnot_interested\n";
+	exit;
 } else {
-  $doi = $2;
-  $clean_url = "http://citeseerx.ist.psu.edu/viewdoc/versions?doi=$doi";
+	$doi = $2;
+	$clean_url = "http://citeseer.ist.psu.edu/viewdoc/versions?doi=$doi";
 }
 
 my $data = "";
 $data = get $clean_url;
 if (not $data) {
-  print "status\terr\tCouldn't connect to $clean_url\n";
-  exit;
+	print "status\terr\tCouldn't connect to $clean_url\n";
+	exit;
 }
 
 print "begin_tsv\n";
 print "linkout\tCITESX\t\t$doi\t\t\n";
 
+print "ignore\t$clean_url\n";
+
+
+my $type="JOUR";
+
+my $tree = HTML::TreeBuilder->new();
+$tree->parse($data);
+my $head = ($tree->look_down('_tag','head'))[0];
+my @meta = $head->look_down('_tag','meta');
+
+
+foreach my $m (@meta) {
+	my $name = $m->attr("name");
+	my $content = $m->attr("content");
+	$content =~ s/\s+$//;
+	$content =~ s/^\s+//;
+	#print "$name = $content\n";
+	$name =~ /description/i and do {
+		$content =~ s/CiteSeerX - Document Details \([^\)]+\): //;
+		print "abstract\t$content\n";
+	};
+	$name =~ /citation_title/i and do {
+		print "title\t$content\n";
+	};
+	$name =~ /citation_year/i and do {
+		print "year\t$content\n";
+	};
+	$name =~ /citation_conference/i and do {
+		print "title_secondary\t$content\n";
+		$type = "INCONF";
+	};
+	$name =~ /citation_authors/i and do {
+		my @au = split /,\s+/, $content;
+		foreach my $a (@au) {
+			print "author\t$a\n";
+		}
+	};
+	$name =~ /citation_issue/i and do {
+		print "issue\t$content\n";
+	};
+	$name =~ /citation_volume/i and do {
+		print "volume\t$content\n";
+	};
+	$name =~ /citation_x/i and do {
+		print "\t$content\n";
+	};
+}
+
+if ($data =~ m{<tr><td>PAGES</td>\s+<td>(.*)--(.*)</td>}) {
+	print "start_page\t$1\n";
+	print "end_page\t$2\n";
+}
+
+
+
+print "type\t$type\n";
+
+
+#$tree->dump();
+#print "$data\n";
+
+print "end_tsv\n";
+print "status\tok\n";
+exit;
+
 my $venue = "";
 my $venue_type = "";
 foreach my $line (split(/\n/, $data)) {
+	#print "$line\n";
   if ($line !~ m,^\s*<tr><td>,) {
     next;
   }

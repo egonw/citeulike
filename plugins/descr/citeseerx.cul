@@ -47,7 +47,7 @@ plugin {
 	name {CiteSeerX Beta}
 
 	# The link the front page of this service
-	url {http://citeseerx.ist.psu.edu/}
+	url {http://citeseer.ist.psu.edu/}
 
 	# Any additional information which needs to be displayed to the user.
 	# E.g. "Experimental support"
@@ -80,7 +80,7 @@ plugin {
 	# RB note: fixing the URL string so it can handle things like
 	# http://blah.com.proxy.uni.edu/whatever.  We'll clean away the proxy info
 	# on the script side.
-	regexp {^http://citeseerx.ist.psu.edu(.[^/]+)?/viewdoc/}
+	regexp {^http://citeseerx?.ist.psu.edu(.[^/]+)?/viewdoc/}
 }
 
 #
@@ -114,16 +114,17 @@ format_linkout CITESX {
 # If you ever fix a bug in the parser, it is highly recommended that
 # you add the offending page as a test case.
 
-test {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.103.1502} {
-    formatted_url {{CiteSeerX Beta} http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.103.1502}
+
+test {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.23.9800} {
+    formatted_url {{CiteSeerX Beta} http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.23.9800}
     volume 52
-    linkout {CITESX {} 10.1.1.103.1502 {} {}}
+    linkout {CITESX {} 10.1.1.23.9800 {} {}}
     year 2001
     start_page 226
     type JOUR
     end_page 234
     issue 52
-    title {Searching the Web: the public and their queries}
+    title {Searching The Web: The Public and Their Queries}
     journal {Journal of the American Society for Information Science and Technology}
     status ok
     abstract {In studying actual Web searching by the public at large, we analyzed over one million Web queries by users of the Excite search engine. We found that most people use few search terms, few modified queries, view few Web pages, and rarely use advanced search features. A small number of search terms are used with high frequency, and a great many terms are unique; the language of Web queries is distinctive. Queries about recreation and entertainment rank highest. Findings are compared to data from two other large studies of Web queries. This study provides an insight into the public practices and choices in Web searching.}
@@ -133,32 +134,16 @@ test {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.103.1502} {
     author {Saracevic Tefko T {Tefko Saracevic}}
 }
 
-test {http://citeseerx.ist.psu.edu/viewdoc/versions?doi=10.1.1.30.5842} {
+test {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.30.5842} {
     formatted_url {{CiteSeerX Beta} http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.30.5842}
     year 1993
     linkout {CITESX {} 10.1.1.30.5842 {} {}}
     start_page 12
-    type INCONF
+    type JOUR
     end_page 21
-    title_secondary {in Proceedings of Supercomputing Conference}
-    title {A parallel hashed oct-tree N-body algorithm}
+    title {A Parallel Hashed Oct-Tree N-Body Algorithm}
     status ok
-    abstract {We report on an efficient adaptive N-body method which we have recently designed and implemented. The algorithm computes the forces on an arbitrary distribution of bodies in a time which scales as N log N with the particle number. The accuracy of the force calculations is analytically bounded, and can be adjusted via a user defined parameter between a few percent relative accuracy, down to machine arithmetic accuracy. Instead of using pointers to indicate the topology of the tree, we identify each possible cell with a key. The mapping of keys into memory locations is achieved via a hash table. This allows the program to access data in an efficient manner across multiple processors. Performance of the parallel program is measured on the 512 processor Intel Touchstone Delta system. We also comment on a number of wide-ranging applications which can benefit from application of this type of algorithm. 1}
-    author {Warren Michael MS {Michael S. Warren}}
-    author {Salmon John JK {John K. Salmon}}
-}
-
-test {http://citeseerx.ist.psu.edu/viewdoc/versions10.1.1.30.5842} {
-    formatted_url {{CiteSeerX Beta} http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.30.5842}
-    year 1993
-    linkout {CITESX {} 10.1.1.30.5842 {} {}}
-    start_page 12
-    type INCONF
-    end_page 21
-    title_secondary {in Proceedings of Supercomputing Conference}
-    title {A parallel hashed oct-tree N-body algorithm}
-    status ok
-    abstract {We report on an efficient adaptive N-body method which we have recently designed and implemented. The algorithm computes the forces on an arbitrary distribution of bodies in a time which scales as N log N with the particle number. The accuracy of the force calculations is analytically bounded, and can be adjusted via a user defined parameter between a few percent relative accuracy, down to machine arithmetic accuracy. Instead of using pointers to indicate the topology of the tree, we identify each possible cell with a key. The mapping of keys into memory locations is achieved via a hash table. This allows the program to access data in an efficient manner across multiple processors. Performance of the parallel program is measured on the 512 processor Intel Touchstone Delta system. We also comment on a number of wide-ranging applications which can benefit from application of this type of algorithm. 1}
+    abstract {We report on an efficient adaptive N-body method which we have recently designed and implemented. The algorithm computes the forces on an arbitrary distribution of bodies in a time which scales as N log N with the particle number. The accuracy of the force calculations is analytically bounded, and can be adjusted via a user defined parameter between a few percent relative accuracy, down to machine arithmetic accuracy. Instead of using pointers to indicate the topology of the tree, we identify each possible cell with a key. The mapping of keys into memory locations is achieved via a hash table. This allows the program to access data in an efficient manner across multiple processors. Performance of the parallel program is measured on the 512 processor Intel Touchstone Delta system. We also comment on a number of wide-ranging applications which can benefit from application of this type of algorithm.}
     author {Warren Michael MS {Michael S. Warren}}
     author {Salmon John JK {John K. Salmon}}
 }
