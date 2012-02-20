@@ -149,8 +149,8 @@ bibtex = re.sub(r'^(@\w+{\S+)[ ](\S+)',r'\1\2',bibtex, re.MULTILINE)
 #
 # Sometimes authors have spurious comma
 # http://dl.acm.org/citation.cfm?id=2076464 => author = {CACM Staff,}
+# (The first regex should have a $ anchor, but I can't get that to work... )
 bibtex = re.sub(r',},',r'},',bibtex, re.MULTILINE)
-
 
 #
 # Look for the DOI in the bibtex - it's usually like doi = {http://doi.acm.org/10.1145/1141911.1141931}
