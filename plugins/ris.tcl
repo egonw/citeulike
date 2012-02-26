@@ -219,7 +219,7 @@ proc parse_ris {rec} {
 					set ret(address) $v
 				}
 
-				{DOI} {
+				{DOI|DO} {
 					set ret(doi) $v
 				}
 
