@@ -372,6 +372,20 @@ namespace eval driver {
 					if {![info exists ret($k)]} {
 						set ret($k) $v
 					}
+					if {$k eq "doi"} {
+						set want_doi 1
+						if {[info exists ret(linkout)]} {
+							foreach lo $ret(linkout) {
+								::struct::list assign [split $lo "\t"] type dummy doi
+								if {$type eq "DOI"} {
+									set want_doi 0
+								}
+							}
+						}
+						if {$want_doi} {
+							lappend ret(linkout) "DOI\t\t$v\t\t"
+						}
+					}
 				}
 			}
 
@@ -382,6 +396,20 @@ namespace eval driver {
 				foreach {k v} [parse_bibtex $bibtex] {
 					if {![info exists ret($k)]} {
 						set ret($k) $v
+					}
+					if {$k eq "doi" || $k eq "DOI"} {
+						set want_doi 1
+						if {[info exists ret(linkout)]} {
+							foreach lo $ret(linkout) {
+								::struct::list assign [split $lo "\t"] type dummy doi
+								if {$type eq "DOI"} {
+									set want_doi 0
+								}
+							}
+						}
+						if {$want_doi} {
+							lappend ret(linkout) "DOI\t\t$v\t\t"
+						}
 					}
 				}
 			}
