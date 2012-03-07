@@ -1,0 +1,84 @@
+plugin {
+	version {1}
+	name {Association for the Advancement of Artificial Intelligence Digital Library}
+	url {http://www.aaai.org/Library/conferences-library.php}
+	blurb {AAAI parser - only works for some conferences}
+	author {Tristan Henderson}
+	email {tnhh@tnhh.org}
+	language {perl}
+	regexp {http://(www.)?aaai.org/ocs/index.php/.*/paper/view/\d+}
+}
+
+format_linkout AAAI {
+	return [list "AAAI" "http://www.aaai.org/ocs/index.php/${ikey_1}/${ikey_2}/paper/view/${ckey_1}"]
+}
+
+test {http://www.aaai.org/ocs/index.php/EAAI/EAAI10/paper/view/1952} {
+	formatted_url {AAAI http://www.aaai.org/ocs/index.php/EAAI/EAAI10/paper/view/1952}
+	linkout {AAAI EAAI 1952 EAAI10 {}}
+	year 2010
+	type CONF
+	plugin_version 1
+	title {The Tekkotsu "Crew": Teaching Robot Programming at a Higher Level}
+	booktitle {First AAAI Symposium on Educational Advances in Artificial Intelligence}
+	url {http://www.aaai.org/ocs/index.php/EAAI/EAAI10/paper/view/1952}
+	status ok
+	author {Touretzky David DS {David S. Touretzky}}
+	author {Tira-Thompson Ethan EJ {Ethan J. Tira-Thompson}}
+	abstract {The Tekkotsu "crew" is a collection of interacting software components designed to relieve a programmer of much of the burden of specifying low-level robot behaviors. Using this abstract approach to robot programming we can teach beginning roboticists to develop interesting robot applications with relatively little effort.}
+	plugin aaai
+}
+
+test {http://www.aaai.org/ocs/index.php/AAAI/AAAI10/paper/view/1774} {
+	formatted_url {AAAI http://www.aaai.org/ocs/index.php/AAAI/AAAI10/paper/view/1774}
+	linkout {AAAI AAAI 1774 AAAI10 {}}
+	year 2010
+	type CONF
+	plugin_version 1
+	title {A New Algorithm for Weighted Partial MaxSAT}
+	booktitle {Twenty-Fourth AAAI Conference on Artificial Intelligence}
+	url {http://www.aaai.org/ocs/index.php/AAAI/AAAI10/paper/view/1774}
+	status ok
+	author {Ansotegui Carlos C {Carlos Ansotegui}}
+	author {Bonet Maria ML {Maria Luisa Bonet}}
+	author {Levy Jordi J {Jordi Levy}}
+	abstract {We present and implement a Weighted Partial MaxSAT solver based on successive calls to a SAT solver. We prove the correctness of our algorithm and compare our solver with other Weighted Partial MaxSAT solvers.}
+	plugin aaai
+}
+
+test {http://aaai.org/ocs/index.php/ICWSM/ICWSM11/paper/view/2837/0} {
+	formatted_url {AAAI http://www.aaai.org/ocs/index.php/ICWSM/ICWSM11/paper/view/2837}
+	linkout {AAAI ICWSM 2837 ICWSM11 {}}
+	year 2011
+	type CONF
+	plugin_version 1
+	title {Rating Friends Without Making Enemies}
+	booktitle {Fifth International AAAI Conference on Weblogs and Social Media}
+	url {http://www.aaai.org/ocs/index.php/ICWSM/ICWSM11/paper/view/2837}
+	status ok
+	author {Adamic Lada LA {Lada A. Adamic}}
+	author {Lauterbach Debra D {Debra Lauterbach}}
+	author {Teng Chun-Yuen C {Chun-Yuen Teng}}
+	author {Ackerman Mark M {Mark Ackerman}}
+	abstract {As online social networks expand their role beyond maintaining existing relationships, they may look to more faceted ratings to support the formation of new connections between their users. Our study focuses on one community employing faceted ratings, CouchSurfing.org, and combines data analysis of ratings, a large-scale survey, and in-depth interviews.  In order to understand the ratings, we revisit the notions of friendship and trust and uncover an asymmetry: close friendship includes trust, but high levels of trust can be achieved without close friendship. To users, providing faceted ratings presents challenges, including differentiating and quantifying inherently subjective feelings such as friendship and trust, concern over a friend's reaction to a rating, and knowledge of how ratings can affect others' reputations. One consequence of these issues is the near absence of negative feedback, even though a small portion of actual experiences and privately held ratings are negative. We show how users take this into account when formulating and interpreting ratings, and discuss designs that could encourage more balanced feedback.}
+	plugin aaai
+}
+
+test {http://www.aaai.org/ocs/index.php/ICWSM/ICWSM11/paper/view/2837/0} {
+	formatted_url {AAAI http://www.aaai.org/ocs/index.php/ICWSM/ICWSM11/paper/view/2837}
+	linkout {AAAI ICWSM 2837 ICWSM11 {}}
+	year 2011
+	type CONF
+	plugin_version 1
+	title {Rating Friends Without Making Enemies}
+	booktitle {Fifth International AAAI Conference on Weblogs and Social Media}
+	url {http://www.aaai.org/ocs/index.php/ICWSM/ICWSM11/paper/view/2837}
+	status ok
+	author {Adamic Lada LA {Lada A. Adamic}}
+	author {Lauterbach Debra D {Debra Lauterbach}}
+	author {Teng Chun-Yuen C {Chun-Yuen Teng}}
+	author {Ackerman Mark M {Mark Ackerman}}
+	abstract {As online social networks expand their role beyond maintaining existing relationships, they may look to more faceted ratings to support the formation of new connections between their users. Our study focuses on one community employing faceted ratings, CouchSurfing.org, and combines data analysis of ratings, a large-scale survey, and in-depth interviews.  In order to understand the ratings, we revisit the notions of friendship and trust and uncover an asymmetry: close friendship includes trust, but high levels of trust can be achieved without close friendship. To users, providing faceted ratings presents challenges, including differentiating and quantifying inherently subjective feelings such as friendship and trust, concern over a friend's reaction to a rating, and knowledge of how ratings can affect others' reputations. One consequence of these issues is the near absence of negative feedback, even though a small portion of actual experiences and privately held ratings are negative. We show how users take this into account when formulating and interpreting ratings, and discuss designs that could encourage more balanced feedback.}
+	plugin aaai
+}
+
