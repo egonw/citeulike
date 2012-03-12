@@ -17,7 +17,7 @@ test {http://www.aaai.org/ocs/index.php/EAAI/EAAI10/paper/view/1952} {
 	formatted_url {AAAI http://www.aaai.org/ocs/index.php/EAAI/EAAI10/paper/view/1952}
 	linkout {AAAI EAAI 1952 EAAI10 {}}
 	year 2010
-	type CONF
+	type INCONF
 	plugin_version 1
 	title {The Tekkotsu "Crew": Teaching Robot Programming at a Higher Level}
 	booktitle {First AAAI Symposium on Educational Advances in Artificial Intelligence}
@@ -33,7 +33,7 @@ test {http://www.aaai.org/ocs/index.php/AAAI/AAAI10/paper/view/1774} {
 	formatted_url {AAAI http://www.aaai.org/ocs/index.php/AAAI/AAAI10/paper/view/1774}
 	linkout {AAAI AAAI 1774 AAAI10 {}}
 	year 2010
-	type CONF
+	type INCONF
 	plugin_version 1
 	title {A New Algorithm for Weighted Partial MaxSAT}
 	booktitle {Twenty-Fourth AAAI Conference on Artificial Intelligence}
@@ -50,7 +50,7 @@ test {http://aaai.org/ocs/index.php/ICWSM/ICWSM11/paper/view/2837/0} {
 	formatted_url {AAAI http://www.aaai.org/ocs/index.php/ICWSM/ICWSM11/paper/view/2837}
 	linkout {AAAI ICWSM 2837 ICWSM11 {}}
 	year 2011
-	type CONF
+	type INCONF
 	plugin_version 1
 	title {Rating Friends Without Making Enemies}
 	booktitle {Fifth International AAAI Conference on Weblogs and Social Media}
@@ -68,7 +68,7 @@ test {http://www.aaai.org/ocs/index.php/ICWSM/ICWSM11/paper/view/2837/0} {
 	formatted_url {AAAI http://www.aaai.org/ocs/index.php/ICWSM/ICWSM11/paper/view/2837}
 	linkout {AAAI ICWSM 2837 ICWSM11 {}}
 	year 2011
-	type CONF
+	type INCONF
 	plugin_version 1
 	title {Rating Friends Without Making Enemies}
 	booktitle {Fifth International AAAI Conference on Weblogs and Social Media}

@@ -24,7 +24,7 @@ my $ris = $res->content;
 print "begin_tsv\n";
 print "linkout\tAAAI\t$conf_key1\t$aaai_key\t$conf_key2\t\n";
 # Assume everything is a conference, since the parser only seems to work for conferences
-print "type\tCONF\n";
+print "type\tINCONF\n";
 foreach my $line (split(/\n/,$ris)) {
     if ($line =~ /^JF  - (.*); (.*)/) {
         # The RIS JF entry contains breadcrumbs
