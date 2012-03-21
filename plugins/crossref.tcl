@@ -73,13 +73,13 @@ proc CROSSREF::parse_journal {doc} {
 
 	catch {
 		catch {
-			set ret(day)   [[$doc selectNodes ${prefix}/journal_article/publication_date/day] text]
+			set ret(day)   [[$doc selectNodes ${prefix}/journal_article/publication_date\[1\]/day] text]
 		}
 		catch {
-			set ret(month) [[$doc selectNodes ${prefix}/journal_article/publication_date/month] text]
+			set ret(month) [[$doc selectNodes ${prefix}/journal_article/publication_date\[1\]/month] text]
 		}
 		catch {
-			set ret(year)  [[$doc selectNodes ${prefix}/journal_article/publication_date/year] text]
+			set ret(year)  [[$doc selectNodes ${prefix}/journal_article/publication_date\[1\]/year] text]
 		}
 	}
 
@@ -193,14 +193,14 @@ proc CROSSREF::parse_chapter {doc} {
 	}
 
 	catch {
-		set ret(day)   [[$doc selectNodes ${meta}/publication_date/day] text]
+		set ret(day)   [[$doc selectNodes ${meta}/publication_date\[1\]/day] text]
 	}
 	catch {
-		set ret(month) [[$doc selectNodes ${meta}/publication_date/month] text]
+		set ret(month) [[$doc selectNodes ${meta}/publication_date\[1\]/month] text]
 	}
 	# puts "Looking for ${meta}/publication_date/year"
 	catch {
-		set ret(year)  [[$doc selectNodes ${meta}/publication_date/year] text]
+		set ret(year)  [[$doc selectNodes ${meta}/publication_date\[1\]/year] text]
 	}
 
 	catch {
@@ -338,16 +338,16 @@ proc CROSSREF::parse_conf {doc} {
 	}
 
 	catch {
-		set ret(year)  [[$doc selectNodes ${paper}/publication_date/year] text]
-		set ret(month) [[$doc selectNodes ${paper}/publication_date/month] text]
-		set ret(day)   [[$doc selectNodes ${paper}/publication_date/day] text]
+		set ret(year)  [[$doc selectNodes ${paper}/publication_date\[1\]/year] text]
+		set ret(month) [[$doc selectNodes ${paper}/publication_date\[1\]/month] text]
+		set ret(day)   [[$doc selectNodes ${paper}/publication_date\[1\]/day] text]
 	}
 
 	if {![info exists ret(year)]} {
 		catch {
-			set ret(year)  [[$doc selectNodes ${meta}/publication_date/year] text]
-			set ret(month) [[$doc selectNodes ${meta}/publication_date/month] text]
-			set ret(day)   [[$doc selectNodes ${meta}/publication_date/day] text]
+			set ret(year)  [[$doc selectNodes ${meta}/publication_date\[1\]/year] text]
+			set ret(month) [[$doc selectNodes ${meta}/publication_date\[1\]/month] text]
+			set ret(day)   [[$doc selectNodes ${meta}/publication_date\[1\]/day] text]
 		}
 	}
 
