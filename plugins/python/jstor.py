@@ -37,6 +37,8 @@
 import urllib, re, sys, codecs
 import socket, subprocess
 from metaheaders import MetaHeaders
+from cultools import urlparams
+
 
 socket.setdefaulttimeout(15)
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
@@ -55,12 +57,17 @@ def url_to_id(url, page):
 		return (jstoreId, doi)
 
 	# If there's a doi=DOI in the URL then we'll have that
-	m = re.search(r'doi=(10.\d\d\d\d/(\d+))', url)
-	if m:
-		return (int(m.group(2)),m.group(1))
-	m = re.search(r'doi=(10.\d\d\d\d/.+)', url)
-	if m:
-		return (None,m.group(1))
+	try:
+		doi = urlparams(url)["doi"]
+		m = re.search(r'(10.\d\d\d\d/(\d+))', doi)
+		if m:
+			return (int(m.group(2)),m.group(1))
+		m = re.search(r'(10.\d\d\d\d/.+)', doi)
+		if m:
+			return (None,m.group(1))
+	except KeyError:
+		pass
+
 
 	# If it's the old style SICI then, annoyingly, we'll need to fetch it
 	if 'sici=' in url:
