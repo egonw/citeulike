@@ -3,22 +3,18 @@
 import warnings
 warnings.simplefilter("ignore",DeprecationWarning)
 
-import os, sys, re, urllib2, cookielib, string
-from urllib import urlencode
-from urllib2 import urlopen
-from copy import copy
-import BeautifulSoup
+import os, sys, re, urllib2, string, socket
 import htmlentitydefs
+import mechanize
 import html5lib
 from html5lib import treebuilders
-import lxml.html
-
-import socket
+import lxml.html, lxml.etree
 
 socket.setdefaulttimeout(15)
 
 class ParseException(Exception):
 	pass
+
 
 ##
 # Removes HTML or XML character references and entities from a text string.
@@ -139,7 +135,7 @@ def xscrape_abstract(page):
 
 	page = tidy.parseString(page,**options)
 
-	#print "%s" % page
+	#print  page
 	#return
 
 	parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("beautifulsoup"))
@@ -183,9 +179,44 @@ def xscrape_abstract(page):
 def handle(url):
 
 	cUrl = canon_url(url)
-#	print "%s => %s" % (url, cUrl)
-	page = urlopen(cUrl).read()
+	#print "%s => %s" % (url, cUrl)
 
+	cookies = mechanize.CookieJar()
+
+	browser = mechanize.Browser()
+	browser.addheaders = [("User-Agent", "Mozilla/5.0 (compatible; citeulike/1.0)"),
+			     ("From", "plugins@citeulike.org")]
+	#browser.add_handler(PrettifyHandler())
+	browser.set_handle_robots(False)
+	browser.set_debug_http(False)
+	browser.set_debug_redirects(False)
+	browser.open(cUrl)
+
+	response = browser.response()
+	page = response.get_data()
+	#print page
+
+	#
+	# Elsevier insist on user selecting a "preferred source" when the article is
+	# available.  This is normally stored in a cookie.
+	# If we get directed to the Elsevier "linking hub", find the 1st SD link on the
+	# and follow that.
+	# Yeah, I know - rubbish.
+	#
+	huburl = browser.geturl()
+	m = re.search(r'linkinghub.elsevier.com/', huburl)
+	if m:
+		root = lxml.html.fromstring(page)
+		inputs = root.cssselect("input")
+		hrefs = [link.get("value") for link in inputs]
+		for href in hrefs:
+			# print href
+			n = re.search('sciencedirect.com',href)
+			if n:
+				browser.open(href)
+				response = browser.response()
+				page = response.get_data()
+				break
 
 	m = re.search(r'<a(?: id="[^"]+")? href="http://dx.doi.org/([^"]+)"', page)
 
@@ -199,7 +230,11 @@ def handle(url):
 		link = soup.find(text=re.compile(r"view abstract", re.I))
 		if link:
 			href = link.parent['href']
-			page = urlopen(canon_url("http://www.sciencedirect.com" + href)).read()
+			#page = urlopen(canon_url("http://www.sciencedirect.com" + href)).read()
+			browser.open(href)
+			response = browser.response()
+			page = response.get_data()
+
 			m = re.search(r'<a(?: id="[^"]+")?  href="http://dx.doi.org/([^"]+)"', page)
 
 
@@ -212,32 +247,21 @@ def handle(url):
 	#	raise ParseException, "Cannot find an Elsevier DOI (10.1006, 10.1016, 10.1053) DOI"
 
 	xml_url  = crossref_xml_url(doi)
-	xml_page = urlopen(xml_url).read()
 
+	#xml_page = urlopen(xml_url).read()
 
+	browser.open(xml_url)
+	response = browser.response()
+	xml_page = response.get_data()
 	xml_page = xml_page.decode('utf-8')
 
 	# Get rid of extraneous "stars" \u2606.   Sometimes at end of title (hopefully
 	# they're never meant to be "real" elsewhere...)
 	xml_page = xml_page.replace(u'\u2606',' ')
-	#\xe2\x98\x86
-
-
 
 	m = re.search("not found in CrossRef", xml_page)
 	if m:
 		raise ParseException, "Unable to locate that DOI (%s) in crossref" % doi
-
-
-	#
-	# Emergency bodge to fix completely toileted XML from crossref
-	#
-	#m = re.search("(<doi_record>.*</doi_record>)", xml_page, re.S)
-	#if not m:
-#		raise ParseException, "Unable to extract metadata - malformed XML"
-
-#	xml_page = m.group(1)
-
 
 	yield "begin_crossref"
 	yield xml_page
@@ -260,21 +284,12 @@ def handle(url):
 
 if __name__ == "__main__":
 
-	cookie_jar = cookielib.CookieJar()
-
-	handlers = []
-	if "--debug" in sys.argv:
-		handlers.append( urllib2.HTTPHandler(debuglevel=True) )
-	handlers.append( urllib2.HTTPCookieProcessor(cookie_jar) )
-
-	opener=urllib2.build_opener(*handlers)
-	opener.addheaders = [
-		("User-Agent", "CiteULike/1.0 +http://www.citeulike.org/"),
-		]
-	urllib2.install_opener(opener)
-# 	urllib2.ProxyHandler({"http":"http://quimby.smithersbet.com:3128"})
-
 	url = sys.stdin.readline().strip()
+
+	for line in handle(url):
+		print line.encode("utf-8")
+	sys.exit(0)
+
 	try:
 		for line in handle(url):
 			print line.encode("utf-8")
