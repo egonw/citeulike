@@ -313,8 +313,10 @@ proc CROSSREF::parse_conf {doc} {
 
 	catch {
 		set meta "$prefix/proceedings_metadata"
-		[[$doc selectNodes ${meta}]
-		set meta "$prefix/proceedings_series_metadata"
+		set dummy [[$doc selectNodes ${meta}] asText]
+		if {$dummy eq ""} {
+			set meta "$prefix/proceedings_series_metadata"
+		}
 	}
 
 	set paper ${prefix}/conference_paper
@@ -473,7 +475,7 @@ proc CROSSREF::load {doi} {
 
 proc test_conf {} {
 	source author.tcl
-	set doi "10.1109/MSR.2007.13"
+	set doi "10.1109/CSE.2009.417"
 	set crossref_xml [CROSSREF::load $doi]
 	set crossref_data [CROSSREF::parse_xml $crossref_xml]
 	puts $crossref_data
