@@ -118,61 +118,6 @@ def scrape_abstract(page):
 #	print "2================================================================="
 	return unescape(abstract)
 
-
-#
-# Old Scraper using Beautiful Soup.   Seems to fail on some pages
-#
-def xscrape_abstract(page):
-	import tidy
-
-	abs = []
-
-
-	options = dict(output_xhtml=1,
-		add_xml_decl=1,
-		indent=1,
-		tidy_mark=0)
-
-	page = tidy.parseString(page,**options)
-
-	#print  page
-	#return
-
-	parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("beautifulsoup"))
-	soup = parser.parse(page)
-#	print page
-#	soup = BeautifulSoup.BeautifulSoup(page.__str__)
-	print "soup=%s" % soup
-	for div in soup.findAll('div',attrs={'class':'articleText'}):
-		print "****1"
-		h3 = div.find('h3',{'class':'h3'})
-		if h3:
-			print "****2"
-			val = h3.contents[0]
-			print "****3 %s" % val
-			if string.lower(val) in ('abstract'):
-				for p in h3.findNextSiblings('p'):
-					for t in p.findAll(text=True):
-						abs.append(t)
-				break
-
-	if len(abs) == 0:
-		for div in soup.findAll('div',attrs={'id':'articleContent'}):
-			p = div.find('div', attrs={'class':'articleText_indent'})
-			if p:
-				for t in p.findAll(text=True):
-					abs.append(t.string)
-
-	abstract = ' '.join(abs)
-
-	abstract = re.sub('\n+',' ',abstract)
-	abstract = re.sub('\s+',' ',abstract)
-	print "1================================================================="
-	print abstract
-	print "2================================================================="
-	return unescape(abstract)
-
-
 #
 # Just try to fetch the metadata from crossref
 #
@@ -225,12 +170,10 @@ def handle(url):
 	if not m:
 		parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("beautifulsoup"))
 		soup = parser.parse(page)
-#		soup = BeautifulSoup.BeautifulSoup(page)
 
 		link = soup.find(text=re.compile(r"view abstract", re.I))
 		if link:
 			href = link.parent['href']
-			#page = urlopen(canon_url("http://www.sciencedirect.com" + href)).read()
 			browser.open(href)
 			response = browser.response()
 			page = response.get_data()
@@ -247,8 +190,6 @@ def handle(url):
 	#	raise ParseException, "Cannot find an Elsevier DOI (10.1006, 10.1016, 10.1053) DOI"
 
 	xml_url  = crossref_xml_url(doi)
-
-	#xml_page = urlopen(xml_url).read()
 
 	browser.open(xml_url)
 	response = browser.response()
