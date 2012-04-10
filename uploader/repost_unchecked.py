@@ -9,7 +9,11 @@ import json
 from lxml import etree
 import os, errno
 import os.path
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, STDOUT
+import socket
+
+socket.setdefaulttimeout(15)
+
 
 """
 Usage:
@@ -26,11 +30,18 @@ class PrettifyHandler(mechanize.BaseHandler):
 		if not hasattr(response, "seek"):
 			response = mechanize.response_seek_wrapper(response)
 		if response.info().dict.has_key('content-type') and ('html' in response.info().dict['content-type']):
-			p = Popen(["/usr/bin/tidy", "-q", "-i"], stdin=PIPE, stdout=PIPE, stderr=PIPE)
-			p.stdin.write(response.get_data())
-			p.stdin.close()
-			html = p.stdout.read()
-			p.stdout.close()
+
+			p = Popen(["/usr/bin/tidy", "-q", "-i"], stdout=PIPE, stdin=PIPE, stderr=PIPE)
+
+			html = p.communicate(input=response.get_data())[0]
+			#print html
+
+			#p = Popen(["/usr/bin/tidy", "-q", "-i"], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+			#p.stdin.write(response.get_data())
+			#p.stdin.flush()
+			#p.stdin.close()
+			#html = p.stdout.read()
+			#p.stdout.close()
 			response.set_data(html)
 
 			#html = etree.HTML(response.get_data())
@@ -91,10 +102,6 @@ def login(username, password):
 #
 def post(article):
 
-	if article["is_unchecked"]!="Y":
-		print "Skipping checked article %s" % url
-		return 1
-
 	src_article_id = article["article_id"]
 
 	url = None
@@ -147,10 +154,15 @@ def post(article):
 		print "ERROR:could not find a linkout"
 		return -1
 
+	if article["is_unchecked"]!="Y":
+		print "Skipping checked article %s" % url
+		return 2
 
 	browser.open(BASE+"/posturl?"+urllib.urlencode({"url": url}))
 
 	here = browser.geturl()
+
+	browser.response().get_data()
 
 	print "Got", here
 
@@ -223,6 +235,7 @@ def post(article):
 	browser["to_read"] = [article["priority"]]
 
 	browser.submit()
+	browser.response().get_data()
 
 	new_url = browser.geturl()
 
@@ -277,6 +290,22 @@ def sync_articles(src_article, dest_article):
 		sync_userfiles(src_article, dest_article)
 	sync_notes(src_article, dest_article)
 	sync_metadata(src_article, dest_article)
+	sync_cito(src_article, dest_article)
+
+def sync_cito(src_article, dest_article):
+	if src_article.has_key("cito"):
+		print "Syncing CiTO"
+	else:
+		print "No CiTO"
+
+	this_article_id = dest_article["article_id"]
+	cito = src_article["cito"]
+
+	for c in cito:
+		rel = c["relation"]
+		that_article_id = c["article_id"]
+		#browser.open(BASE+"/add_cito.json.do?this_article_id=%s&that_article_id=%s&cito_code=%s" % (this_article_id,that_article_id,rel ))
+		browser.open(BASE+"/add_cito.json.do?","this_article_id=%s&that_article_id=%s&cito_code=%s&from=/user/%s" % (this_article_id,that_article_id,rel,options.username))
 
 
 def sync_metadata(src_article, dest_article):
@@ -333,6 +362,7 @@ def sync_metadata(src_article, dest_article):
 		browser["editors"] = "\n".join(src_article["editors"])
 
 	browser.submit()
+	browser.response().get_data()
 
 
 def sync_notes(src_article, dest_article):
@@ -370,6 +400,7 @@ def sync_notes(src_article, dest_article):
 			browser["private_note"] = ["y"]
 		# returns us to article page, so OK in loop
 		browser.submit()
+		browser.response().get_data()
 
 def sync_userfiles(src_article, dest_article):
 	if not src_article.has_key("userfiles"):
@@ -413,6 +444,7 @@ def sync_userfiles(src_article, dest_article):
 		browser.add_file(open(s), 'application/octet-stream', f["name"])
 		browser["keep_name"] = ["yes"]
 		browser.submit()
+		browser.response().get_data()
 
 
 ################################################################################
@@ -450,6 +482,11 @@ parser.add_option("-f", "--file",
 		dest="srcfile",
 		help="Source JSON file")
 
+parser.add_option("--no-pause",
+		dest="pause",
+		action="store_false",
+		default=True,
+		help="Don't pause between posts.  Please don't use this or you might get blocked.")
 
 (options, args) = parser.parse_args()
 
@@ -487,21 +524,37 @@ login(options.username, options.password)
 
 articles = json.load(open(options.srcfile))
 failed = []
+
+print "Got %s articles (total)" % len(articles)
+
+# filter out checked articles
+articles = [a for a in articles if a["is_unchecked"] == "Y"]
+print "Got %s articles (unchecked)" % len(articles)
+
+count = 0
 for article in articles:
+	count = count + 1
 	print "========================================================================="
-	print "Posting:",article["title"]
+	print "%s: Posting: %s" % (count, article["title"])
 	status = post(article)
 	if status < 0:
 		failed.append(article)
 	# A few article is fine, otherwise don't post too fast!
-	if len(articles) <= 3:
-		pass
-	elif len(articles) <= 10:
-		time.sleep(1)
-	else:
-		time.sleep(5)
+	pause = options.pause
+	if not pause and status == 2:
+		pause = False
+	if pause:
+		# print "***pause****", options.pause, status
+		if len(articles) <= 3:
+			pass
+		elif len(articles) <= 10:
+			time.sleep(1)
+			pass
+		else:
+			time.sleep(5)
+			pass
 
 if len(failed) > 0:
 	print "========================================================================"
 	print "Failed to post:"
-	print json.dumps(failed)
+	print json.dumps(failed,indent=4)
