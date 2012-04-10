@@ -113,9 +113,9 @@ def post(article):
 		for linkout in article["linkouts"]:
 			if linkout["type"] == "URL":
 				# look for an explicit CrossRef link
-				m = re.search(r'dx.doi.org/(.*))', linkout["url"])
+				m = re.search(r'dx.doi.org/(.*)', linkout["url"])
 				if m:
-					url = m.group(1)
+					url = linkout["url"]
 					break
 
 				# Look for anything DOI-like.
@@ -123,7 +123,7 @@ def post(article):
 				# in the 2nd part.   In practice, / is rare!
 				m = re.search(r'(10\.\d\d\d\d/[^/]+)', linkout["url"])
 				if m:
-					url = m.group(1)
+					url = "doi:%s" % m.group(1)
 					break
 
 	# Look for PubMed.   Actually, I don't think anything but DOI and URL
@@ -135,20 +135,24 @@ def post(article):
 				break
 
 	# OK, let's try anything, but exclude any linkout that seems to be a PDF
-	for linkout in article["linkouts"]:
-		u = linkout["url"]
-		m = re.search(r'\.pdf', u, re.I);
-		if not m:
-			url = u
-			break
+	if url == None and article.has_key("linkouts"):
+		for linkout in article["linkouts"]:
+			u = linkout["url"]
+			m = re.search(r'\.pdf', u, re.I);
+			if not m:
+				url = u
+				break
 
 	if not url:
 		print "ERROR:could not find a linkout"
 		return -1
 
+
 	browser.open(BASE+"/posturl?"+urllib.urlencode({"url": url}))
 
 	here = browser.geturl()
+
+	print "Got", here
 
 	#
 	# If the article is already in the library, sync up the metadata.
@@ -163,14 +167,18 @@ def post(article):
 
 	m = re.search(r'/post_unknown.adp', here)
 	if m:
-		print "UNKNOWN:%s" % url
+		print "ERROR:UNKNOWN:%s" % url
 		return -1
 
+	m = re.search(r'/post_error.adp', here)
+	if m:
+		print "ERROR:UNKNOWN:driver unable to post: %s" % url
+		return -1
 
 	# Make sure we're at the actual posting page
 	m = re.search(r'/posturl2', here)
 	if not m:
-		print "ERROR:%s" % here
+		print "ERROR:%s" % url
 		return -1
 
 	print "Preparing to post: %s" % url
