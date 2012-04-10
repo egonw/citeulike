@@ -322,7 +322,7 @@ def sync_metadata(src_article, dest_article):
 		if len(published) > 0:
 			browser["year"]  = published[0]
 		if len(published) > 1:
-			browser["month"]  = [published[1]]
+			browser["month"]  = [str(int(published[1]))]
 		if len(published) > 2:
 			browser["day"]  = published[2]
 
