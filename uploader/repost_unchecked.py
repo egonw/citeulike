@@ -297,6 +297,7 @@ def sync_cito(src_article, dest_article):
 		print "Syncing CiTO"
 	else:
 		print "No CiTO"
+		return
 
 	this_article_id = dest_article["article_id"]
 	cito = src_article["cito"]
@@ -304,7 +305,6 @@ def sync_cito(src_article, dest_article):
 	for c in cito:
 		rel = c["relation"]
 		that_article_id = c["article_id"]
-		#browser.open(BASE+"/add_cito.json.do?this_article_id=%s&that_article_id=%s&cito_code=%s" % (this_article_id,that_article_id,rel ))
 		browser.open(BASE+"/add_cito.json.do?","this_article_id=%s&that_article_id=%s&cito_code=%s&from=/user/%s" % (this_article_id,that_article_id,rel,options.username))
 
 
