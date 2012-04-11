@@ -10,7 +10,7 @@ from lxml import etree
 import os, errno
 import os.path
 from subprocess import Popen, PIPE, STDOUT
-import socket
+import socket, codecs
 
 socket.setdefaulttimeout(15)
 
@@ -134,7 +134,7 @@ def post(article):
 					break
 
 	# Look for PubMed.   Actually, I don't think anything but DOI and URL
-	# Linkouts are likely in unchecked articles.
+	# linkouts are likely in unchecked articles.
 	if url == None and article.has_key("linkouts"):
 		for linkout in article["linkouts"]:
 			if linkout["type"] == "Pubmed":
@@ -154,15 +154,14 @@ def post(article):
 		print "ERROR:could not find a linkout"
 		return -1
 
+	# This in now filtered out in the calling func. so should never fire.
 	if article["is_unchecked"]!="Y":
 		print "Skipping checked article %s" % url
 		return 2
 
-	browser.open(BASE+"/posturl?"+urllib.urlencode({"url": url}))
+	get(BASE+"/posturl?"+urllib.urlencode({"url": url}))
 
 	here = browser.geturl()
-
-	browser.response().get_data()
 
 	print "Got", here
 
@@ -234,8 +233,7 @@ def post(article):
 	# reading priority
 	browser["to_read"] = [article["priority"]]
 
-	browser.submit()
-	browser.response().get_data()
+	do_submit()
 
 	new_url = browser.geturl()
 
@@ -278,9 +276,9 @@ def get_dest_article(new_url):
 	json_url = "%s/json%s" % (m.group(1), m.group(2))
 	print "Downloading json from %s" % json_url
 
-	browser.open(json_url)
+	resp = get(json_url)
 
-	dest_article = json.loads(browser.response().get_data())[0]
+	dest_article = json.loads(resp)[0]
 	return dest_article
 
 
@@ -300,12 +298,12 @@ def sync_cito(src_article, dest_article):
 		return
 
 	this_article_id = dest_article["article_id"]
-	cito = src_article["cito"]
 
-	for c in cito:
-		rel = c["relation"]
-		that_article_id = c["article_id"]
-		browser.open(BASE+"/add_cito.json.do?","this_article_id=%s&that_article_id=%s&cito_code=%s&from=/user/%s" % (this_article_id,that_article_id,rel,options.username))
+	for c in src_article["cito"]:
+		browser.open(BASE+"/add_cito.json.do?",
+			"this_article_id=%s&that_article_id=%s&cito_code=%s&from=/user/%s" %
+			(this_article_id,c["article_id"],c["relation"],options.username))
+		browser.response().get_data()
 
 
 def sync_metadata(src_article, dest_article):
@@ -336,15 +334,23 @@ def sync_metadata(src_article, dest_article):
 		"abstract": "abstract"
 	}
 
+
 	# TODO.  Need an option to export RAW records, especially for
 	# "//" fields and (possibly) authors.
 
-	for n in [c for c in browser.controls]:
-		#print "",n.name
+	fields = browser.controls
+	#fields = [f for f in fields if f.name == "abstract" ]
+
+	for n in [c for c in fields]:
 		cname = n.name
 
 		if cname and form_name_map.has_key(cname) and form_name_map[cname] and src_article.has_key(form_name_map[cname]):
-			browser[cname] = src_article[form_name_map[cname]]
+			v = src_article[form_name_map[cname]]
+			v = v.encode("utf-8","ignore")
+			browser[cname] = v
+
+	#do_submit()
+	#return
 
 	if src_article.has_key("published"):
 		published = src_article["published"]
@@ -356,13 +362,22 @@ def sync_metadata(src_article, dest_article):
 			browser["day"]  = published[2]
 
 	if src_article.has_key("authors"):
-		browser["authors"] = "\n".join(src_article["authors"])
+		browser["authors"] = "\n".join([a.encode("utf-8","ignore") for a in src_article["authors"]])
 
 	if src_article.has_key("editors"):
-		browser["editors"] = "\n".join(src_article["editors"])
+		browser["editors"] = "\n".join([a.encode("utf-8","ignore") for a in src_article["editors"]])
 
+	do_submit()
+
+
+def do_submit():
 	browser.submit()
 	browser.response().get_data()
+
+
+def get(url):
+	browser.open(url)
+	return browser.response().get_data()
 
 
 def sync_notes(src_article, dest_article):
@@ -399,8 +414,7 @@ def sync_notes(src_article, dest_article):
 		if n["private"]:
 			browser["private_note"] = ["y"]
 		# returns us to article page, so OK in loop
-		browser.submit()
-		browser.response().get_data()
+		do_submit()
 
 def sync_userfiles(src_article, dest_article):
 	if not src_article.has_key("userfiles"):
@@ -443,8 +457,7 @@ def sync_userfiles(src_article, dest_article):
 		browser.select_form(name="fileupload_frm")
 		browser.add_file(open(s), 'application/octet-stream', f["name"])
 		browser["keep_name"] = ["yes"]
-		browser.submit()
-		browser.response().get_data()
+		do_submit()
 
 
 ################################################################################
