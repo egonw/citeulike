@@ -206,12 +206,20 @@ proc CROSSREF::parse_chapter {doc} {
 	catch {
 		set ret(title) [_get_text [$doc selectNodes ${content}/titles/title\[1\]]]
 	}
+	if {![info exists ret(title)]} {
+		catch {
+			set ret(title) [_get_text [$doc selectNodes ${meta}/titles/title\[1\]]]
+		}
+	}
 
 	#
 	# Authors
 	#    - NB we use the 'sequence' attribute to get author order correct
 	#
 	set a_nodes [$doc selectNodes ${content}/contributors/person_name\[@contributor_role='author'\]]
+	if {$a_nodes eq ""} {
+		set a_nodes [$doc selectNodes ${meta}/contributors/person_name\[@contributor_role='author'\]]
+	}
 
 	set author_list [list]
 
@@ -244,6 +252,10 @@ proc CROSSREF::parse_chapter {doc} {
 	# book_metadata language="en"><contributors><person_name contributor_role="editor"
 	#
 	set a_nodes [$doc selectNodes $meta/contributors/person_name\[@contributor_role='editor'\]]
+	if {$a_nodes eq ""} {
+		set a_nodes [$doc selectNodes ${meta}/contributors/person_name\[@contributor_role='editor'\]]
+	}
+
 
 #	puts "XXX:editors: ${meta}/contributors/person_name -> $a_nodes"
 
@@ -284,6 +296,13 @@ proc CROSSREF::parse_chapter {doc} {
 		set ret(doi) [[$doc selectNodes ${content}/doi_data/doi] text]
 		lappend ret(linkout) [join [list DOI "" $ret(doi) "" ""] \t]
 	}
+	if {![info exists ret(doi)]} {
+		catch {
+			set ret(doi) [[$doc selectNodes ${meta}/doi_data/doi] text]
+			lappend ret(linkout) [join [list DOI "" $ret(doi) "" ""] \t]
+		}
+	}
+
 	catch {
 		set evpii [[$doc selectNodes ${content}/doi_data/resource] text]
 		if {$evpii ne "" && [regexp {http://linkinghub.elsevier.com/retrieve/pii/(.*)} $evpii -> id]} {
@@ -434,6 +453,18 @@ proc CROSSREF::parse_xml {xml {hints {}}} {
 		if {[$doc selectNodes //doi_record/crossref/book/content_item\[@component_type="chapter"\] ] ne ""} {
 			set ret [parse_chapter $doc]
 		}
+	}
+	if {$ret ne ""} {
+		return $ret
+	}
+	# Book?
+	catch {
+		if {[$doc selectNodes //doi_record/crossref/book ] ne ""} {
+			set ret [parse_chapter $doc]
+		}
+	}
+	if {$ret ne ""} {
+		return $ret
 	}
 	# Conference?
 	catch {
