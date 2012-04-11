@@ -11,6 +11,8 @@ import os, errno
 import os.path
 from subprocess import Popen, PIPE, STDOUT
 import socket, codecs
+from OrderedSet import OrderedSet
+import ClientForm
 
 socket.setdefaulttimeout(15)
 
@@ -96,69 +98,51 @@ def login(username, password):
 
 	assert logged_in, "Unable to log in"
 
-################################################################################
-#
-# Post an individual article
-#
-def post(article):
 
-	src_article_id = article["article_id"]
-
-	url = None
-
-	#
-	# Ironically, not all linkouts are postable
-	# (I suspect these might be just PDF linkouts)
-	#
+def get_linkouts(article):
+	linkouts = OrderedSet([])
 
 	# 1st try DOI, followed by PUBMED, since these are stable
 	if article.has_key("doi"):
-		url = article["doi"]
+		linkouts.add("http://dx.doi.org/%s" % article["doi"])
 
 	# Look for a DOI added as a URL
-	if url == None and article.has_key("linkouts"):
+	if article.has_key("linkouts"):
 		for linkout in article["linkouts"]:
 			if linkout["type"] == "URL":
 				# look for an explicit CrossRef link
 				m = re.search(r'dx.doi.org/(.*)', linkout["url"])
 				if m:
-					url = linkout["url"]
-					break
+					linkouts.add(linkout["url"])
 
 				# Look for anything DOI-like.
 				# DOI spec very loose and pretty much any char allowed
 				# in the 2nd part.   In practice, / is rare!
 				m = re.search(r'(10\.\d\d\d\d/[^/]+)', linkout["url"])
 				if m:
-					url = "doi:%s" % m.group(1)
-					break
+					linkouts.add("http://dx.doi.org/%s" % m.group(1))
 
 	# Look for PubMed.   Actually, I don't think anything but DOI and URL
 	# linkouts are likely in unchecked articles.
-	if url == None and article.has_key("linkouts"):
+	if article.has_key("linkouts"):
 		for linkout in article["linkouts"]:
 			if linkout["type"] == "Pubmed":
-				url = linkout["url"]
-				break
+				linkouts.add(linkout["url"])
 
 	# OK, let's try anything, but exclude any linkout that seems to be a PDF
-	if url == None and article.has_key("linkouts"):
+	if article.has_key("linkouts"):
 		for linkout in article["linkouts"]:
 			u = linkout["url"]
 			m = re.search(r'\.pdf', u, re.I);
 			if not m:
-				url = u
-				break
+				linkouts.add(u)
 
-	if not url:
-		print "ERROR:could not find a linkout"
-		return -1
+	print [l for l in linkouts]
 
-	# This in now filtered out in the calling func. so should never fire.
-	if article["is_unchecked"]!="Y":
-		print "Skipping checked article %s" % url
-		return 2
+	return linkouts
 
+
+def pre_post(url):
 	get(BASE+"/posturl?"+urllib.urlencode({"url": url}))
 
 	here = browser.geturl()
@@ -173,31 +157,87 @@ def post(article):
 	if m:
 		print "ALREADY_POSTED:%s" % here
 		dest_article = get_dest_article(here)
+		if dest_article == None:
+			return None
+
 		sync_articles(article, dest_article)
-		return 1
+		return "EXISTS"
 
 	m = re.search(r'/post_unknown.adp', here)
 	if m:
 		print "ERROR:UNKNOWN:%s" % url
-		return -1
+		return "UNKNOWN_URL"
 
 	m = re.search(r'/post_error.adp', here)
 	if m:
 		print "ERROR:UNKNOWN:driver unable to post: %s" % url
-		return -1
+		return "DRIVER_ERROR"
 
 	# Make sure we're at the actual posting page
 	m = re.search(r'/posturl2', here)
 	if not m:
 		print "ERROR:%s" % url
+		return None
+
+	return "NEW"
+
+def init_group_copy(src_article_id):
+	print "DEBUG:init_group_copy:"
+	browser.open(BASE+"/copy?article_id=%s&src_username=%s" % (src_article_id, options.username))
+
+def dump_form():
+	for n in [c for c in browser.controls]:
+		print ">>>> ",n
+
+
+################################################################################
+#
+# Post an individual article
+#
+def post(article):
+
+	# This in now filtered out in the calling func. so should never fire.
+	if article["is_unchecked"]!="Y":
+		print "Skipping checked article"
+		return 2
+
+	src_article_id = article["article_id"]
+
+	linkouts = get_linkouts(article)
+
+	if len(linkouts) == 0:
+		print "ERROR:could not find a linkout"
+		return -1
+
+	url = None
+	for linkout in linkouts:
+		print "Trying Linkout:", linkout
+
+		ret = pre_post(linkout)
+		if ret == None:
+			pass
+		elif ret == "EXISTS":
+			if not options.group:
+				return 1
+			init_group_copy(src_article_id)
+			url = linkout
+			break
+		elif ret == "UNKNOWN_URL":
+			pass
+		elif ret == "DRIVER_ERROR":
+			pass
+		elif ret == "NEW":
+			url = linkout
+			break
+		else:
+			raise
+
+	if url == None:
 		return -1
 
 	print "Preparing to post: %s" % url
 
 	browser.select_form(name="frm")
-
-	#for n in [c for c in browser.controls]:
-	#	print ">>>> ",n
 
 	if article.has_key("tags"):
 		tags = " ".join(article["tags"])
@@ -227,8 +267,37 @@ def post(article):
 		browser["is_private"] = "Y"
 
 
+	# make sure no libraries are selected
+	try:
+		browser["to_group"] = []
+	except:
+		pass
+	try:
+		browser["to_own_library"] = []
+	except:
+		pass
+
+	if options.group:
+		print "posting to group", options.group
+		try:
+			browser["to_group"] = [options.group]
+		except ClientForm.ItemNotFoundError:
+			print "NOTICE: group checkbox unavailable - the article must already exist in that group"
+			dest_article = get_dest_article(BASE+"/group/"+options.group+"/article/"+src_article_id)
+			sync_articles(article, dest_article)
+			return 1
+	else:
+		print "posting to own library"
+		browser["to_own_library"] = ["y"]
+
+
 	# make sure we don't go to journal page
-	browser["to_orig"] = []
+	# this might no exist if we're copying, which is the case when
+	# posting to a group
+	try:
+		browser["to_orig"] = []
+	except:
+		pass
 
 	# reading priority
 	browser["to_read"] = [article["priority"]]
@@ -245,7 +314,7 @@ def post(article):
 	dest_article_id = m.group(1)
 
 	# should never happen as it should have been trapped earlier.
-	if dest_article_id == src_article_id:
+	if not options.group and dest_article_id == src_article_id:
 		print "ERROR: src and dest articles the same"
 		return -1
 
@@ -255,6 +324,9 @@ def post(article):
 	# OK sync up metadata and attachments
 	#
 	dest_article = get_dest_article(new_url)
+	if dest_article == None:
+		return -1
+
 	sync_articles(article, dest_article)
 
 	#
@@ -272,6 +344,7 @@ def get_dest_article(new_url):
 	m = re.search(r'(http://[^/]+)(/.+)', new_url)
 	if not m:
 		print "ERROR: cannot parse %s" % new_url
+		return None
 
 	json_url = "%s/json%s" % (m.group(1), m.group(2))
 	print "Downloading json from %s" % json_url
@@ -290,6 +363,12 @@ def sync_articles(src_article, dest_article):
 	sync_metadata(src_article, dest_article)
 	sync_cito(src_article, dest_article)
 
+def get_library_path():
+	if options.group:
+		return "/group/%s" % options.group
+	else:
+		return "/user/%s" % options.username
+
 def sync_cito(src_article, dest_article):
 	if src_article.has_key("cito"):
 		print "Syncing CiTO"
@@ -301,9 +380,10 @@ def sync_cito(src_article, dest_article):
 
 	for c in src_article["cito"]:
 		browser.open(BASE+"/add_cito.json.do?",
-			"this_article_id=%s&that_article_id=%s&cito_code=%s&from=/user/%s" %
-			(this_article_id,c["article_id"],c["relation"],options.username))
+			"this_article_id=%s&that_article_id=%s&cito_code=%s&from=%s" %
+			(this_article_id,c["article_id"],c["relation"],get_library_path()))
 		browser.response().get_data()
+
 
 
 def sync_metadata(src_article, dest_article):
@@ -460,6 +540,21 @@ def sync_userfiles(src_article, dest_article):
 		do_submit()
 
 
+def pause():
+	pause = options.pause
+	if not pause and status == 2:
+		pause = False
+	if pause:
+		if len(articles) <= 3:
+			pass
+		elif len(articles) <= 10:
+			time.sleep(1)
+			pass
+		else:
+			time.sleep(5)
+			pass
+
+
 ################################################################################
 
 if ( len(sys.argv) == 1 ):
@@ -474,6 +569,11 @@ parser.add_option("-u", "--username",
 parser.add_option("-p", "--password",
 		dest="password",
 		help="citeulike password")
+
+parser.add_option("-g", "--group",
+		dest="group",
+		help="citeulike group")
+
 
 parser.add_option("-b", "--base",
 		dest="baseurl",
@@ -552,20 +652,9 @@ for article in articles:
 	status = post(article)
 	if status < 0:
 		failed.append(article)
+
 	# A few article is fine, otherwise don't post too fast!
-	pause = options.pause
-	if not pause and status == 2:
-		pause = False
-	if pause:
-		# print "***pause****", options.pause, status
-		if len(articles) <= 3:
-			pass
-		elif len(articles) <= 10:
-			time.sleep(1)
-			pass
-		else:
-			time.sleep(5)
-			pass
+	pause()
 
 if len(failed) > 0:
 	print "========================================================================"
