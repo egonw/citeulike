@@ -111,7 +111,7 @@ if ($error) {
 }
 
 print "begin_tsv\n";
-print "type\tJOUR\n";
+# print "type\tJOUR\n";
 print "url\t$in_url\n";
 print "end_tsv\n";
 print "begin_crossref\n";

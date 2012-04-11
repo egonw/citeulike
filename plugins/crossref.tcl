@@ -209,6 +209,7 @@ proc CROSSREF::parse_chapter {doc} {
 	if {![info exists ret(title)]} {
 		catch {
 			set ret(title) [_get_text [$doc selectNodes ${meta}/titles/title\[1\]]]
+			set ret(type) BOOK
 		}
 	}
 
@@ -329,6 +330,8 @@ proc CROSSREF::parse_conf {doc} {
 	array set ret [list]
 
 	set prefix //doi_record/crossref/conference
+
+	set ret(type) INCONF
 
 	catch {
 		set meta "$prefix/proceedings_metadata"
