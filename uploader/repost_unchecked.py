@@ -12,7 +12,7 @@ from subprocess import Popen, PIPE, STDOUT
 from OrderedSet import OrderedSet
 import ClientForm
 
-socket.setdefaulttimeout(15)
+socket.setdefaulttimeout(25)
 
 
 """
@@ -183,8 +183,8 @@ def pre_post(url):
 	m = re.search(r'article/(\d+)\?show_msg=already_posted', here)
 	if m:
 		print "ALREADY_POSTED:(in user lib):%s" % here
-		if options.group != None:
-			here = BASE+"/group/%s/article/%s" % (options.group, m.group(1))
+		if GROUP_ID != None:
+			here = BASE+"/group/%s/article/%s" % (GROUP_ID, m.group(1))
 			print "Looking for group article %s" % here
 			try:
 				dest_article = get_dest_article(here)
@@ -307,13 +307,13 @@ def post(article):
 	except:
 		pass
 
-	if options.group:
-		print "posting to group", options.group
+	if GROUP_ID:
+		print "posting to group", GROUP_ID
 		try:
-			browser["to_group"] = [options.group]
+			browser["to_group"] = [GROUP_ID]
 		except ClientForm.ItemNotFoundError:
 			print "NOTICE: group checkbox unavailable - the article must already exist in that group"
-			dest_article = get_dest_article(BASE+"/group/"+options.group+"/article/"+src_article_id)
+			dest_article = get_dest_article(BASE+"/group/"+GROUP_ID+"/article/"+src_article_id)
 			sync_articles(article, dest_article)
 			return 1
 	else:
@@ -354,7 +354,7 @@ def post(article):
 	dest_article_id = m.group(1)
 
 	# should never happen as it should have been trapped earlier.
-	if not options.group and dest_article_id == src_article_id:
+	if not GROUP_ID and dest_article_id == src_article_id:
 		print "ERROR: src and dest articles the same"
 		return -1
 
@@ -420,8 +420,8 @@ def sync_articles(src_article, dest_article):
 #
 #
 def get_library_path():
-	if options.group:
-		return "/group/%s" % options.group
+	if GROUP_ID:
+		return "/group/%s" % GROUP_ID
 	else:
 		return "/user/%s" % options.username
 
@@ -757,10 +757,8 @@ for article in articles:
 			sys.exit(0)
 		GROUP_ID = m.group(1)
 
-options.group = None
 if GROUP_ID:
-	options.group = GROUP_ID
-	print "Syncing to group library:",options.group
+	print "Syncing to group library:",GROUP_ID
 else:
 	print "Syncing to user library:",options.username
 
