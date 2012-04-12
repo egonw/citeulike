@@ -31,7 +31,7 @@ class PrettifyHandler(mechanize.BaseHandler):
 			response = mechanize.response_seek_wrapper(response)
 		if response.info().dict.has_key('content-type') and ('html' in response.info().dict['content-type']):
 
-			p = Popen(["/usr/bin/tidy", "-q", "-i"], stdout=PIPE, stdin=PIPE, stderr=PIPE)
+			p = Popen([options.tidybin, "-q", "-i"], stdout=PIPE, stdin=PIPE, stderr=PIPE)
 
 			html = p.communicate(input=response.get_data())[0]
 			#print html
@@ -121,7 +121,6 @@ def get_linkouts(article):
 				# Look for anything DOI-like.
 				# DOI spec very loose and pretty much any char allowed
 				# in the 2nd part.   In practice, / is rare!
-
 
 				m = re.search(r'(10\.\d\d\d\d/[^/]+)', parsed_url.path)
 				if m:
@@ -225,7 +224,7 @@ def pre_post(url):
 
 ################################################################################
 #
-#
+# Utility to debug forms
 #
 def dump_form():
 	for n in [c for c in browser.controls]:
@@ -260,13 +259,9 @@ def post(article):
 			pass
 		elif ret == "EXISTS":
 			return 1
-			# posting redirects to the user's own library copy
-			# if it exists.  In that case we need to simulate a "[copy]"
-			# from the user's library.
-			# SMELL: this will probably copy across stuff from the user's
-			# library we don't want in the group library.
 		elif ret == "GROUP_COPY":
 			url = linkout
+			break
 		elif ret == "UNKNOWN_URL":
 			pass
 		elif ret == "DRIVER_ERROR":
@@ -691,6 +686,11 @@ parser.add_option("--no-pause",
 		action="store_false",
 		default=True,
 		help="Don't pause between posts.  Please don't use this or you might get blocked.")
+
+parser.add_option("--tidy",
+		dest="tidybin",
+		default="/usr/bin/tidy",
+		help="Location of the tidy binary (default /usr/bin/tidy)")
 
 (options, args) = parser.parse_args()
 
