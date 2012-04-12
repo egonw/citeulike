@@ -659,6 +659,7 @@ parser.add_option("-p", "--password",
 
 #parser.add_option("-g", "--group",
 #		dest="group",
+#		default=None,
 #		help="citeulike group id (deprecated)")
 
 parser.add_option("-b", "--base",
@@ -767,7 +768,6 @@ else:
 print "Got %s articles (total)" % len(articles)
 articles = [a for a in articles if a["is_unchecked"] == "Y"]
 print "Got %s articles (unchecked)" % len(articles)
-
 
 # This stores articles that couldn't be posted.  It's dumped to STDOUT at the end
 failed = []
