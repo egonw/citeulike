@@ -67,15 +67,14 @@ def check_header(root, name):
 # Login to CiteULike using the normal form
 #
 def login(username, password):
-	browser.open(BASE+"/login?from=/profile/"+username)
+	GET(BASE+"/login?from=/profile/"+username)
 	browser.select_form(name="frm")
 
 	browser["username"] = username
 	browser["password"] = password
 
-	response = browser.submit()
+	page = do_submit()
 
-	page =  response.read()
 	root = lxml.html.document_fromstring(page)
 
 	logged_in = False
@@ -165,7 +164,7 @@ def get_linkouts(article):
 #
 #
 def pre_post(url):
-	get(BASE+"/posturl?"+urllib.urlencode({"url": url}))
+	GET(BASE+"/posturl?"+urllib.urlencode({"url": url}))
 
 	here = browser.geturl()
 
@@ -184,11 +183,24 @@ def pre_post(url):
 	#
 	m = re.search(r'article/(\d+)\?show_msg=already_posted', here)
 	if m:
-		print "ALREADY_POSTED:%s" % here
-		dest_article = get_dest_article(here)
-		if dest_article == None:
-			return None
+		print "ALREADY_POSTED:(in user lib):%s" % here
+		if options.group != None:
+			here = BASE+"/group/%s/article/%s" % (options.group, m.group(1))
+			print "Looking for group article %s" % here
+			try:
+				dest_article = get_dest_article(here)
+			except:
+				print "Cannot find existing group article. Will copy"
+				GET(BASE+"/copy?article_id=%s" % (m.group(1),))
+				return "GROUP_COPY"
+		else:
+			print "Looking for user article %s" % here
+			dest_article = get_dest_article(BASE+"/user/%s/article/%s" % (options.username, m.group(1)))
+			if dest_article == None:
+				print "Not found (should never happen)"
+				return None
 
+		print "Found, syncing"
 		sync_articles(article, dest_article)
 		return "EXISTS"
 
@@ -210,13 +222,6 @@ def pre_post(url):
 
 	return "NEW"
 
-################################################################################
-#
-#
-#
-def init_group_copy(src_article_id):
-	print "DEBUG:init_group_copy:"
-	browser.open(BASE+"/copy?article_id=%s&src_username=group:%s" % (src_article_id, options.group))
 
 ################################################################################
 #
@@ -254,16 +259,14 @@ def post(article):
 		if ret == None:
 			pass
 		elif ret == "EXISTS":
-			if not options.group:
-				return 1
+			return 1
 			# posting redirects to the user's own library copy
 			# if it exists.  In that case we need to simulate a "[copy]"
 			# from the user's library.
 			# SMELL: this will probably copy across stuff from the user's
 			# library we don't want in the group library.
-			init_group_copy(src_article_id)
+		elif ret == "GROUP_COPY":
 			url = linkout
-			break
 		elif ret == "UNKNOWN_URL":
 			pass
 		elif ret == "DRIVER_ERROR":
@@ -399,7 +402,7 @@ def get_dest_article(new_url):
 	json_url = "%s/json%s" % (m.group(1), m.group(2))
 	print "Downloading json from %s" % json_url
 
-	resp = get(json_url)
+	resp = GET(json_url)
 
 	dest_article = json.loads(resp)[0]
 	return dest_article
@@ -441,10 +444,9 @@ def sync_cito(src_article, dest_article):
 	this_article_id = dest_article["article_id"]
 
 	for c in src_article["cito"]:
-		browser.open(BASE+"/add_cito.json.do?",
+		POST(BASE+"/add_cito.json.do?",
 			"this_article_id=%s&that_article_id=%s&cito_code=%s&from=%s" %
 			(this_article_id,c["article_id"],c["relation"],get_library_path()))
-		browser.response().get_data()
 
 
 ################################################################################
@@ -452,7 +454,7 @@ def sync_cito(src_article, dest_article):
 #
 #
 def sync_metadata(src_article, dest_article):
-	browser.open("%s/edit_article_details?user_article_id=%s" % (BASE,dest_article["user_article_id"]))
+	GET("%s/edit_article_details?user_article_id=%s" % (BASE,dest_article["user_article_id"]))
 	browser.select_form(predicate=lambda f: 'id' in f.attrs and f.attrs['id'] == 'article')
 
 	form_name_map = {
@@ -520,16 +522,23 @@ def sync_metadata(src_article, dest_article):
 # data was read properly.  Not sure this helps, but no harm...
 #
 def do_submit():
+	print "LOG:SUBMIT:from=%s; to=%s" % (browser.geturl(), browser.form.action)
 	browser.submit()
-	browser.response().get_data()
+	return browser.response().get_data()
 
 
 ################################################################################
 #
 # see comments on do_sumit to see why this func exists.
 #
-def get(url):
+def GET(url):
 	browser.open(url)
+	print "LOG:GET:%s" % url
+	return browser.response().get_data()
+
+def POST(url, params):
+	browser.open(url, params)
+	print "LOG:POST:%s <= %s" % (url, params)
 	return browser.response().get_data()
 
 ################################################################################
@@ -560,11 +569,10 @@ def sync_notes(src_article, dest_article):
 		if not matched:
 			wanted.append(s)
 
-	browser.open(dest_article["href"])
+	GET(dest_article["href"])
 	for n in wanted:
 		print "Syncing note: ", n["text"]
 
-		# print browser.response().get_data()
 		select_form_by_id("addnote_frm")
 		browser["text"] = n["text"]
 		if n["private"]:
@@ -604,7 +612,7 @@ def sync_userfiles(src_article, dest_article):
 			print "Skipping:",f["name"],"(already exists)"
 
 
-	browser.open(dest_article["href"])
+	GET(dest_article["href"])
 	for f in wanted:
 		print "Syncing: ", f["path"]
 		s = FILE_CACHE_DIR+"/"+f["sha1"]
@@ -654,10 +662,9 @@ parser.add_option("-p", "--password",
 		dest="password",
 		help="citeulike password")
 
-parser.add_option("-g", "--group",
-		dest="group",
-		help="citeulike group")
-
+#parser.add_option("-g", "--group",
+#		dest="group",
+#		help="citeulike group id (deprecated)")
 
 parser.add_option("-b", "--base",
 		dest="baseurl",
@@ -673,7 +680,7 @@ parser.add_option("--no-copy-attachments",
 parser.add_option("-C", "--cache-dir",
 		dest="cachedir",
 		default="/tmp/mycache",
-		help="Copy attachments")
+		help="Don't copy attachments")
 
 parser.add_option("-f", "--file",
 		dest="srcfile",
@@ -720,11 +727,46 @@ COPY_TAG="*repost-%s" % datetime.now().strftime("%Y%m%d-%H%M%S")
 login(options.username, options.password)
 
 articles = json.load(open(options.srcfile))
-print "Got %s articles (total)" % len(articles)
+
+#
+# Check the articles are all in the same library
+#
+GROUP_ID = None
+found_userlib = False
+for article in articles:
+	href= article["href"]
+	m = re.search("/user/([^/]+)", href)
+	if m:
+		if options.username != m.group(1):
+			print "ERROR: Articles must be from the your library.  Found %s, expected /user/%s" % (href, options.username)
+			sys.exit(0)
+
+		if GROUP_ID:
+			print "ERROR: All articles must be from the same library.  Found %s, expected /group/%s" % (href, GROUP_ID)
+			sys.exit(0)
+		found_userlib = True
+	m = re.search("/group/(\d+)", href)
+	if m:
+		if found_userlib:
+			print "ERROR: All articles must be from the same library.  Found %s, expected /user/%s" % (href, options.username)
+			sys.exit(0)
+
+		if GROUP_ID and GROUP_ID != m.group(1):
+			print "ERROR: All articles must be from the same library.  Found %s, expected /group/%s" % (href, GROUP_ID)
+			sys.exit(0)
+		GROUP_ID = m.group(1)
+
+if GROUP_ID:
+	options.group = GROUP_ID
+	print "Syncing to group library:",options.group
+else:
+	print "Syncing to user library:",options.username
 
 # filter out checked articles
+print "Got %s articles (total)" % len(articles)
 articles = [a for a in articles if a["is_unchecked"] == "Y"]
 print "Got %s articles (unchecked)" % len(articles)
+
 
 # This stores articles that couldn't be posted.  It's dumped to STDOUT at the end
 failed = []
@@ -735,7 +777,9 @@ for article in articles:
 	print "========================================================================="
 	print "%s: Posting: %s" % (count, article["title"])
 	status = post(article)
+	print "status:",status
 	if status < 0:
+
 		failed.append(article)
 
 	# A few article is fine, otherwise don't post too fast!
