@@ -756,6 +756,7 @@ for article in articles:
 			sys.exit(0)
 		GROUP_ID = m.group(1)
 
+options.group = None
 if GROUP_ID:
 	options.group = GROUP_ID
 	print "Syncing to group library:",options.group
