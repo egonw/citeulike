@@ -1,16 +1,14 @@
 #!/usr/bin/env python
 
+import re, urllib, sys, time, urlparse, os, errno, os.path, socket, codecs, json
+
 import mechanize
 import lxml.html
-import re, urllib, sys, time
+
 from datetime import datetime
 from optparse import OptionParser
-import json
 from lxml import etree
-import os, errno
-import os.path
 from subprocess import Popen, PIPE, STDOUT
-import socket, codecs
 from OrderedSet import OrderedSet
 import ClientForm
 
@@ -98,7 +96,10 @@ def login(username, password):
 
 	assert logged_in, "Unable to log in"
 
-
+################################################################################
+#
+#
+#
 def get_linkouts(article):
 	linkouts = OrderedSet([])
 
@@ -114,19 +115,36 @@ def get_linkouts(article):
 				m = re.search(r'dx.doi.org/(.*)', linkout["url"])
 				if m:
 					linkouts.add(linkout["url"])
+					continue
+
+				parsed_url = urlparse.urlparse(linkout["url"])
 
 				# Look for anything DOI-like.
 				# DOI spec very loose and pretty much any char allowed
 				# in the 2nd part.   In practice, / is rare!
-				m = re.search(r'(10\.\d\d\d\d/[^/]+)', linkout["url"])
+
+
+				m = re.search(r'(10\.\d\d\d\d/[^/]+)', parsed_url.path)
 				if m:
 					linkouts.add("http://dx.doi.org/%s" % m.group(1))
+					continue
 
-	# Look for PubMed.   Actually, I don't think anything but DOI and URL
-	# linkouts are likely in unchecked articles.
+				qs = urlparse.parse_qs(parsed_url.query)
+				done = False
+				for k in qs:
+					for v in qs[k]:
+						m = re.search(r'(10\.\d\d\d\d/[^/]+)', v)
+						if m:
+							linkouts.add("http://dx.doi.org/%s" % m.group(1))
+							done = True
+							break
+					if done:
+						break
+
+	# Look for PubMed.
 	if article.has_key("linkouts"):
 		for linkout in article["linkouts"]:
-			if linkout["type"] == "Pubmed":
+			if linkout["type"] == "URL" and re.search("http://view.ncbi.nlm.nih.gov/pubmed/", linkout["url"]):
 				linkouts.add(linkout["url"])
 
 	# OK, let's try anything, but exclude any linkout that seems to be a PDF
@@ -142,6 +160,10 @@ def get_linkouts(article):
 	return linkouts
 
 
+################################################################################
+#
+#
+#
 def pre_post(url):
 	get(BASE+"/posturl?"+urllib.urlencode({"url": url}))
 
@@ -152,6 +174,13 @@ def pre_post(url):
 	#
 	# If the article is already in the library, sync up the metadata.
 	# TODO: make this an option
+	#
+	# There's a problem here when we deal with groups - there's no way to post
+	# directly to a group, the "already_posted" comes back when the article is
+	# in the user's own library.
+	#
+	# The later workaround/hack is to detect whether the to_group checkbox
+	# exists on the 2nd stage posting page.
 	#
 	m = re.search(r'article/(\d+)\?show_msg=already_posted', here)
 	if m:
@@ -181,10 +210,18 @@ def pre_post(url):
 
 	return "NEW"
 
+################################################################################
+#
+#
+#
 def init_group_copy(src_article_id):
 	print "DEBUG:init_group_copy:"
 	browser.open(BASE+"/copy?article_id=%s&src_username=%s" % (src_article_id, options.username))
 
+################################################################################
+#
+#
+#
 def dump_form():
 	for n in [c for c in browser.controls]:
 		print ">>>> ",n
@@ -219,6 +256,11 @@ def post(article):
 		elif ret == "EXISTS":
 			if not options.group:
 				return 1
+			# posting redirects to the user's own library copy
+			# if it exists.  In that case we need to simulate a "[copy]"
+			# from the user's library.
+			# SMELL: this will probably copy across stuff from the user's
+			# library we don't want in the group library.
 			init_group_copy(src_article_id)
 			url = linkout
 			break
@@ -255,19 +297,9 @@ def post(article):
 
 	print "Posting %s (tags:%s; key:%s)" % (url, tags, user_citation_key)
 
-	# Add the 1st note - we'll sync multiple notes later.
-	if article.has_key("notes") and len(article["notes"]) > 0:
-		note = article["notes"][0]
-		print "Note:\n%s" % note
-		browser["note"] = note["text"]
-		if note["private"]:
-			browser["private_note"] = ["y"]
-
-	if article["privacy"]=="private":
-		browser["is_private"] = "Y"
-
-
 	# make sure no libraries are selected
+	# Mechinize barfs if the form elements don't exist, which is the case
+	# when the article already exists in the user/group library. So catch that.
 	try:
 		browser["to_group"] = []
 	except:
@@ -290,10 +322,20 @@ def post(article):
 		print "posting to own library"
 		browser["to_own_library"] = ["y"]
 
+	# Add the 1st note - we'll sync multiple notes later.
+	if article.has_key("notes") and len(article["notes"]) > 0:
+		note = article["notes"][0]
+		print "Note:\n%s" % note
+		browser["note"] = note["text"]
+		if note["private"]:
+			browser["private_note"] = ["y"]
+
+	if article["privacy"]=="private":
+		browser["is_private"] = "Y"
 
 	# make sure we don't go to journal page
-	# this might no exist if we're copying, which is the case when
-	# posting to a group
+	# this might not exist if we're copying, which is the case when
+	# posting to a group (since we've gone via the "copy" page)
 	try:
 		browser["to_orig"] = []
 	except:
@@ -337,9 +379,17 @@ def post(article):
 	return 1
 
 
+################################################################################
+#
+#
+#
 def select_form_by_id(id):
 	browser.select_form(predicate=lambda f: 'id' in f.attrs and f.attrs['id'] == id)
 
+################################################################################
+#
+#
+#
 def get_dest_article(new_url):
 	m = re.search(r'(http://[^/]+)(/.+)', new_url)
 	if not m:
@@ -355,6 +405,10 @@ def get_dest_article(new_url):
 	return dest_article
 
 
+################################################################################
+#
+#
+#
 def sync_articles(src_article, dest_article):
 	# print article, dest_article
 	if options.copy_attachments:
@@ -363,12 +417,20 @@ def sync_articles(src_article, dest_article):
 	sync_metadata(src_article, dest_article)
 	sync_cito(src_article, dest_article)
 
+################################################################################
+#
+#
+#
 def get_library_path():
 	if options.group:
 		return "/group/%s" % options.group
 	else:
 		return "/user/%s" % options.username
 
+################################################################################
+#
+#
+#
 def sync_cito(src_article, dest_article):
 	if src_article.has_key("cito"):
 		print "Syncing CiTO"
@@ -385,7 +447,10 @@ def sync_cito(src_article, dest_article):
 		browser.response().get_data()
 
 
-
+################################################################################
+#
+#
+#
 def sync_metadata(src_article, dest_article):
 	browser.open("%s/edit_article_details?user_article_id=%s" % (BASE,dest_article["user_article_id"]))
 	browser.select_form(predicate=lambda f: 'id' in f.attrs and f.attrs['id'] == 'article')
@@ -449,17 +514,28 @@ def sync_metadata(src_article, dest_article):
 
 	do_submit()
 
-
+################################################################################
+#
+# Had some problems with requests hanging so wrote this to ensure that
+# data was read properly.  Not sure this helps, but no harm...
+#
 def do_submit():
 	browser.submit()
 	browser.response().get_data()
 
 
+################################################################################
+#
+# see comments on do_sumit to see why this func exists.
+#
 def get(url):
 	browser.open(url)
 	return browser.response().get_data()
 
-
+################################################################################
+#
+#
+#
 def sync_notes(src_article, dest_article):
 	if not src_article.has_key("notes"):
 		print "No notes to sync"
@@ -496,6 +572,10 @@ def sync_notes(src_article, dest_article):
 		# returns us to article page, so OK in loop
 		do_submit()
 
+################################################################################
+#
+#
+#
 def sync_userfiles(src_article, dest_article):
 	if not src_article.has_key("userfiles"):
 		print "No attachments to sync"
@@ -540,6 +620,11 @@ def sync_userfiles(src_article, dest_article):
 		do_submit()
 
 
+################################################################################
+#
+# Unthrottled, this proc can be very server unfriendly, so add a "smart" pause.
+# between posts.  There are still quite a lot of requests in each post, though.
+#
 def pause():
 	pause = options.pause
 	if not pause and status == 2:
@@ -554,8 +639,7 @@ def pause():
 			time.sleep(5)
 			pass
 
-
-################################################################################
+#<MAIN>#########################################################################
 
 if ( len(sys.argv) == 1 ):
 	sys.argv.append("-h")
@@ -636,13 +720,14 @@ COPY_TAG="*repost-%s" % datetime.now().strftime("%Y%m%d-%H%M%S")
 login(options.username, options.password)
 
 articles = json.load(open(options.srcfile))
-failed = []
-
 print "Got %s articles (total)" % len(articles)
 
 # filter out checked articles
 articles = [a for a in articles if a["is_unchecked"] == "Y"]
 print "Got %s articles (unchecked)" % len(articles)
+
+# This stores articles that couldn't be posted.  It's dumped to STDOUT at the end
+failed = []
 
 count = 0
 for article in articles:
