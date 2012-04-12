@@ -216,7 +216,7 @@ def pre_post(url):
 #
 def init_group_copy(src_article_id):
 	print "DEBUG:init_group_copy:"
-	browser.open(BASE+"/copy?article_id=%s&src_username=%s" % (src_article_id, options.username))
+	browser.open(BASE+"/copy?article_id=%s&src_username=group:%s" % (src_article_id, options.group))
 
 ################################################################################
 #
