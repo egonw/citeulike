@@ -716,7 +716,7 @@ browser.add_handler(PrettifyHandler())
 browser.set_handle_robots(False)
 browser.set_debug_http(False)
 # CiteUlike rejects the default user-agent
-browser.addheaders = [('User-agent', 'citeulike uploader/username=%s' % options.username)]
+browser.addheaders = [('User-agent', 'citeulike uploader/username=%s' % options.username), ("Connection", "close")]
 
 #
 # This tag is added to all created article, mainly so they can be easily deleted in
