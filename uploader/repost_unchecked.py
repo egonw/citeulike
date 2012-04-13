@@ -367,7 +367,9 @@ def post(article):
 	if dest_article == None:
 		return -1
 
-	sync_articles(article, dest_article)
+	# We don't need the extra sync-tags since we're copying all in the first
+	# place.
+	sync_articles(article, dest_article, sync_all_tags=False)
 
 	#
 	# TODO: add a tag to src article to show that it's been reposted.
@@ -407,13 +409,36 @@ def get_dest_article(new_url):
 #
 #
 #
-def sync_articles(src_article, dest_article):
+def sync_articles(src_article, dest_article, sync_all_tags=True):
 	# print article, dest_article
 	if options.copy_attachments:
 		sync_userfiles(src_article, dest_article)
 	sync_notes(src_article, dest_article)
 	sync_metadata(src_article, dest_article)
 	sync_cito(src_article, dest_article)
+	if sync_all_tags:
+		sync_tags(src_article, dest_article)
+	add_tags(src_article, SRC_TAG)
+
+################################################################################
+#
+#
+#
+def sync_tags(src_article, dest_article):
+	if src_article.has_key("tags"):
+		print "Syncing tags"
+	else:
+		print "No tags"
+		return
+
+	dest_tags = []
+	for t in src_article["tags"]:
+		# Don't copy some tags
+		if re.search(r'^(no-tag|\*repost-)', t):
+			continue
+		dest_tags.append(t)
+	add_tags(dest_article, " ".join(dest_tags))
+
 
 ################################################################################
 #
@@ -535,6 +560,30 @@ def POST(url, params):
 	browser.open(url, params)
 	print "LOG:POST:%s <= %s" % (url, params)
 	return browser.response().get_data()
+
+################################################################################
+#
+#
+#
+def add_tags(article, tags):
+	article_id = article["article_id"]
+
+	# We need a context so /do_list_tag can infer user or group
+	if GROUP_ID:
+		context="/group/%s/article/%s" % (GROUP_ID, article_id)
+	else:
+		context="/user/%s/article/%s" % (options.username, article_id)
+
+	qs=urllib.urlencode([
+		("action","Add"),
+		("tags", tags),
+		("from",context),
+		("article_id",article_id)
+		])
+
+	print "Adding tags %s to %s" % (tags, article_id)
+	POST(BASE+"/do_list_tag", qs);
+
 
 ################################################################################
 #
@@ -724,6 +773,7 @@ browser.addheaders = [('User-agent', 'citeulike uploader/username=%s' % options.
 # case of SNAFU
 #
 COPY_TAG="*repost-%s" % datetime.now().strftime("%Y%m%d-%H%M%S")
+SRC_TAG=COPY_TAG+"-unchecked"
 
 login(options.username, options.password)
 
