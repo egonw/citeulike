@@ -84,15 +84,15 @@ foreach my $author (@authors) {
 	print "author\t$author\n";
 }
 print "journal\t$journal\n";
-print "volume\t$volume\n";
-print "issue\t$issue\n";
+print "volume\t$volume\n" if $volume;
+print "issue\t$issue\n" if $issue;
 print "year\t$year\n" if $year;
 print "month\t$month\n" if $month;
 print "day\t$day\n" if $day;
-print "issn\t$issn\n";
+print "issn\t$issn\n" if $issn;
 print "type\tJOUR\n";
 print "url\t$url\n";
-print "abstract\t$abstract\n";
+print "abstract\t$abstract\n" if $abstract;
 print "end_tsv\n";
 print "status\tok\n";
 
