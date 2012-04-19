@@ -1,0 +1,73 @@
+plugin {
+	version {1}
+	name {St Andrews Library Journals}
+	url {http://ojs.st-andrews.ac.uk/}
+	blurb {}
+	author {Tristan Henderson}
+	email {tnhh@tnhh.org}
+	language {perl}
+	regexp {http://ojs.st-andrews.ac.uk/index.php/\w+/article/view/\d+}
+}
+
+format_linkout STAND {
+	return [list "St. Andrews University" "http://ojs.st-andrews.ac.uk/index.php/${ckey_1}/article/view/${ikey_1}"]
+}
+
+test {http://ojs.st-andrews.ac.uk/index.php/jtr/article/view/224} {
+	formatted_url {{St. Andrews University} http://ojs.st-andrews.ac.uk/index.php/jtr/article/view/224}
+	linkout {STAND 224 jtr {} {}}
+	volume 2
+	issue 3
+	year 2011
+	month 11
+	day 11
+	type JOUR
+	issn 2049-7040
+	plugin_version 1
+	title {'Paving the way for Extremism: How Preventing the Symptoms Does Not Cure the Disease of Terrorism'}
+	journal {Journal of Terrorism Research}
+	url {http://ojs.st-andrews.ac.uk/index.php/jtr/article/view/224}
+	status ok
+	author {Awan Imran I {Awan, Imran}}
+	abstract {The British government's controversial counter-terrorism strategies and policies have come under fierce opposition with critics arguing it has not actually prevented extremism but has manifested itself into a political and ideological campaign that unfairly targets the Muslim community. Moreover, such strategies have marginalised the Muslim community in the UK from wider civic society and created an atmosphere of hate and anger. The Prime Minister of Great Britain, David Cameron in 2010, spoke at a conference in Munich about security, radicalisation, and multi-culturalism, sparking a debate about how the UK monitors and deals with extremism. Blaming the doctrine of 'state-multiculturalism' the British coalition government argued for a more 'active muscular liberalism' which would identify the root causes of extremist ideologies. Moreover, this paranoia and hysteria has led to a social, political, moral and theological debate about Islamism, Muslims, and terrorism which is fuelled by the way Britain is portrayed across the world as a country where extremist organisations employ tactics of persuasion, indoctrination, radicalisation and the promotion of religious intolerance.}
+	plugin standrews
+}
+
+test {http://ojs.st-andrews.ac.uk/index.php/TIS/article/view/67} {
+	formatted_url {{St. Andrews University} http://ojs.st-andrews.ac.uk/index.php/TIS/article/view/67}
+	linkout {STAND 67 TIS {} {}}
+	volume 18
+	issue 1
+	year 2011
+	type JOUR
+	issn 1465-2862
+	plugin_version 1
+	title {George MacLeod's open-air preaching: Performance and counter-performance}
+	journal {Theology in Scotland}
+	url {http://ojs.st-andrews.ac.uk/index.php/TIS/article/view/67}
+	status ok
+	author {Blythe Stuart SM {Blythe, Stuart M.}}
+	abstract {Stuart Blythe uses the methodology of performance to analyse George MacLeod's open-air preaching. He points out that MacLeod's preaching was derived from a theology of the incarnation, and an understanding of the paradoxes and dichotomies of common human life. This preaching, Blythe suggests, was also a counter-performance in the context of outlooks and ideologies inimical to the gospel. The paper raises interesting issues related to preaching as performance, and the further question as to whether or not the life and work of the Church as a whole might now be better understood as a counter-performance . [The full text of this article is not available online]}
+	plugin standrews
+}
+
+test {http://ojs.st-andrews.ac.uk/index.php/jtr/article/view/187} {
+	formatted_url {{St. Andrews University} http://ojs.st-andrews.ac.uk/index.php/jtr/article/view/187}
+	linkout {STAND 187 jtr {} {}}
+	volume 2
+	issue 2
+	year 2011
+	month 10
+	day 30
+	type JOUR
+	issn 2049-7040
+	plugin_version 1
+	title {A Quantitative Assessment on 26/11 Mumbai Attack using Social Network Analysis}
+	journal {Journal of Terrorism Research}
+	url {http://ojs.st-andrews.ac.uk/index.php/jtr/article/view/187}
+	status ok
+	author {Azad Sarita S {Azad, Sarita}}
+	author {Gupta Arvind A {Gupta, Arvind}}
+	abstract {This paper analyses, the terror attacks in Mumbai on November 26, 2008, popularly known as 26/11 terror attacks, as per a mathematical technique known as Social Network Analysis (SNA). This analysis of the behaviour of the ten attackers and their telephonic communications with their handlers in Pakistan even as the attacks were in progress is based on the open source information. Using the SNA technique, we identify the key members, sub-groups, and the interaction among the various members of the group. The analysis gives useful insights into the modus operandi of the terrorists. We have found that a star-type structure of hierarchy prevailed during the attack which means terrorists were well connected through a central node.}
+	plugin standrews
+}
