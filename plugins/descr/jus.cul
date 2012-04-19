@@ -1,0 +1,74 @@
+plugin {
+	version {1}
+	name {Journal of Usability Studies}
+	url {http://www.upassoc.org/upa_publications/jus/index.html}
+	blurb {}
+	author {Tristan Henderson}
+	email {tnhh@tnhh.org}
+	language {perl}
+	regexp {http://(www.)?upassoc.org/upa_publications/jus/\d+\w+/\w+.html}
+}
+
+format_linkout JUS {
+	return [list "JUS" "http://upassoc.org/upa_publications/jus/${ckey_1}/${ckey_2}.html"]
+}
+
+test {http://upassoc.org/upa_publications/jus/2011may/redish1.html} {
+	formatted_url {JUS http://upassoc.org/upa_publications/jus/2011may/redish1.html}
+	linkout {JUS {} 2011may {} redish1}
+	volume 6
+	issue 3
+	year 2011
+	month 5
+	start_page 90
+	end_page 101
+	type JOUR
+	plugin_version 1
+	title {Overlap, Influence, Intertwining: The Interplay of UX and Technical Communication}
+	journal {Journal of Usability Studies}
+	url {http://upassoc.org/upa_publications/jus/2011may/redish1.html}
+	status ok
+	author {Redish Janice JG {Janice (Ginny) Redish}}
+	author {Barnum Carol C {Carol Barnum}}
+	plugin jus
+}
+
+test {http://www.upassoc.org/upa_publications/jus/2009november/scharff1.html} {
+	formatted_url {JUS http://upassoc.org/upa_publications/jus/2009november/scharff1.html}
+	linkout {JUS {} 2009november {} scharff1}
+	volume 5
+	issue 1
+	year 2009
+	month 11
+	start_page 8
+	end_page 20
+	type JOUR
+	plugin_version 1
+	title {When Links Change: How Additions and Deletions of Single Navigation Links Affect User Performance}
+	journal {Journal of Usability Studies}
+	url {http://upassoc.org/upa_publications/jus/2009november/scharff1.html}
+	status ok
+	author {Scharff Lauren LFV {Lauren F.V. Scharff}}
+	author {Kortum Philip P {Philip Kortum}}
+	plugin jus
+}
+
+test {http://upassoc.org/upa_publications/jus/2007_february/kirmani_rajasekaran_heqs.html} {
+	formatted_url {JUS http://upassoc.org/upa_publications/jus/2007_february/kirmani_rajasekaran_heqs.html}
+	linkout {JUS {} 2007_february {} kirmani_rajasekaran_heqs}
+	volume 2
+	issue 2
+	year 2007
+	month 2
+	start_page 61
+	end_page 75
+	type JOUR
+	plugin_version 1
+	title {Heuristic Evaluation Quality Score (HEQS): A Measure of Heuristic Evaluation Skills}
+	journal {Journal of Usability Studies}
+	url {http://upassoc.org/upa_publications/jus/2007_february/kirmani_rajasekaran_heqs.html}
+	status ok
+	author {Kirmani Shazeeye S {Shazeeye Kirmani}}
+	author {Rajasekaran Shanmugam S {Shanmugam Rajasekaran}}
+	plugin jus
+}
