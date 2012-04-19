@@ -10,11 +10,11 @@ plugin {
 }
 
 format_linkout STAND {
-	return [list "St. Andrews University" "http://ojs.st-andrews.ac.uk/index.php/${ckey_1}/article/view/${ikey_1}"]
+	return [list "University of St Andrews" "http://ojs.st-andrews.ac.uk/index.php/${ckey_1}/article/view/${ikey_1}"]
 }
 
 test {http://ojs.st-andrews.ac.uk/index.php/jtr/article/view/224} {
-	formatted_url {{St. Andrews University} http://ojs.st-andrews.ac.uk/index.php/jtr/article/view/224}
+	formatted_url {{University of St Andrews} http://ojs.st-andrews.ac.uk/index.php/jtr/article/view/224}
 	linkout {STAND 224 jtr {} {}}
 	volume 2
 	issue 3
@@ -34,7 +34,7 @@ test {http://ojs.st-andrews.ac.uk/index.php/jtr/article/view/224} {
 }
 
 test {http://ojs.st-andrews.ac.uk/index.php/TIS/article/view/67} {
-	formatted_url {{St. Andrews University} http://ojs.st-andrews.ac.uk/index.php/TIS/article/view/67}
+	formatted_url {{University of St Andrews} http://ojs.st-andrews.ac.uk/index.php/TIS/article/view/67}
 	linkout {STAND 67 TIS {} {}}
 	volume 18
 	issue 1
@@ -52,7 +52,7 @@ test {http://ojs.st-andrews.ac.uk/index.php/TIS/article/view/67} {
 }
 
 test {http://ojs.st-andrews.ac.uk/index.php/jtr/article/view/187} {
-	formatted_url {{St. Andrews University} http://ojs.st-andrews.ac.uk/index.php/jtr/article/view/187}
+	formatted_url {{University of St Andrews} http://ojs.st-andrews.ac.uk/index.php/jtr/article/view/187}
 	linkout {STAND 187 jtr {} {}}
 	volume 2
 	issue 2
