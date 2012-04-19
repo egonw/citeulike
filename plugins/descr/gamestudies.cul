@@ -1,0 +1,74 @@
+plugin {
+	version {1}
+	name {Game Studies}
+	url {http://gamestudies.org/}
+	blurb {}
+	author {Tristan Henderson}
+	email {tnhh@tnhh.org}
+	language {perl}
+	regexp {http://(www.)?gamestudies.org/\d+/articles/\w+}
+}
+
+format_linkout GAMEST {
+	return [list {Game Studies} "http://gamestudies.org/${ikey_1}/articles/${ckey_1}"]
+}
+
+test {http://gamestudies.org/0701/articles/elnasr_niedenthal_knez_almeida_zupko} {
+	formatted_url {{Game Studies} http://gamestudies.org/0701/articles/elnasr_niedenthal_knez_almeida_zupko}
+	linkout {GAMEST 0701 elnasr_niedenthal_knez_almeida_zupko {} {}}
+	volume 7
+	issue 1
+	year 2007
+	month 8
+	issn 1604-7982
+	type JOUR
+	plugin_version 1
+	title {Dynamic Lighting for Tension in Games}
+	journal {Game Studies}
+	url {http://gamestudies.org/0701/articles/elnasr_niedenthal_knez_almeida_zupko}
+	status ok
+	author {El-Nasr Magy MS {Magy Seif El-Nasr}}
+	author {Niedenthal Simon S {Simon Niedenthal}}
+	author {Knez Igor I {Igor Knez}}
+	author {Almeida Priya P {Priya Almeida}}
+	author {Zupko Joseph J {Joseph Zupko}}
+	plugin gamestudies
+}
+
+test {http://www.gamestudies.org/0701/articles/smith} {
+	formatted_url {{Game Studies} http://gamestudies.org/0701/articles/smith}
+	linkout {GAMEST 0701 smith {} {}}
+	volume 7
+	issue 1
+	year 2007
+	month 8
+	issn 1604-7982
+	type JOUR
+	plugin_version 1
+	title {Tragedies of the ludic commons - understanding cooperation in multiplayer games}
+	abstract {Conflict, it is often assumed, is the essence of games. Modern multiplayer games, however, also rely heavily on the cooperation between players. In fact, given the rapidly increasing popularity and complexity of these games, game designers are arguably engaged in one of the most ambitious experiments with social software in recent years.}
+	journal {Game Studies}
+	url {http://gamestudies.org/0701/articles/smith}
+	status ok
+	author {Smith Jonas JH {Jonas Heide Smith}}
+	plugin gamestudies
+}
+
+test {http://gamestudies.org/1103/articles/michael_hitchens} {
+    formatted_url {{Game Studies} http://gamestudies.org/1103/articles/michael_hitchens}
+    linkout {GAMEST 1103 michael_hitchens {} {}}
+    volume 11
+    issue 3
+    year 2011
+    month 12
+    issn 1604-7982
+	type JOUR
+	plugin_version 1
+	title {A Survey of First-person Shooters and their Avatars}
+    abstract {The First-Person Shooter (FPS) is a popular game form, with examples appearing on many different platforms. The genre has an almost two decade history and is represented by hundreds of commercial titles. While there has been extensive study of the FPS genre, this has tended to focus on particular games, or at best a limited set of examples. In order to provide a wider context for such work this paper surveys 566 separate FPS titles, across a range of platforms. The titles are compared by year of release, platform and game setting. Characteristics of avatars within the surveyed titles are also examined, including race, gender and background, and how these vary across platform and time. The analysis reveals definite trends, both historically and by platform.}
+	journal {Game Studies}
+	url {http://gamestudies.org/1103/articles/michael_hitchens}
+	status ok
+	author {Hitchens Michael M {Michael Hitchens}}
+    plugin gamestudies
+}
