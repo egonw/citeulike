@@ -101,6 +101,9 @@ namespace eval driver {
 	proc format_linkout {type body} {
 		# Slight Tcl tricker here. Define a procedure, but with
 		# a slightly different signature to what might be obvious
+		if {[string length $type] > 6} {
+			error "format_linkout type can have a maximum of 6 chars (found '$type')"
+		}
 		proc format_linkout_${type} {type ikey_1 ckey_1 ikey_2 ckey_2} $body
 	}
 
@@ -137,11 +140,14 @@ namespace eval driver {
 		foreach file [glob -directory [descr_dir] "*.cul"] {
 			set name [file rootname [file tail $file]]
 
-			lappend PLUGINS $name
 			set PLUGIN $name
 
 			# The description file is actually a valid TCL file, which we can source
-			source $file
+			if {[source $file] eq "DISABLED"} {
+				continue
+			}
+
+			lappend PLUGINS $name
 
 			# Confirm it actually defined what it had to
 			variable DETAIL_$PLUGIN
@@ -198,6 +204,22 @@ namespace eval driver {
 		return 0
 	}
 
+
+	proc set_doi_linkout_if_not_exist {r doi} {
+		upvar $r ret
+		set want_doi 1
+		if {[info exists ret(linkout)]} {
+			foreach lo $ret(linkout) {
+				::struct::list assign [split $lo "\t"] type dummy dummy
+				if {$type eq "DOI"} {
+					set want_doi 0
+				}
+			}
+		}
+		if {$want_doi} {
+			lappend ret(linkout) "DOI\t\t$doi\t\t"
+		}
+	}
 
 	# Actually do the work. Given a URL, we'll actually
 	# run the appropriate plugins and then we'll have a result.
@@ -373,18 +395,7 @@ namespace eval driver {
 						set ret($k) $v
 					}
 					if {$k eq "doi"} {
-						set want_doi 1
-						if {[info exists ret(linkout)]} {
-							foreach lo $ret(linkout) {
-								::struct::list assign [split $lo "\t"] type dummy doi
-								if {$type eq "DOI"} {
-									set want_doi 0
-								}
-							}
-						}
-						if {$want_doi} {
-							lappend ret(linkout) "DOI\t\t$v\t\t"
-						}
+						set_doi_linkout_if_not_exist ret $v
 					}
 				}
 			}
@@ -398,18 +409,7 @@ namespace eval driver {
 						set ret($k) $v
 					}
 					if {$k eq "doi" || $k eq "DOI"} {
-						set want_doi 1
-						if {[info exists ret(linkout)]} {
-							foreach lo $ret(linkout) {
-								::struct::list assign [split $lo "\t"] type dummy doi
-								if {$type eq "DOI"} {
-									set want_doi 0
-								}
-							}
-						}
-						if {$want_doi} {
-							lappend ret(linkout) "DOI\t\t$v\t\t"
-						}
+						set_doi_linkout_if_not_exist ret $v
 					}
 				}
 			}
