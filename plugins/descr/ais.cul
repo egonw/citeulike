@@ -1,0 +1,53 @@
+plugin {
+	version {1}
+	name {AIS Electronic Library}
+	url {http://aisel.aisnet.org/journals/}
+	blurb {}
+	author {Tristan Henderson}
+	email {tnhh@tnhh.org}
+	language {perl}
+	regexp {http://aisel.aisnet.org/\w+/vol\d+/iss\d+/\d+/}
+}
+
+format_linkout AIS {
+	return [list "AIS" "http://aisel.aisnet.org/${ckey_1}/vol${ikey_1}/iss${ikey_2}/${ckey_2}/"]
+}
+
+test {http://aisel.aisnet.org/jais/vol8/iss6/22/} {
+	formatted_url {AIS http://aisel.aisnet.org/jais/vol8/iss6/22/}
+	linkout {AIS 8 jais 6 22}
+	volume 8
+	issue 6
+	year 2007
+	issn 1536-9323
+	type JOUR
+	plugin_version 1
+	title {Research Issues in Social computing}
+	journal {Journal of the Association for Information Systems}
+	url {http://aisel.aisnet.org/jais/vol8/iss6/22/}
+	status ok
+	abstract {Social Computing and online communities have ushered in a new era of the web, where information and communication technologies are facilitating organized human endeavor in fundamentally new ways. The broad impact of social computing in diverse domains and the complexity of features that span diverse disciplines pose new challenges for Information Systems researchers. Information Systems research should expand its scope and adapt theories and methodologies from even more disciplines to address this challenge. This phenomenon has diverse theoretical connections and bridges social and technical aspects. Thus, it offers an ideal opportunity for IS researchers to take the lead in demonstrating the focus of IS in cross-disciplinary research and emphasizing praxis. We outline salient traits of social computing as a precursor to discussing research challenges. Research issues related to organization theory, property rights, motivational and social aspects, and network dynamics are discussed. We emphasize aspects where social computing may offer insights for reference disciplines. We also discuss research issues in the business deployment of social computing, including network effects, trust and reputation, business models, market structure, and customer interaction. We indicate that the field of IS can point the way to using social computing in transforming research and education.}
+	author {Parameswaran Manoj M {Manoj Parameswaran}}
+	author {Whinston Andrew AB {Andrew B Whinston}}
+	plugin ais
+}
+
+test {http://aisel.aisnet.org/pajais/vol3/iss3/3/} {
+	formatted_url {AIS http://aisel.aisnet.org/pajais/vol3/iss3/3/}
+	linkout {AIS 3 pajais 3 3}
+	volume 3
+	issue 3
+	year 2011
+	issn 1943-7544
+	type JOUR
+	plugin_version 1
+	title {Building IT Capability to Increase Organizational Performance: A Path-Oriented Process}
+	journal {Pacific Asia Journal of the Association for Information Systems}
+	url {http://aisel.aisnet.org/pajais/vol3/iss3/3/}
+	status ok
+	abstract {Most studies on information technology (IT) capability have drawn their conceptualization from the tenets of resource-based view (RBV). Though path dependence is central to the concept of RBV, very few studies have examined the developmental paths of IT capabilities, which are typically treated as first-order constructs with their effects on firm performance investigated as direct causal links. This paper conceptualizes IT capability as the outcome of a path- specific resource building process, driven by the e-business skills and knowledge of a firm's IT human resources, which we refer to as e-business centric IT expertise. We posit that through the use of appropriate IT infrastructure, and the development of back-end integration and front-end functionalities, e-business centric IT expertise could be harnessed to provide the right information to the right customers at the right time, giving rise to a firm-specific IT capability. We further contend that IT capability is a source of competitive advantage, offering inimitable differentiation in market responsive agility, which is a key to securing sales in an increasingly customer-centric market. We operationalize these conceptualizations as a structural equation model (SEM) and tested 12 hypothesized relationships using data drawn from a survey of 310 fast-growth smallto-medium sized companies in Australia. The test results uphold 10 of the 12 formulated hypotheses, supporting our conceptualization that IT capability building is a path-specific process.To affirm our contention that IT capability is developed from the interacting effects of a suite of IT resources, and not the sum of the disjointed effects of individual resources, we also formulated and tested an alternative model that links individual IT resources directly to market responsive agility. Combined with a series of mediation tests, our SEM exercises confirm that IT resourcesinteract in a specific way to give rise to IT capability to enhance market responsive agility and achieve sales performance. We discuss the implications of these findings in the context of IT investment.}
+	author {Bi Rui R {Rui Bi}}
+	author {Kam Booi B {Booi Kam}}
+	author {Smyrnios Kosmas K {Kosmas Smyrnios}}
+	plugin ais
+}
