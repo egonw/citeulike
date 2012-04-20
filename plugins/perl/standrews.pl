@@ -11,6 +11,8 @@ use HTML::TreeBuilder;
 use strict;
 use warnings;
 
+binmode STDOUT, ":utf8";
+
 my $url = <>;
 chomp $url;
 
