@@ -195,6 +195,9 @@ if __name__=="__main__":
 	import sys
 	url = sys.stdin.readline().strip()
 
+	# strip off query string
+	url = re.sub(r'\?.*', '', url)
+
 	page = get_url(url)
 
 	(jstor_id, doi) = url_to_id(url, page)
