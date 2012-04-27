@@ -61,7 +61,7 @@ if ($ris =~ m{(TY  -.*ER  -)}s) {
 }
 print "end_ris\n";
 
-if ($ris =~ m{ER  - }) {
+if ($ris =~ m{ER  -}) {
 	print "status\tok\n";
 } else {
 	print "status\terr\tCouldn't extract the details from Open Repository's 'export citation' link.\n";
