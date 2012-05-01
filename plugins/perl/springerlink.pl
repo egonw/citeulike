@@ -123,11 +123,11 @@ my $sep;
 
 $sep = '$';
 
-$mech->field("ctl00${sep}ContentPrimary${sep}ctl00${sep}ctl00${sep}Export" , "AbstractRadioButton");
-
 eval {
 	# not always present
         no warnings 'all';
+		$mech->field("ctl00${sep}ContentPrimary${sep}ctl00${sep}ctl00${sep}Export" , "AbstractRadioButton");
+
         $mech->field("ctl00${sep}ContentPrimary${sep}ctl00${sep}ctl00${sep}Format" , "RisRadioButton");
 };
 
