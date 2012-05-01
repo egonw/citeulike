@@ -147,12 +147,19 @@ if True and metaheaders.get_item("citation_title"):
 	metaheaders.print_item("publisher","citation_publisher")
 	metaheaders.print_item("institution","citation_author_institution")
 
-
-
 	# date is sometimes (always?) like "Oct. 2004"
 	date = metaheaders.get_item("citation_date")
 
 else:
+	# try to grep for the DOI
+	#ContentID=10.1109/CSE.2009.417
+	scripts = root.xpath("//script/text()")
+	for script in scripts:
+		m = re.search("ContentID=(10.([^&]+))",script)
+		if m:
+			doi = m.group(1)
+			break
+
 	if not doi:
 		bail("Couldn't find an DOI")
 	print "use_crossref\t1"

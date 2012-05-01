@@ -318,17 +318,17 @@ The description file must do two things:
 
 		Thus, each article has associated with it a number of "linkouts". Each
 		linkout is a five-element list: (type, ikey_1, ckey_1, ikey_2,
-		ckey_2). Here "i" stands for "integer" and "c" stands for
-		character. The idea is that we try to capture the internal identifier
-		used by the system you're scraping to represent the article. For
-		example, this paper on PubMed
+		ckey_2). (Historically "i" stood for "integer" and "c" stood for
+		character, but all 4 are character fields now) The idea is that
+		we try to capture the internal identifier used by the system you're
+		scraping to represent the article. For example, this paper on PubMed
 		<http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=10972276&query_hl=2>
 		seems to have an internal ID of 10972276. How we represent this
 		information in the five element field is up to the plugin, but we need
 		to specify a unique type for this "pubmed linkout". In this case,
 		we'll use "PMID" (the maximum length for the type is six characters),
-		and choose to encode the integer 1972276 in the "integer key 1" field:
-		ikey_1. Thus we have:
+		and choose to put the 1972276 in the ikey_1 field:
+		Thus we have:
 
 		(PMID,1972276,,,)
 

@@ -99,8 +99,8 @@ if (!$slink) {
 	print "status\terr\t (3) Could not find a link to the citation details on this page. Try posting the article from the abstract page\n" and exit;
 }
 
-
-my $link_ris = "http://www.springerlink.com/content/$slink/export-citation/";
+my $link = "http://www.springerlink.com/content/$slink/";
+my $link_ris = "${link}export-citation/";
 
 print "$link_ris\n";
 
@@ -135,6 +135,7 @@ eval {
 $sep = '$';
 my $res = $mech->select("ctl00${sep}ContentPrimary${sep}ctl00${sep}ctl00${sep}CitationManagerDropDownList" , "ReferenceManager");
 if (!$res) {
+	$mech->get( $link );
 	# Books - can't get citation so get from crossref.  Need DOI first.
 	# hacky... look for <dd>10.xxxxxx</dd>
 	# TODO - crossref.tcl can't parse crossref books yet....
