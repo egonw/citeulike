@@ -119,14 +119,21 @@ my $form = $mech->form_name("aspnetForm");
 
 my @inputs = $form->inputs;
 
-$mech->field('ctl00$ContentPrimary$ctl00$ctl00$Export' , "AbstractRadioButton");
+my $sep;
+
+$sep = '$';
+
+$mech->field("ctl00${sep}ContentPrimary${sep}ctl00${sep}ctl00${sep}Export" , "AbstractRadioButton");
+
 eval {
 	# not always present
         no warnings 'all';
-        $mech->field('ctl00$ContentPrimary$ctl00$ctl00$Format' , "RisRadioButton");
+        $mech->field("ctl00${sep}ContentPrimary${sep}ctl00${sep}ctl00${sep}Format" , "RisRadioButton");
 };
 
-my $res = $mech->select('ctl00$ContentPrimary$ctl00$ctl00$CitationManagerDropDownList' , "ReferenceManager");
+# There are "name" with "$" and "id" with "_".
+$sep = '$';
+my $res = $mech->select("ctl00${sep}ContentPrimary${sep}ctl00${sep}ctl00${sep}CitationManagerDropDownList" , "ReferenceManager");
 if (!$res) {
 	# Books - can't get citation so get from crossref.  Need DOI first.
 	# hacky... look for <dd>10.xxxxxx</dd>
@@ -135,39 +142,42 @@ if (!$res) {
 	if ($c =~ /<dd>(10\.\d\d\d\d\/[^<]+)<\/dd>/) {
 		# fake a RIS - all we need is the DOI bit
 		$ris= "UR  - http://dx.doi.org/".$1;
+	} elsif ($c =~ /<span class="value">(10\.\d\d\d\d\/[^<]+)<\/span>/) {
+		# fake a RIS - all we need is the DOI bit
+		$ris= "UR  - http://dx.doi.org/".$1;
 	} else {
 		$ris = "";
 	}
 } else {
-#foreach (@inputs) {
-	#print "$_\n";
-	#print $_->name . " => " . $_->value."\n";
-#}
-#$mech->add_header( "Accept-Charset" => 'utf-8' );
+	#foreach (@inputs) {
+		#print "$_\n";
+		#print $_->name . " => " . $_->value."\n";
+	#}
+	#$mech->add_header( "Accept-Charset" => 'utf-8' );
 
-my $response = $mech->click('ctl00$ContentPrimary$ctl00$ctl00$ExportCitationButton');
+	my $response = $mech->click("ctl00${sep}ContentPrimary${sep}ctl00${sep}ctl00${sep}ExportCitationButton");
 
-#
-# This seems very fragile - $ris is already UTF8 bytes.
-# There are no encoding headers in the response (always) but I think
-# browsers should default to UTF-8, whereas mechanize seems to assume something
-# like Latin-1
-#
-#$ris = $response->decoded_content({default_charset => "UTF-8"});
-$ris = $response->content();
-$ris = decode("utf8", $ris);
+	#
+	# This seems very fragile - $ris is already UTF8 bytes.
+	# There are no encoding headers in the response (always) but I think
+	# browsers should default to UTF-8, whereas mechanize seems to assume something
+	# like Latin-1
+	#
+	#$ris = $response->decoded_content({default_charset => "UTF-8"});
+	$ris = $response->content();
+	$ris = decode("utf8", $ris);
 
-# strip UTF BOM
-$ris =~ s/^\xEF\xBB\xBF//;
-# Hmmm - above doesn't work so use hammer
-$ris =~ s/^[^A-Z]+//;
+	# strip UTF BOM
+	$ris =~ s/^\xEF\xBB\xBF//;
+	# Hmmm - above doesn't work so use hammer
+	$ris =~ s/^[^A-Z]+//;
 
-$ris =~ s/\r//g;
+	$ris =~ s/\r//g;
 
-
-unless ($ris =~ m{ER\s+-}) {
-	print "status\terr\tCouldn't extract the details from SpringerLink's 'export citation'\n" and exit;
-}
+	print "2. $ris\n";
+	unless ($ris =~ m{ER\s+-}) {
+		print "status\terr\tCouldn't extract the details from SpringerLink's 'export citation'\n" and exit;
+	}
 
 }
 #Generate linkouts and print RIS:
