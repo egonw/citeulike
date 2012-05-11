@@ -157,7 +157,13 @@ item(head, "title", "citation_title")
 item(head, "journal", "citation_journal_title")
 #item(head, "volume", "citation_volume")
 item(head, "start_page", "citation_firstpage")
+
 date = meta(head, 'dc.Date')
+if not date:
+	date = meta(head, 'dc.date')
+if not date:
+	date = meta(head, 'citation_publication_date')
+
 if date:
 	m = re.match(r'(\d+)-(\d+)-(\d+)', date)
 	if m:
@@ -173,9 +179,13 @@ if date:
 
 # authors
 authors = head.findAll("meta", {"name":"dc.Contributor"})
+if not authors:
+	authors = head.findAll("meta", {"name":"citation_author"})
 if authors:
 	for a in authors:
 		print "author\t%s" % a['content']
+	
+
 
 # There's an abstract in the header but, for older articles, it's a dummy
 # generic one, so easiest to scrape
