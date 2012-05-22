@@ -60,7 +60,6 @@ $url = <>;
 chomp($url);
 
 
-
 # Is this a "book section"?  If so we need to get user to click the "View Article" link
 #
 # Hmm.  This isn't always the case...
@@ -86,8 +85,6 @@ $url =~ s/springerlink\.metapress\.com/springerlink.com/;
 # Remove any trailing proxy stuff on the end
 $url =~ s!springerlink\.com[^/]+/!springerlink.com/!;
 
-
-
 # extract the UID from the end of the line.
 $url =~ m{/content/([^/?]+)};
 
@@ -102,20 +99,16 @@ if (!$slink) {
 my $link = "http://www.springerlink.com/content/$slink/";
 my $link_ris = "${link}export-citation/";
 
-print "$link_ris\n";
-
 my $mech = WWW::Mechanize->new( autocheck => 1 );
 $mech->quiet(1);
 $mech->agent_alias( 'Windows IE 6' );
 
+# Seems needed to get this page for the RIS link to work
+$mech->get( $link);
 
 $mech->get( $link_ris );
 
-#print $mech->content();
-
-
 my $form = $mech->form_name("aspnetForm");
-#print $form;
 
 my @inputs = $form->inputs;
 
@@ -175,12 +168,13 @@ if (!$res) {
 
 	$ris =~ s/\r//g;
 
-	print "2. $ris\n";
 	unless ($ris =~ m{ER\s+-}) {
 		print "status\terr\tCouldn't extract the details from SpringerLink's 'export citation'\n" and exit;
 	}
 
 }
+
+
 #Generate linkouts and print RIS:
 print "begin_tsv\n";
 
