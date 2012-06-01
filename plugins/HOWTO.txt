@@ -537,11 +537,13 @@ like and CiteULike will just ignore them.
       citeulike_field      | bibtex_equivalent | ris_equivalent
 ---------------------------+-------------------+----------------
  abstract                  | abstract          | AB
+ author                    | author            | AU (A1)
  address                   | address           | AD
  chapter                   | chapter           |
  date_other                |                   |
  day                       |                   |
  edition                   | edition           |
+ editor                    | editor            | ED (A2+)
  end_page                  |                   | EP
  how_published             | howpublished      |
  institution               | institution       |
@@ -566,7 +568,13 @@ like and CiteULike will just ignore them.
 abstract:
 		Raw text of the article's abstract. HTML and TeX are permitted
 		and (one day) CiteULike will format them correctly.
-
+		
+author:
+		An author of the article - can be repeated multiple times.  If 
+		possible, use a format like "Smith, John F" as this is less 
+		ambiguous than "John F Smith", especially when the author has 
+		multiple surnames.
+		
 address:
 		Raw address of the publisher's address. This is appropriate
 		especially for books, and should not be used to represent the
@@ -586,6 +594,10 @@ day:
 
 edition:
 		The edition of a book, usually written in full as "Second"
+
+editor:
+		An editor of the article - can be repeated multiple times. See 
+		"author" above for formatting suggestions.
 
 end_page:
 		The last page the article occupies in this issue. May be
