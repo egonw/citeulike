@@ -40,6 +40,9 @@
 # Function to encode URL compenents
 # NOTE: not utf-8 safe unless indicated.
 #
+
+package require uri
+
 namespace eval cul::url {
 
 	proc _init {} {
@@ -117,4 +120,37 @@ namespace eval cul::url {
 		return $url
 	}
 
+
+	# strip off the query string
+	proc strip_qs {url} {
+		array set parts [uri::split $url]
+		set parts(query) {}
+		return [eval uri::join [array get parts]]
+	}
+
+	# remove any known dud query string params, e.g., google "utm_..."
+	proc cleanup_qs {url} {
+		# scheme, host, port, path, query, fragment
+		array set parts [uri::split $url]
+
+		if {[info exists parts(query)] && $parts(query) ne ""} {
+			set q [list]
+			foreach p [split $parts(query) "&"] {
+				if {[string first "utm_" $p] == 0} {
+					# pass
+				} else {
+					lappend q $p
+				}
+			}
+			set parts(query) [join $q "&"]
+		}
+
+		set ret [eval uri::join [array get parts]]
+		return $ret
+	}
+}
+
+if {[info exists ::argv0] && [file tail $::argv0] eq [info script]} {
+	puts [cul::url::cleanup_qs "http://www.citeulike.org/?a=b&a=x%20y"]
+	puts [cul::url::cleanup_qs "http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0037961?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+plosone%2FPLoSONE+%28PLoS+ONE+Alerts%3A+New+Articles%29"]
 }

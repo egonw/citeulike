@@ -223,24 +223,30 @@ namespace eval driver {
 
 	# Actually do the work. Given a URL, we'll actually
 	# run the appropriate plugins and then we'll have a result.
-	proc parse_url {url {rec_level 0} {candidate ""} {extra_linkouts {}}} {
+	proc parse_url {in_url {rec_level 0} {candidate ""} {extra_linkouts {}}} {
+
+		# strip off any google "utm_*" stuff
+		# In many cases this will remove the qs completely
+		set in_url [cul::url::cleanup_qs $in_url]
 
 		# Plugins are permitted to "redirect" to other URLs
-		# but we really don't want to end up in an inifite loop
+		# but we really don't want to end up in an infinite loop
 		# with each iteration doing a DOS attack on our hosts.
 		# Limit the recursion to much lower than the default tcl
 		# recursion limit.
 		if {$rec_level > 5} {
-			error "Too much recursion. Last url was $url"
+			error "Too much recursion. Last url was $in_url"
 		}
 
 		if {$candidate ne ""} {
 			set candidates [list $candidate]
 		} else {
-			set candidates [interested_plugins $url]
+			set candidates [interested_plugins $in_url]
 		}
 
 		foreach plugin $candidates {
+			set url $in_url
+
 			# For now, we'll just exec() a process. This is
 			# not terribly efficient, and we ultimately want to
 			# have the plugins run in a persistent executable which
