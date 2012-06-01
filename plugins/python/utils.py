@@ -3,10 +3,12 @@
 import time, exceptions, sys, os, signal, re
 from htmlentitydefs import name2codepoint
 
-from BeautifulSoup import BeautifulStoneSoup
+# from BeautifulSoup import BeautifulStoneSoup
+import HTMLParser
 
 def decode_entities(html):
-	return unicode(BeautifulStoneSoup(html,convertEntities=BeautifulStoneSoup.HTML_ENTITIES ))
+	return unicode(HTMLParser.HTMLParser().unescape(html))
+	# return unicode(BeautifulStoneSoup(html,convertEntities=BeautifulStoneSoup.HTML_ENTITIES ))
 
 def x_decode_entities(html):
 	html = re.sub('&#(\d+);', lambda m: unichr(int(m.group(1))), html)

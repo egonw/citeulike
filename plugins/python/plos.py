@@ -11,10 +11,7 @@ from urllib2 import urlopen
 from urlparse import urlparse
 import sys, re, urllib, codecs
 from utils import decode_entities
-#import BeautifulSoup
 import htmlentitydefs
-#import html5lib
-#from html5lib import treebuilders
 import lxml.html
 
 import socket
@@ -68,8 +65,6 @@ def strip_markup(text):
 def fetch_new_ris(hostname, doi):
 
 	url = "http://%s/article/getRisCitation.action?articleURI=info:doi/%s" % (hostname, urllib.quote(doi))
-
-	print url
 
 	record = unicode(urlopen(url).read().strip(), "utf8")
 
