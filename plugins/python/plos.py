@@ -27,7 +27,7 @@ socket.setdefaulttimeout(15)
 def url2doi(url):
 	""" Look for any instance of a DOI in the URL """
 	urluq = urllib.unquote(url)
-	m = re.search('10\.1371/[^/&]+', urluq)
+	m = re.search('10\.1371/[^/&?]+', urluq)
 	if m:
 		return m.group(0)
 	return None
@@ -68,6 +68,8 @@ def strip_markup(text):
 def fetch_new_ris(hostname, doi):
 
 	url = "http://%s/article/getRisCitation.action?articleURI=info:doi/%s" % (hostname, urllib.quote(doi))
+
+	print url
 
 	record = unicode(urlopen(url).read().strip(), "utf8")
 
