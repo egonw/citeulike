@@ -41,6 +41,96 @@
 # This code is a disgrace, but it seems to work on most of the
 # broken implementations of RIS which are enountered in the wild.
 
+
+proc map_ris_type {type} {
+
+	# We use STD, but "officially" it's STAND
+	if {$type eq {STAND}} {
+		return {STD}
+	}
+
+	# These are the types we know about
+	set known_types [regexp -all -inline {[A-Z]{3,}} {
+		BOOK  - Whole book
+		CHAP  - Book chapter
+		GEN   - Generic
+		CONF  - Conference proceeding
+		INPR  - In Press
+		JOUR  - Journal
+		PAMP  - Pamphlet
+		RPRT  - Report
+		STD - Standard
+		THES  - Thesis/Dissertation
+		UNPB  - Unpublished work
+		DATA  - Data file
+		ELEC  - Web Page
+	}]
+
+	if {[lsearch -exact $known_types $type] != -1} {
+		return $type
+	}
+
+	return {GEN}
+
+	# TODO, provide a better mapping, e.g., ebook->book
+	set all_types {
+		ABST  - Abstract
+		ADVS  - Audiovisual material
+		AGGR  - Aggregated Database
+		ANCIENT - Ancient Text
+		ART   - Art Work
+		BILL  - Bill
+		BLOG  - Blog
+		CASE  - Case
+		CHART - Chart
+		CLSWK - Classical Work
+		COMP  - Computer program
+		CONF  - Conference proceeding
+		CPAPER - Conference paper
+		CTLG  - Catalog
+		DATA  - Data file
+		DBASE - Online Database
+		DICT  - Dictionary
+		EBOOK - Electronic Book
+		ECHAP - Electronic Book Section
+		EDBOOK - Edited Book
+		EJOUR - Electronic Article
+		ELEC  - Web Page
+		ENCYC - Encyclopedia
+		EQUA  - Equation
+		FIGURE - Figure
+		GOVDOC - Government Document
+		GRANT - Grant
+		HEAR  - Hearing
+		ICOMM - Internet Communication
+		INPR  - In Press
+		JFULL - Journal (full)
+		JOUR  - Journal
+		LEGAL - Legal Rule or Regulation
+		MANSCPT - Manuscript
+		MAP   - Map
+		MGZN  - Magazine article
+		MPCT  - Motion picture
+		MULTI - Online Multimedia
+		MUSIC - Music score
+		NEWS  - Newspaper
+		PAMP  - Pamphlet
+		PAT   - Patent
+		PCOMM - Personal communication
+		RPRT  - Report
+		SER   - Serial publication
+		SLIDE - Slide
+		SOUND - Sound recording
+		STAND - Standard
+		STAT  - Statute
+		THES  - Thesis/Dissertation
+		UNPB  - Unpublished work
+		VIDEO - Video recording
+	}
+}
+
+
+
 proc parse_ris {rec} {
 	set last_tag ""
 	set seen_abstracts [list]
@@ -95,7 +185,8 @@ proc parse_ris {rec} {
 					} elseif {$v=="ABST"} {
 						set ret(type) JOUR
 					} else {
-						set ret(type) $v
+						set ret(type) [map_ris_type $v]
+						#set ret(type) $v
 					}
 				}
 
