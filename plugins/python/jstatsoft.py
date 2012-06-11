@@ -16,7 +16,6 @@ socket.setdefaulttimeout(15)
 def main():
 	# Append bibtex to the url
 	url = sys.stdin.readline().strip()
-	bibtexurl=url+'/bibtex'
 
 	match  = re.search(r'http://www\.jstatsoft\.org/([a-z][0-9]+)/([a-z][0-9]+)', url)
 	if not match:
@@ -24,8 +23,12 @@ def main():
 		sys.exit(1)
 
 	print "begin_tsv"
-	print "linkout\tJSS\t\t%s\t\t%s" % (match.group(1),match.group(2))
+	(volume, issue) = (match.group(1),match.group(2))
+	print "linkout\tJSS\t\t%s\t\t%s" % (volume, issue)
 	print "end_tsv"
+
+	bibtexurl="http://www.jstatsoft.org/%s/%s/bibtex" % (volume, issue)
+
 	print "\nbegin_bibtex"
 
 	pat=re.compile(r'(?s)<td class="label">Abstract:<\/td>(.*)<td [^>]+><p>(.*)<\/p>')
@@ -43,10 +46,13 @@ def main():
 		abstract=pat.search(content).groups()
 		abstract=abstract[1]
 
+		abstract = re.sub(r'"', '\'', abstract)
+
 	except Exception,err:
 		abstract=''
 
 	abstract= "\n  Abstract =    \""+abstract+"\","
+
 	try:
 		# Download the bibtex-containing file
 		instream=urllib.urlopen(bibtexurl)
