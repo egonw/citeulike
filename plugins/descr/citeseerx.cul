@@ -80,7 +80,7 @@ plugin {
 	# RB note: fixing the URL string so it can handle things like
 	# http://blah.com.proxy.uni.edu/whatever.  We'll clean away the proxy info
 	# on the script side.
-	regexp {^http://citeseerx?.ist.psu.edu(.[^/]+)?/viewdoc/}
+	regexp {^http://citeseerx?.ist.psu.edu(.[^/]+)?(/citeseerx)?/viewdoc/}
 }
 
 #

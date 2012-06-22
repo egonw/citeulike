@@ -38,6 +38,8 @@ use LWP::Simple;
 use HTML::TreeBuilder;
 use strict;
 
+binmode STDOUT, ":utf8";
+
 my $unclean_url = <>;
 
 # Example URLs
@@ -46,7 +48,7 @@ my $unclean_url = <>;
 
 my $clean_url;
 my $doi;
-if ($unclean_url !~ m,^https?://citeseerx?.ist.psu.edu(\.[^/]+)?/viewdoc/[^/]*?(?:\?doi=)?([0-9.]+),) {
+if ($unclean_url !~ m,^https?://citeseerx?.ist.psu.edu(\.[^/]+)?(?:/citeseerx)?/viewdoc/[^/]*?(?:\?doi=)?([0-9.]+),) {
 	print "status\tnot_interested\n";
 	exit;
 } else {
