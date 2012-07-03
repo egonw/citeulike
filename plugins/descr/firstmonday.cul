@@ -1,12 +1,12 @@
 plugin {
-	version {1}
+	version {2}
 	name {First Monday}
 	url {http://firstmonday.org/}
 	blurb {}
 	author {Tristan Henderson}
 	email {tnhh@tnhh.org}
 	language {perl}
-	regexp {http://firstmonday.org/htbin/cgiwrap/bin/ojs/index.php/fm/article/view/\d+}
+	regexp {http://(www.)?(uic.edu|firstmonday.org)/htbin/cgiwrap/bin/ojs/index.php/fm/article/view/\d+}
 }
 
 format_linkout FSTMON {
