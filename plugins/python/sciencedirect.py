@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.6
+#!/usr/bin/env python2.7
 # NOTE THIS NEEDS 2.6 as parser breaks with 2.5 :-)
 import warnings
 warnings.simplefilter("ignore",DeprecationWarning)
@@ -9,6 +9,7 @@ import mechanize
 import html5lib
 from html5lib import treebuilders
 import lxml.html, lxml.etree
+from lxml.cssselect import CSSSelector
 
 socket.setdefaulttimeout(15)
 
@@ -139,7 +140,7 @@ def handle(url):
 
 	response = browser.response()
 	page = response.get_data()
-	#print page
+	# print page
 
 	#
 	# Elsevier insist on user selecting a "preferred source" when the article is
@@ -148,14 +149,17 @@ def handle(url):
 	# and follow that.
 	# Yeah, I know - rubbish.
 	#
+
 	huburl = browser.geturl()
+
+	doi = None
+
 	m = re.search(r'linkinghub.elsevier.com/', huburl)
 	if m:
 		root = lxml.html.fromstring(page)
 		inputs = root.cssselect("input")
 		hrefs = [link.get("value") for link in inputs]
 		for href in hrefs:
-			# print href
 			n = re.search('sciencedirect.com',href)
 			if n:
 				browser.open(href)
@@ -167,24 +171,42 @@ def handle(url):
 
 	# this page might requires a login.  Luckily there seems to be a
 	# link "View Abstract" which can take us to a page we can read
-	if not m:
-		parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("beautifulsoup"))
-		soup = parser.parse(page)
+	if not m and not doi:
 
-		link = soup.find(text=re.compile(r"view abstract", re.I))
-		if link:
-			href = link.parent['href']
-			browser.open(href)
-			response = browser.response()
-			page = response.get_data()
+		root = lxml.html.fromstring(page)
+		links = root.cssselect("a")
+		for href in [e.get("href") for e in links]:
+			if href:
+				m = re.search(r'http://dx.doi.org/([^"]+)', href)
+				if m:
+					break
+
+		if False:
+			parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("beautifulsoup"))
+			# print page
+			soup = parser.parse(page)
+
+			link = soup.find(text=re.compile(r"view abstract", re.I))
+			if link:
+				href = link.parent['href']
+				browser.open(href)
+				response = browser.response()
+				page = response.get_data()
 
 			m = re.search(r'<a(?: id="[^"]+")?  href="http://dx.doi.org/([^"]+)"', page)
 
+	if m:
+		doi = m.group(1)
+	else:
+		root = lxml.html.fromstring(page)
+		doi_nodes = root.cssselect("#doi")
+		for n in [e.text for e in doi_nodes]:
+			doi = re.sub(r'doi:','',n)
+			break
 
-	if not m:
+	if not doi:
 		raise ParseException, "Cannot find DOI in page"
 
-	doi = m.group(1)
 
 	# if not re.search(r'^10[.](1016|1006|1053)/',doi):
 	#	raise ParseException, "Cannot find an Elsevier DOI (10.1006, 10.1016, 10.1053) DOI"
@@ -204,11 +226,9 @@ def handle(url):
 	if m:
 		raise ParseException, "Unable to locate that DOI (%s) in crossref" % doi
 
-	yield "begin_crossref"
-	yield xml_page
-	yield "end_crossref"
-
 	yield "begin_tsv"
+	yield "use_crossref\t1"
+	yield "linkout\tDOI\t\t%s\t\t" % doi
 
 	abstract = scrape_abstract(page)
 #	try:
