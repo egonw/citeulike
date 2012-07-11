@@ -92,11 +92,17 @@ foreach authorlink [split $page "\n"] {
 }
 # DOI
 
+set type {MISC}
 if {[regexp "<a href=\"http://dx.doi.org\[^\"\]+\">(\[^<\]+)</a>" $page -> doi]} {
 	puts [join [list linkout DOI {} $doi {} {}] "\t"]
+	set type {JOUR}
+	puts "use_crossref\t1"
 }
-
-
+if {[regexp {<a (?:[^>]+)>(10\.\d\d\d\d/[^<]+)</a>} $page -> doi]} {
+	puts [join [list linkout DOI {} $doi {} {}] "\t"]
+	set type {JOUR}
+	puts "use_crossref\t1"
+}
 
 # TITLE
 regexp {dc:title="(.*?)"\s*trackback:ping} $page -> title
@@ -133,7 +139,7 @@ if {[info exists year]} {
 }
 
 
-puts "type\tJOUR"
+puts "type\t$type"
 
 puts "end_tsv"
 
