@@ -92,7 +92,7 @@ foreach authorlink [split $page "\n"] {
 }
 # DOI
 
-set type {MISC}
+set type {GEN}
 if {[regexp "<a href=\"http://dx.doi.org\[^\"\]+\">(\[^<\]+)</a>" $page -> doi]} {
 	puts [join [list linkout DOI {} $doi {} {}] "\t"]
 	set type {JOUR}
