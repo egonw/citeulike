@@ -22,4 +22,5 @@ def install_io_trap():
 	signal.signal(signal.SIGPIPE,handleSig)
 	sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
 
-
+def remove_querystring(url):
+	return re.sub(r'\?.*','', url)
