@@ -131,7 +131,8 @@ def parse_citation(s):
 # JSTOR barfs at normal python urllib, so spawn lynx, which seem to work
 def get_url(url):
 	#return subprocess.Popen(["lynx", "-source", "-read_timeout", "10", url],stdout=subprocess.PIPE).stdout.read()
-	page = subprocess.Popen(["lynx", "-source", url],stdout=subprocess.PIPE).stdout.read()
+	#page = subprocess.Popen(["lynx", "-source", url],stdout=subprocess.PIPE).stdout.read()
+	page = subprocess.Popen(["GET", "-H", "User-Agent: citeulike.org", url], stdout=subprocess.PIPE).stdout.read()
 	page = page.decode("utf-8")
 	return page
 
@@ -144,8 +145,6 @@ def main(id, doi, page):
 	# Sometimes other prefixes
 	if doi:
 		print "\t".join([ "linkout", "DOI", "", doi, "", ""])
-
-
 
 	meta = MetaHeaders(page=page)
 	title = meta.get_item("dc.Title")
