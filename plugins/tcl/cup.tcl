@@ -63,10 +63,6 @@ if {![regexp {\<meta name="rft_id" content="info:doi/(10.[^"]+)"/\>} $page -> do
 puts "begin_tsv"
 
 set has_doi 0
-if {$doi ne ""} {
-	puts "linkout\tDOI\t\t$doi\t\t"
-	set has_doi 1
-}
 puts "linkout\tCUP\t$aid\t\t\t"
 
 
@@ -129,7 +125,7 @@ if {$ris == 1} {
 		}
 
 		if {!$has_doi && [regexp {^URL\s*=\s*{http://dx.doi.org/(10\..*)}} $bib_line -> doi]} {
-			lappend fixed_bib "doi = {$doi}"
+			lappend fixed_bib "doi = {$doi},"
 			set has_doi 1
 		}
 
@@ -142,6 +138,10 @@ if {$ris == 1} {
 	puts "end_bibtex"
 }
 
+if {$has_doi && $doi ne ""} {
+	puts "linkout\tDOI\t\t$doi\t\t"
+	set has_doi 1
+}
 
 
 puts "status\tok"
