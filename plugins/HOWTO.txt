@@ -70,7 +70,6 @@ start_page -> 718
 url -> http://dx.doi.org/10.1038/435718a
 end_page -> 719
 plugin_version -> 1
-doi -> 10.1038/435718a
 issue -> 7043
 title -> Chemistry society goes head to head with NIH in fight over public database
 journal -> Nature
@@ -568,13 +567,13 @@ like and CiteULike will just ignore them.
 abstract:
 		Raw text of the article's abstract. HTML and TeX are permitted
 		and (one day) CiteULike will format them correctly.
-		
+
 author:
-		An author of the article - can be repeated multiple times.  If 
-		possible, use a format like "Smith, John F" as this is less 
-		ambiguous than "John F Smith", especially when the author has 
+		An author of the article - can be repeated multiple times.  If
+		possible, use a format like "Smith, John F" as this is less
+		ambiguous than "John F Smith", especially when the author has
 		multiple surnames.
-		
+
 address:
 		Raw address of the publisher's address. This is appropriate
 		especially for books, and should not be used to represent the
@@ -596,7 +595,7 @@ edition:
 		The edition of a book, usually written in full as "Second"
 
 editor:
-		An editor of the article - can be repeated multiple times. See 
+		An editor of the article - can be repeated multiple times. See
 		"author" above for formatting suggestions.
 
 end_page:
