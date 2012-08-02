@@ -1,0 +1,88 @@
+plugin {
+	version {1}
+	name {International Journal of Digital Curation}
+	url {http://ijdc.net/}
+	blurb {}
+	author {Tristan Henderson}
+	email {tnhh@tnhh.org}
+	language {perl}
+	regexp {http://(www.)?ijdc.net/index.php/\w+/article/view/\d+}
+}
+
+format_linkout IJDC {
+	return [list "International Journal of Digital Curation" "http://ijdc.net/index.php/${ckey_1}/article/view/${ikey_1}"]
+}
+
+test {http://ijdc.net/index.php/ijdc/article/view/181} {
+	formatted_url {{International Journal of Digital Curation} http://ijdc.net/index.php/ijdc/article/view/181}
+	linkout {IJDC 181 ijdc {} {}}
+	volume 6
+	issue 2
+	year 2011
+	month 07
+	day 26
+	type JOUR
+	issn 1746-8256
+	plugin_version 1
+	title {Citation and Peer Review of Data: Moving Towards Formal Data Publication}
+	journal {International Journal of Digital Curation}
+	url {http://ijdc.net/index.php/ijdc/article/view/181}
+    start_page 4
+    end_page 37
+    doi {10.2218/ijdc.v6i2.205}
+	status ok
+    author {Lawrence Bryan B {Lawrence, Bryan}}
+    author {Jones Catherine C {Jones, Catherine}}
+    author {Matthews Brian B {Matthews, Brian}}
+    author {Pepler Sam S {Pepler, Sam}}
+    author {Callaghan Sarah S {Callaghan, Sarah}}
+	abstract {This paper discusses many of the issues associated with formally publishing data in academia, focusing primarily on the structures that need to be put in place for peer review and formal citation of datasets. Data publication is becoming increasingly important to the scientific community, as it will provide a mechanism for those who create data to receive academic credit for their work and will allow the conclusions arising from an analysis to be more readily verifiable, thus promoting transparency in the scientific process. Peer review of data will also provide a mechanism for ensuring the quality of datasets, and we provide suggestions on the types of activities one expects to see in the peer review of data. A simple taxonomy of data publication methodologies is presented and evaluated, and the paper concludes with a discussion of dataset granularity, transience and semantics, along with a recommended human-readable citation syntax.}
+	plugin ijdc
+}
+
+test {http://www.ijdc.net/index.php/ijdc/article/view/183} {
+    formatted_url {{International Journal of Digital Curation} http://ijdc.net/index.php/ijdc/article/view/183}
+	linkout {IJDC 183 ijdc {} {}}
+	volume 6
+	issue 2
+	year 2011
+	month 07
+	day 25
+	type JOUR
+	issn 1746-8256
+	plugin_version 1
+	title {"You made it, you take care of it": Data Management as Personal Information Management}
+	journal {International Journal of Digital Curation}
+	url {http://ijdc.net/index.php/ijdc/article/view/183}
+    start_page 53
+    end_page 77
+    doi {10.2218/ijdc.v6i2.190}
+	status ok
+    author {Fear Kathleen K {Fear, Kathleen}}
+	abstract {This study explores how researchers at a major Midwestern university are managing their data, as well as the factors that have shaped their practices and those that motivate or inhibit changes to that practice. A combination of survey (n=363) and interview data (n=15) yielded both qualitative and quantitative results bearing on my central research question: In what types of data management activities do researchers at this institution engage? Corollary to that, I also explored the following questions: What do researchers feel could be improved about their data management practices? Which services might be of interest to them? How do they feel those services could most effectively be implemented? In this paper, I situate researchers' data management practices within a theory of personal information management. I present a view of data management and preservation needs from researchers' perspectives across a range of domains. Additionally, I discuss the implications that understanding research data management as personal information management has for introducing services to support and improve data management practice.}
+	plugin ijdc
+}
+
+test {http://www.ijdc.net/index.php/ijdc/article/view/6} {
+    formatted_url {{International Journal of Digital Curation} http://ijdc.net/index.php/ijdc/article/view/6}
+	linkout {IJDC 6 ijdc {} {}}
+	volume 1
+	issue 1
+	year 2008
+	month 12
+	day 02
+	type JOUR
+	issn 1746-8256
+	plugin_version 1
+	title {Digital Curation for Science, Digital Libraries, and Individuals}
+	journal {International Journal of Digital Curation}
+	url {http://ijdc.net/index.php/ijdc/article/view/6}
+    start_page 3
+    end_page 16
+    doi {10.2218/ijdc.v1i1.2}
+	status ok
+    author {Beagrie Neil N {Beagrie, Neil}}
+	abstract {The creation, management and use of digital materials are of increasing importance for a wide range of activities. Much of the knowledge base and intellectual assets of institutions and individuals are now in digital form. The term digital curation is increasingly being used for the actions needed to add value to and maintain these digital assets over time for current and future generations of users. The paper explores this emerging field of digital curation as an area of inter-disciplinary research and practice, and the trends which are influencing its development. It analyses the genesis of the term and how traditional roles relating to digital assets are in transition. Finally it explores some of the drivers for curation ranging from trends such as exponential growth in digital information, to "life-caching", digital preservation, the Grid and new opportunities for publishing, sharing, and re-using data. It concludes that significant effort needs to be put into developing a persistent information infrastructure for digital materials and into developing the digital curation skills of researchers and information professionals. Without this, current investment in digitisation and digital content will only secure short-term rather than lasting benefits.}
+	plugin ijdc
+}
+
