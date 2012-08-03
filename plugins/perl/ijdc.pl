@@ -53,11 +53,11 @@ my @meta = $head->look_down('_tag','meta');
 foreach my $m (@meta) {
 	my $name = $m->attr("name");
 	my $content = $m->attr("content");
-	$content = decode("utf-8",$content);
+    #$content = decode("utf-8",$content);
 
 	if ($name) {
 		if ($name =~ /^description$/) {
-			$title = sanitise($content);
+			$title = $content;
 		} elsif ($name =~ /^citation_journal_title$/) {
 			$journal = $content;
 		} elsif ($name =~ /^citation_authors$/) {
@@ -82,7 +82,7 @@ foreach my $m (@meta) {
 		} elsif ($name =~ /^citation_issn$/) {
 			$issn = $content;
 		} elsif ($name =~ /^DC.Description$/) {
-			$abstract = sanitise($content);
+			$abstract = $content;
 		} elsif ($name =~ /^citation_doi$/) {
             $doi = $content;
 		} elsif ($name =~ /^citation_firstpage$/) {
@@ -96,6 +96,7 @@ foreach my $m (@meta) {
 
 print "begin_tsv\n";
 print "linkout\tIJDC\t$ikey_1\t$ckey_1\t\t\n";
+print "linkout\tDOI\t\t$doi\t\t\n" if $doi;
 print "title\t$title\n";
 foreach my $author (@authors) {
 	print "author\t$author\n";
@@ -107,7 +108,6 @@ print "year\t$year\n" if $year;
 print "month\t$month\n" if $month;
 print "day\t$day\n" if $day;
 print "issn\t$issn\n" if $issn;
-print "doi\t$doi\n" if $doi;
 print "start_page\t$start_page\n" if $start_page;
 print "end_page\t$end_page\n" if $end_page;
 print "type\tJOUR\n";
@@ -116,15 +116,3 @@ print "abstract\t$abstract\n" if $abstract;
 print "end_tsv\n";
 print "status\tok\n";
 
-# get rid of those annoying smart quotation marks and more
-sub sanitise {
-	my ($text) = @_;
-
-	$text =~ s/(\x{2018}|\x{2019})/'/g;
-	$text =~ s/(\x{201C}|\x{201D})/"/g;
-	$text =~ s/\x{2014}/--/g;
-	$text =~ s/^\s+//;
-	$text =~ s/\s+$//;
-	$text =~ s/\s\s+/ /g;
-	return $text;
-}
