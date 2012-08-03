@@ -53,7 +53,7 @@ my @meta = $head->look_down('_tag','meta');
 foreach my $m (@meta) {
 	my $name = $m->attr("name");
 	my $content = $m->attr("content");
-    #$content = decode("utf-8",$content);
+    $content = decode("utf-8",$content);
 
 	if ($name) {
 		if ($name =~ /^description$/) {
