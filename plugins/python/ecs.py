@@ -402,6 +402,7 @@ class ParameterOutOfRange(AWSException): pass
 class ParameterRepeatedInRequest(AWSException): pass
 class RestrictedParameterValueCombination(AWSException): pass
 class XSLTTransformationError(AWSException): pass
+class RequestThrottled(AWSException): pass
 
 # make a valid RESTful AWS query, that is signed, from a dictionary
 # http://docs.amazonwebservices.com/AWSECommerceService/latest/DG/index.html?RequestAuthenticationArticle.html
@@ -450,7 +451,12 @@ def buildException(els):
     class_name = error.childNodes[0].firstChild.data[4:]
     msg = error.childNodes[1].firstChild.data
 
-    e = globals()[ class_name ](msg)
+    try:
+        e = globals()[ class_name ](msg)
+    except KeyError:
+        class_name = error.childNodes[0].firstChild.data
+        e = globals()[ class_name ](msg)
+
     return e
 
 
@@ -461,6 +467,8 @@ def query(url):
     usock = u.open(url)
     dom = minidom.parse(usock)
     usock.close()
+
+    # print dom.toxml()
 
     errors = dom.getElementsByTagName('Error')
     if errors:
