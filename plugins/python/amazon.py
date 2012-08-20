@@ -241,6 +241,10 @@ def secret_key():
 def api_key():
 	return get_keys()[0]
 
+# this is the same as account id
+def associate_id():
+	return get_keys()[2]
+
 
 # map domain -> country ("locale")
 def get_locale(domain):
@@ -284,6 +288,7 @@ def main():
 
 	ecs.setLicenseKey( api_key() )
 	ecs.setSecretKey( secret_key() )
+	ecs.setOptions({"AssociateTag": associate_id()})
 
 	if "--test" in sys.argv:
 		test_parse_url()
@@ -324,4 +329,3 @@ if __name__=="__main__":
 		print "\t".join(["status", "err", e.msg])
 	except Exception, e:
 		print "\t".join(["status", "err", str(e)])
-		raise
