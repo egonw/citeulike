@@ -93,12 +93,11 @@ foreach authorlink [split $page "\n"] {
 # DOI
 
 set type {GEN}
-if {[regexp "<a href=\"http://dx.doi.org\[^\"\]+\">(\[^<\]+)</a>" $page -> doi]} {
+if {[regexp {<a href="http://dx.doi.org/([^"]+)} $page -> doi]} {
 	puts [join [list linkout DOI {} $doi {} {}] "\t"]
 	set type {JOUR}
 	puts "use_crossref\t1"
-}
-if {[regexp {<a (?:[^>]+)>(10\.\d\d\d\d/[^<]+)</a>} $page -> doi]} {
+} elseif {[regexp {<a (?:[^>]+)>(10\.\d\d\d\d/[^<]+)</a>} $page -> doi]} {
 	puts [join [list linkout DOI {} $doi {} {}] "\t"]
 	set type {JOUR}
 	puts "use_crossref\t1"
