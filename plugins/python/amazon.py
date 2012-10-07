@@ -114,7 +114,7 @@ def fetch(page, asin, locale):
 	]
 
 	amazon_type = extract(page, ["ProductGroup"])
-	if amazon_type!="Book":
+	if amazon_type!="Book" and amazon_type!="eBooks" :
 		raise UserException("This item on Amazon does not appear to be a book. It looks like a %s" % amazon_type)
 	else:
 		yield ("type", "BOOK")
@@ -155,6 +155,11 @@ def fetch(page, asin, locale):
 	isbn = extract(page, ['ISBN'])
 	if isbn:
 		yield ("linkout", "\t".join(["ISBN", "", isbn, "", ""]))
+	else:
+		isbn = extract(page, ['EISBN'])
+		if isbn:
+			yield ("linkout", "\t".join(["ISBN", "", isbn, "", ""]))
+
 
 	title = extract(page,["Title"])
 	if not title and isbn:
