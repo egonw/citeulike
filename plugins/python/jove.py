@@ -55,15 +55,21 @@ def item(soup, entry, key):
 
 def handle(url):
 
-	m = re.match(r'http://www\.jove.com/(?:index/Details\.stp|Details.php|details.stp)\?ID=(\d+)', url, re.IGNORECASE)
+	m = re.match(r'http://www\.jove.com/video/(\d+)', url, re.IGNORECASE)
+	if not m:
+		# old style
+		m = re.match(r'http://www\.jove.com/(?:index/Details\.stp|Details.php|details.stp)\?ID=(\d+)', url, re.IGNORECASE)
 	if not m:
 		raise ParseException, "URL not supported %s" % url
 	wkey = m.group(1)
 
-	ris_url = "http://www.jove.com/Resources/php/GetRIS.php?id=%s" % wkey
+	ris_url = "http://www.jove.com/legacy/GetRIS.php?id=%s" % wkey
 
 	ris = urlopen(ris_url).read()
 
+	ris = re.sub(r'DO  - doi:',"DO  - ",ris)
+
+	ris = re.sub(r"J Vis Exp","Journal of Visualized Experiments",ris)
 
 	print "begin_tsv"
 	print "linkout\tJOVE\t%s\t\t\t" % wkey
