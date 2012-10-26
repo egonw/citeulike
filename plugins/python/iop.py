@@ -96,6 +96,11 @@ ERR_STR_TRY_AGAIN = 'The server may be down.  Please try later.'
 # read url from std input
 url = sys.stdin.readline().strip()
 
+# strip off trailing "/<word>" - those pages don't have metadata
+m = re.match(r'(.*?)(/[a-z]+)?$',url)
+if m:
+	url = m.group(1)
+
 # fetch the page the user is viewing and exit gracefully in case of trouble
 try:
 	f = urllib2.urlopen(url)
@@ -184,7 +189,7 @@ if not authors:
 if authors:
 	for a in authors:
 		print "author\t%s" % a['content']
-	
+
 
 
 # There's an abstract in the header but, for older articles, it's a dummy
