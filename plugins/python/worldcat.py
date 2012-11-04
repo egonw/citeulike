@@ -53,7 +53,7 @@ try:
 except:
 	bail("Could not fetch RIS file (" + ris_file_url + ")")
 
-print ris_file
+# print ris_file
 
 if not re.search(r'TY\s{1,4}-', ris_file):
 	bail("RIS file doesn't have a 'TY -'")
