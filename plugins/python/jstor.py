@@ -110,6 +110,8 @@ def grab_bibtex(id, doi):
 
 	page = get_url("%s?%s" %  (url, urllib.urlencode(params)))
 
+	#print "BIBTEX:", "%s?%s" %  (url, urllib.urlencode(params))
+
 	# Remove the random junk found in the record
 	m = re.search(r'@comment{{NUMBER OF CITATIONS : 1}}(.*)@comment{{ These records have been provided', page, re.M|re.DOTALL)
 	if m:
@@ -132,10 +134,10 @@ def parse_citation(s):
 def get_url(url):
 	#return subprocess.Popen(["lynx", "-source", "-read_timeout", "10", url],stdout=subprocess.PIPE).stdout.read()
 	#page = subprocess.Popen(["lynx", "-source", url],stdout=subprocess.PIPE).stdout.read()
-	page = subprocess.Popen(["GET", "-H", "User-Agent: citeulike.org", url], stdout=subprocess.PIPE).stdout.read()
+	# page = subprocess.Popen(["GET", "-H", "User-Agent: citeulike.org", url], stdout=subprocess.PIPE).stdout.read()
+	page = subprocess.Popen(["wget", "-U", "citeulike.org", "-O-", "-q", url], stdout=subprocess.PIPE).stdout.read()
 	page = page.decode("utf-8")
 	return page
-
 
 def main(id, doi, page):
 
