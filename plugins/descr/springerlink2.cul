@@ -1,0 +1,96 @@
+# Copyright (c) 2012  CiteULike.org
+# All rights reserved.
+#
+# This code is derived from software contributed to CiteULike.org
+# by
+#
+#	Fergus Gallagher
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. All advertising materials mentioning features or use of this software
+#    must display the following acknowledgement:
+#        This product includes software developed by
+#		 CiteULike <http://www.citeulike.org> and its
+#		 contributors.
+# 4. Neither the name of CiteULike nor the names of its
+#    contributors may be used to endorse or promote products derived
+#    from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY CITEULIKE.ORG AND CONTRIBUTORS
+# ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+# TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS
+# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
+
+#
+# Plugin description
+#
+
+plugin {
+	version {1}
+	name {New SpringerLink}
+	url {http://link.springer.com/}
+	blurb {}
+	author {Fergus Gallagher}
+	email {fergus@citeulike.org}
+	language {python}
+	regexp {http://link.springer.com}
+	use_crossref 0
+}
+
+# Linkout formatting
+# Raw ingredients required to build the full text URL dynamically using the following variables
+# collected by the plugin: type ikey_1 ckey_1 ikey_2 ckey_2
+format_linkout SLINK2 {
+	return [list SpringerLink "http://link.springer.com/${ckey_1}/${ckey_2}"]
+}
+
+#Tests
+
+test {http://link.springer.com/article/10.1007/s10096-012-1706-7} {
+	serial  0934-9723
+	volume  31
+	linkout  {SLINK2 {} article {} 10.1007/s10096-012-1706-7}
+	linkout {DOI {} 10.1007/s10096-012-1706-7 {} {}}
+	formatted_url {SpringerLink http://link.springer.com/article/10.1007/s10096-012-1706-7}
+	formatted_url {DOI http://dx.doi.org/10.1007/s10096-012-1706-7}
+	year  2012
+	type  JOUR
+	start_page  3375
+	end_page  3383
+	journal_user_abbrev_2  {Eur J Clin Microbiol Infect Dis}
+	url  http://dx.doi.org/10.1007/s10096-012-1706-7
+	plugin_version  1
+	doi  10.1007/s10096-012-1706-7
+	publisher  Springer-Verlag
+	issue  12
+	title_secondary  {European Journal of Clinical Microbiology & Infectious Diseases}
+	title  {Membrane-damaging potential of natural L-(−)-usnic acid in Staphylococcus aureus}
+	abstract {The purpose of this investigation was to try to understand the antibacterial mechanism of L-(−)-usnic acid isolated for the first time from fruticose lichen Usnea subfloridana using clinical isolates of methicillin-resistant Staphylococcus aureus (MRSA). The minimum inhibitory concentration (MIC) of L-(−)-usnic acid against the clinical isolates of MRSA and reference strain S. aureus MTCC-96 (SA-96) was in the range 25–50 μg/ml. Treatment of both reference and clinical strains (MRSA-ST 2071) with four-fold MIC concentrations (100–200 μg/ml) of L-(−)-usnic acid reduced the viability of cells without damaging the cell wall. However, the loss of 260 nm absorbing material and increase in propidium iodide uptake was observed in both of the strains. Similarly, a combined effect of L-(−)-usnic acid (25–50 μg/ml) and 7.5 % NaCl resulted in a reduced number of viable cells within 24 h in comparison to the control. These observations clearly indicate that L-(−)-usnic acid exerts its action by disruption of the bacterial membrane. Further, in vivo efficacy showed that L-(−)-usnic acid significantly (p < 0.001) lowered the microbial load of spleen at doses ranging from 1 to 5 mg/kg. Further, toxicity studies in infected mice at doses 20 times higher than the efficacious dose indicated L-(−)usnic acid to be safe. Paradoxically, L-(−)usnic acid exhibited changes in serum triglycerides, alkaline phosphatase (ALKP) and liver organ weight in the healthy mice administered with only 25 mg/kg body weight. The results obtained in this study showed that natural L-(−)-usnic acid exerts its antibacterial activity against MRSA by disruption of the cell membrane. Further, the natural L-(−)-usnic acid was found to be safe up to 100 mg/kg body weight, thereby, making it a probable candidate for treating S. aureus infections.}
+	author {Gupta {} VK {Gupta, V.K.}}
+	author {Verma {} S {Verma, S.}}
+	author {Gupta {} S {Gupta, S.}}
+	author {Singh {} A {Singh, A.}}
+	author {Pal {} A {Pal, A.}}
+	author {Srivastava {} SK {Srivastava, S.K.}}
+	author {Srivastava {} PK {Srivastava, P.K.}}
+	author {Singh {} SC {Singh, S.C.}}
+	author {Darokar {} MP {Darokar, M.P.}}
+	plugin  springerlink2
+	status ok
+}
+
