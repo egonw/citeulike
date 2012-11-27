@@ -47,12 +47,13 @@ socket.setdefaulttimeout(15)
 
 # Read URL from stdin
 url = sys.stdin.readline().strip()
+path = urllib2.unquote(urlparse(url).path)
 
 page = unicode(urllib2.urlopen(url).read().strip(),"utf8")
 
 root = lxml.html.document_fromstring(page)
 
-m = re.search("http://link.springer.com/([^/]+)/(10\.\d\d\d\d/.*)", url)
+m = re.search("/([^/]+)/(10\.\d\d\d\d/.*)", path)
 if not m:
 	bail("Unrecognised URL %s - cannot extract a DOI" % url)
 
@@ -67,7 +68,7 @@ for div in root.cssselect("div.abstract-content"):
 print "end_tsv"
 print "begin_ris"
 
-ris_url = "http://link.springer.com/export-citation%s.ris" % urlparse(url).path
+ris_url = "http://link.springer.com/export-citation%s.ris" % path
 print unicode(urllib2.urlopen(ris_url).read().strip(),"utf8")
 
 print "end_ris"
