@@ -35,11 +35,19 @@ file = File.new(ENV['HOME']+"/.ssrncookie", "r")
 cookie = file.gets
 file.close
 
-meta = Hpricot(open("http://papers.ssrn.com/sol3/RefExport.cfm?abstract_id=#{id}&format=#{format_id}",
-	"User-Agent" => "lwp-request/5.810",
-	"Cookie" => cookie
-))
-ris = (meta/"//input[@name='hdnContent']")
+ris = false
+
+if false
+	begin
+		meta = Hpricot(open("http://papers.ssrn.com/sol3/RefExport.cfm?abstract_id=#{id}&format=#{format_id}",
+			"User-Agent" => "lwp-request/5.810",
+			"Cookie" => cookie
+		))
+		ris = (meta/"//input[@name='hdnContent']")
+	rescue Exception=>e
+		# handle e
+	end
+end
 #
 # The RIS data is actually dumped at the end - I think it could go here
 # but all the other plugins seem to put it at the end.
@@ -75,8 +83,8 @@ puts "title\t" + title
 
 # Only bother with authors if the RIS wasn't found (otherwise get duplicates)
 if not ris
-  for author in (doc/"//div[@id='innerWhite']/center/font/a[@title='View other papers by this author']")
-    puts "author\t" + author.inner_text.strip.squeeze(" ")
+  for author in (doc/"//meta[@name='citation_author']")
+    puts "author\t" + author.attributes['content'].strip.squeeze(" ")
   end
 end
 
