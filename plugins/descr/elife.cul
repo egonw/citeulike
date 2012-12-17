@@ -1,0 +1,35 @@
+plugin {
+	version {3}
+	name {eLife}
+	url {http://www.elifesciences.org/}
+	blurb {}
+	author {Fergus Gallagher}
+	email {fergus@citeulike.org}
+	language {python}
+	regexp {http://elife.elifesciences.org/content/}
+	use_crossref 0
+}
+
+
+test {http://elife.elifesciences.org/content/1/e00051} {
+	type JOUR
+	linkout {DOI {} 10.7554/eLife.00051 {} {}}
+	formatted_url {DOI http://dx.doi.org/10.7554/eLife.00051}
+	year 2012
+	month 01
+	day 01
+	doi 10.7554/eLife.00051
+	volume 1
+	publisher {eLife Sciences Publications Limited}
+	title {Global divergence in critical income for adult and childhood survival: analyses of mortality using Michaelis–Menten}
+	journal {eLife Sciences}
+	abstract {Life expectancy has risen sharply in the last 50 years. We applied the classic Michaelis–Menten enzyme kinetics to demonstrate a novel mathematical relationship of income to childhood (aged 0–5 years) and adult (aged 15–60 years) survival. We treat income as a substrate that is catalyzed to increase survival (from technologies that income buys) for 180 countries from 1970 and 2007. Michaelis–Menten kinetics permit estimates of maximal survival and, uniquely, the critical income needed to achieve half of the period-specific maximum. Maximum child and adult survival rose by about 1% per year. Critical incomes fell by half for children, but doubled for men. HIV infection and smoking account for some, but not all, of the rising critical incomes for adult survival. Altering the future cost curve for adult survival will require more widespread use of current interventions, most notably tobacco control, but also research to identify practicable low-cost drugs, diagnostics, and strategies. DOI: http://dx.doi.org/10.7554/eLife.00051.001}
+	issn 2050-084X
+	author {Hum Ryan RJ {Ryan J Hum}}
+	author {Jha Prabhat P {Prabhat Jha}}
+	author {McGahan Anita AM {Anita M McGahan}}
+	author {Cheng Yu-Ling Y {Yu-Ling Cheng}}
+	status ok
+}
+
+
