@@ -89,7 +89,7 @@ bib = f.read()
 # papers have pdf only)
 if bib.find('author') == -1 or bib.find('title') == -1 or bib.find('year') == -1:
     print 'status\tnot_interested'
-    print biburl, bib
+#   print biburl, bib
     sys.exit(0)
 
 # strip newlines at the end
