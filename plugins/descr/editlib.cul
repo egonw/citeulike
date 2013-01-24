@@ -1,84 +1,14 @@
-#
-# Copyright (C) 2005 Richard Cameron, CiteULike.org
-# All rights reserved.
-#
-# This code is derived from software contributed to CiteULike.org
-# by
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. All advertising materials mentioning features or use of this software
-#    must display the following acknowledgement:
-#        This product includes software developed by
-#		 CiteULike <http://www.citeulike.org> and its
-#		 contributors.
-# 4. Neither the name of CiteULike nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY CITEULIKE.ORG AND CONTRIBUTORS
-# ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
-# TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-# PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS
-# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-# POSSIBILITY OF SUCH DAMAGE.
-#
-
-# Each plugin needs a description so the driver can advertise the details
-# to the users on the site
 plugin {
-	# Integer version number for the plugin code. When this number is incremented,
-	# CiteULike may reparse all existing articles with the new code.
 	version {1}
-
-	# The name of the plugin, as displayed on the "CiteULike supports..." page
-	name {EdITLib}
-
-	# The link the front page of this service
-	url {http://www.editlib.org}
-
-	# Any additional information which needs to be displayed to the user.
-	# E.g. "Experimental support"
+	name {EdITLib Digitial Library}
+	url {http://editlib.org/}
 	blurb {}
-
-	# Your name
-	author {Chris Hall}
-
-	# Your email address
-	email {chris@citeulike.org}
-
-	# Language you wrote the plugin in
-	language {tcl}
-
-	# Regular expression to match URLs that the plugin is
-	# *potentially* interested in. Any URL matching this regexp
-	# will cause your parser to be invoked. Currently, this will
-	# require fork()ing a process, so you should try to reduce the number
-	# of false positives by making your regexp as restrictive as possible.
-	#
-	# If it is not possible to determine whether or not your plugin is
-	# interested purely on the basis of the URL, you will have a chance
-	# to refine this decision in your code. For now, try to make a reasonable
-	# approximation - like, check for URLs on the right hostname
-	#
-	# Note: Some universities provide mirrors of commericial publishers' sites
-	# with different hostnames, so you should provide some leeway in your
-	# regexp if that applies to you.
-	#
-	regexp {http://.*editlib.org/(p/\d+|.*paper_id=\d+)}
+	author {Jordan Reiter}
+	email {jordan@aace.org}
+	language {python}
+	regexp {editlib.org}
+	use_crossref 0
 }
-
 
 #
 # Linkout formatting
@@ -93,50 +23,37 @@ plugin {
 # in the function: type ikey_1 ckey_1 ikey_2 ckey_2
 #
 format_linkout EdIT {
-	return [list "EdIT" "http://go.editlib.org/p/${ikey_1}"]
+        return [list "EdIT" "http://editlib.org/p/${ikey_1}"]
 }
 
 
-#
-# TESTS
-#
-
-# Each plugin MUST provide a set of tests. The motivation behind this is
-# that web scraping code is inherently fragile, and is likely to break whenever
-# the provider decides to redisign their site. CiteULike will periodically
-# run tests to see if anything has broken.
-
-# Please provide as comprehensive a set of tests as possible.
-# If you ever fix a bug in the parser, it is highly recommended that
-# you add the offending page as a test case.
-
 test {http://www.editlib.org/index.cfm?fuseaction=Reader.ViewAbstract&paper_id=19977} {
-	formatted_url {EdIT http://go.editlib.org/p/19977}
+	formatted_url {EdIT http://editlib.org/p/19977}
 	linkout {EdIT 19977 {} {} {}}
 	volume 15
 	year 2007
 	start_page 23
 	type JOUR
 	end_page 38
-	url {http://go.editlib.org/p/19977}
+	url {http://www.editlib.org/p/19977}
 	publisher AACE
 	issue 1
 	title {Improving Undergraduate Computer Instruction: Experiments and Strategies}
 	journal {AACE Journal}
 	status ok
 	abstract {Today, undergraduate students enter college with increasingly more sophisticated computer skills compared to their counterparts of 20 years ago. However, many instructors are still using traditional instructional modes and methods to teach this new generation of student. This research study discusses a number of instructional strategies that were employed to teach a college-level introductory computer literacy class. The strategies included a hands-on computer skills assessment, the introduction of a flexible attendance policy, elimination of the required textbook, and the use of learning teams. We explored alternative teaching methodologies in an effort to close the gap between classroom practice and real-world application while improving student satisfaction and learning outcomes.}
-	cite KalmElli2007x
+	cite KalmaEllis2007ex
 	issn 1065-6901
 	author {Kalman Howard H {Howard Kalman}}
 	author {Ellis Maureen M {Maureen Ellis}}
 	address {Chesapeake, VA}
-	plugin editlib
+	plugin editlib_new
 	plugin_version 1
 	status ok
 }
 
-test {http://go.editlib.org/p/24218} {
-	formatted_url {EdIT http://go.editlib.org/p/24218}
+test {http://editlib.org/p/24218} {
+	formatted_url {EdIT http://editlib.org/p/24218}
 	linkout {EdIT 24218 {} {} {}}
 	volume 7
 	year 2007
@@ -144,17 +61,43 @@ test {http://go.editlib.org/p/24218} {
 	start_page 245
 	type JOUR
 	end_page 255
-	url {http://go.editlib.org/p/24218}
+	url {http://www.editlib.org/p/24218}
 	publisher AACE
 	issue 4
 	title {Pre-Service English Teachers and Technology: A Consideration of Weblogs for the English Classroom}
 	journal {Contemporary Issues in Technology and Teacher Education}
 	status ok
 	abstract {Teaching with technology is a complex issue, at best, bound by issues of access, funding, support and time for both students and teachers (Young & Bush, 2004). When English teachers effectively integrate technology into their classrooms, however, they have the opportunity to positively engage students in the learning process. Considering the specific technology of weblogs, this article will explore the need for preservice teachers to construct a working pedagogy that includes the use of technology within the content area for teaching and learning.}
-	cite Shof2007q
+	cite Shoffner2007oq
 	issn  1528-5804
 	author {Shoffner Melanie M {Melanie Shoffner}}
-	plugin editlib
+	plugin editlib_new
 	plugin_version 1
 	status ok
 }
+
+
+test {http://www.editlib.org/p/5082} {
+	formatted_url {EdIT http://editlib.org/p/5082}
+	linkout {EdIT 5082 {} {} {}}
+	volume 4
+	year 2005
+	start_page 299
+	type JOUR
+	end_page 315
+	url http://www.editlib.org/p/5082
+	publisher AACE
+	address {Norfolk, VA}
+	issue 3
+	title {Towards a model for m-learning in Africa}
+	journal {International Journal on E-Learning}
+	status ok
+	abstract {Mobile learning (m-learning) is a natural extension of electronic learning (e-learning) and has the potential to make learning even more widely available and accessible than we are used to in existing e-learning environments. The role that communication and interaction plays in the learning process is a critical success factor. It is within this context that m-learning can contribute to the quality of education. It offers opportunities the optimization of interaction between lecturers and learners, among learners, and among members of communities of practice (COPs). Wireless and mobile technologies also make it possible to provide learning opportunities to learners that are either without infrastructure for access (example rural learners) or continually on the move (example business professionals). This article shares the latest developments regarding a m-learning project in Africa and proposes a model for the implementation of m-learning in higher education in developing countries.}
+	cite Brown2005x6
+	issn 1537-2456
+	author {Brown Tom TH {Tom H. Brown}}
+	plugin editlib_new
+	plugin_version 1
+	status ok
+}
+
