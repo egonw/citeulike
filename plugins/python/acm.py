@@ -126,7 +126,7 @@ bibtex_url = re.sub("&amp;","&",bibtex_url)
 #print "Fetching: %s " % bibtex_url
 
 try:
-	bibtex_page = urllib2.urlopen(bibtex_url).read();
+	bibtex_page = urllib2.urlopen(bibtex_url).read()
 except:
 	print ERR_STR_PREFIX + "Could not fetch BibTeX page (" + bibtex_url + ")"
 	sys.exit(1)
