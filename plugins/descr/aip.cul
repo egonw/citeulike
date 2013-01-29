@@ -76,6 +76,9 @@ plugin {
 	# Note: Some universities provide mirrors of commericial publishers' sites
 	# with different hostnames, so you should provide some leeway in your
 	# regexp if that applies to you.
+	
+	# SEG  *might* now be using atypon. There's a separate atypon plugin for 
+	#  ...seg.org/doi/....
 	regexp {([lL]ibrary.seg.org|aip.org|medphys.org)/(resource|getabs|vsearch|link|(\w+/v\d))}
 }
 

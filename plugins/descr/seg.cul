@@ -1,0 +1,41 @@
+plugin {
+	version {1}
+	name {Society of Exploration Geophysicists }
+	url {http://library.seg.org/}
+	blurb {}
+	author {Fergus Gallagher}
+	email {fergus.gallagher@citeulike.org}
+	language {python}
+	regexp {[lL]ibrary.seg.org/doi/abs/}
+}
+
+format_linkout SEG {
+	return [list "Society of Exploration Geophysicists" \
+			"http://library.seg.org/doi/abs/${ckey_1}"]
+}
+
+test {http://library.seg.org/doi/abs/10.1190/1.1439402} {
+	status ok
+	serial 0016-8033
+	volume 29
+	linkout {SEG {} 10.1190/1.1439402 {} {}} 
+	linkout {DOI {} 10.1190/1.1439402 {} {}}
+	type JOUR
+	start_page 664
+	url http://dx.doi.org/10.1190/1.1439402
+	end_page 671
+	doi 10.1190/1.1439402
+	year 1964
+	month 10
+	day 1
+	publisher {Society of Exploration Geophysicists}
+	formatted_url {{Society of Exploration Geophysicists} http://library.seg.org/doi/abs/10.1190/1.1439402} 
+	formatted_url {DOI http://dx.doi.org/10.1190/1.1439402}
+	issue 5
+	title {SEISMIC SIGNAL ENHANCEMENT WITH THREE‐COMPONENT DETECTORS}
+	journal GEOPHYSICS
+	abstract {The time?averaged cross?product of vertical and radial components of ground motion is multiplied by the original signal producing a function of ground motion in which rectilinearly polarized motion is enhanced. This provides some separation of seismic signals from noise when both occupy the same frequency and velocity bands. The vertical and radial motion is decomposed into its Fourier components, and the parameters of an equivalent ellipse are computed at each instant of time. The eccentricity, major axis, and angle of inclination of the ellipse provide criteria for identifying P and SV waves of different velocities.}
+	author {Shimshoni {} M {Shimshoni, M.}} 
+	author {Smith {} S {Smith, S.}}
+}
+

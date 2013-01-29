@@ -57,6 +57,7 @@ set x [url_get $url 0 1]
 foreach {page url} $x {break}
 
 # An alias
+# Note that SEG *might* now be using atypon exclusively.
 set url [regsub -nocase {library.seg.org} $url {scitation.aip.org}]
 
 if {![regexp {aip.org} $url] && ![regexp {medphys.org} $url]} {

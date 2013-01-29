@@ -1,12 +1,7 @@
 #!/usr/bin/env python
 
-# Copyright (c) 2009 Fergus Gallagher <fergus.gallagher@citeulike.org>
+# Copyright (c) 2013 Fergus Gallagher <fergus.gallagher@citeulike.org>
 # All rights reserved.
-#
-# This code is derived from software contributed to CiteULike.org
-# by
-#    Diwaker Gupta
-#    Kristinn B. Gylfason <citeulike@askur.org>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -41,7 +36,6 @@ import re, sys, urllib, urllib2, cookielib, codecs
 import socket
 
 socket.setdefaulttimeout(15)
-
 
 DOI_URL_SEP ='%2F'
 DOI_SEP ='/'
