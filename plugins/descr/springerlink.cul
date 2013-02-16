@@ -48,7 +48,8 @@ plugin {
 	author {Stevan Springer}
 	email {stevan.springer@gmail.com}
 	language {perl}
-	regexp {(http://(beta.|www.)?springerlink(\.metapress)?\.com([^/]*)/(index/.*|\(\w+\)/app/home/contribution.*|content/.*))}
+	# Never match - handled by springerlink2 now
+	regexp {XXXXXXXXX(http://(beta.|www.)?springerlink(\.metapress)?\.com([^/]*)/(index/.*|\(\w+\)/app/home/contribution.*|content/.*))}
 	use_crossref 1
 }
 

@@ -48,7 +48,7 @@ plugin {
 	author {Fergus Gallagher}
 	email {fergus@citeulike.org}
 	language {python}
-	regexp {http://link.springer.com}
+	regexp {(link.springer.com|springerlink.com)}
 	use_crossref 0
 }
 
@@ -60,6 +60,26 @@ format_linkout SLINK2 {
 }
 
 #Tests
+
+test {http://springerlink.com/index/10.1007/BF01975011} {
+	linkout			{DOI {} 10.1007/BF01975011 {} {}}
+	formatted_url           {DOI http://dx.doi.org/10.1007/BF01975011}
+	volume			{96}
+	issue			{2}
+	start_page		{168}
+	end_page		{172}
+	year			{1955}
+	month			{4}
+	day			{1}
+	title			{The orientation of homing pigeons in relation to change in sun declination}
+	journal			{Journal of Ornithology}
+	author			{Rawson Kenneth KS {Rawson, Kenneth S.}}
+	author			{Rawson Anne AM {Rawson, Anne M.}}
+	type			{JOUR}
+	url			http://dx.doi.org/10.1007/BF01975011
+	doi                     10.1007/BF01975011
+	status 			ok
+}
 
 test {http://link.springer.com/article/10.1007/s10096-012-1706-7} {
 	serial  0934-9723

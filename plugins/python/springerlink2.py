@@ -49,18 +49,29 @@ socket.setdefaulttimeout(15)
 url = sys.stdin.readline().strip()
 path = urllib2.unquote(urlparse(url).path)
 
-page = unicode(urllib2.urlopen(url).read().strip(),"utf8")
+
+handler=urllib2.HTTPHandler(debuglevel=0)
+opener = urllib2.build_opener(handler)
+urllib2.install_opener(opener)
+location = urllib2.urlopen(url)
+
+# we may have followed redirects, esp. from springerlink.com
+path = urlparse(location.geturl()).path
+
+page = unicode(location.read().strip(),"utf8")
 
 root = lxml.html.document_fromstring(page)
 
-m = re.search("/([^/]+)/(10\.\d\d\d\d/.*)", path)
+m = re.search("/([^/]+)/(10\.\d\d\d\d)(?:/|%2f)(.*)", path, re.I)
 if not m:
 	bail("Unrecognised URL %s - cannot extract a DOI" % url)
 
-(atype, doi) = (m.group(1), m.group(2))
+(atype, doi_pref,doi_suff) = (m.group(1), m.group(2), m.group(3))
+doi = "%s/%s" % (doi_pref,doi_suff)
 
 print "begin_tsv"
 print "linkout\tSLINK2\t\t%s\t\t%s" % (atype, doi)
+print "linkout\tDOI\t\t%s\t\t" % doi
 
 for div in root.cssselect("div.abstract-content"):
 	print "abstract\t%s" % div.xpath("string()").strip()
@@ -68,7 +79,7 @@ for div in root.cssselect("div.abstract-content"):
 print "end_tsv"
 print "begin_ris"
 
-ris_url = "http://link.springer.com/export-citation%s.ris" % path
+ris_url = "http://link.springer.com/export-citation/%s/%s.ris" % (atype,doi)
 print unicode(urllib2.urlopen(ris_url).read().strip(),"utf8")
 
 print "end_ris"
