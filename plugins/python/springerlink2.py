@@ -49,6 +49,13 @@ socket.setdefaulttimeout(15)
 url = sys.stdin.readline().strip()
 path = urllib2.unquote(urlparse(url).path)
 
+# strip off proxies:
+m = re.match(r'http://(?:.*?)(?:link.springer.com)[^/]*/(.*)$', url)
+if m:
+	url = "http://link.springer.com/" + m.group(1)
+m = re.match(r'http://(?:.*?)(?:springerlink.com)[^/]*/(.*)$', url)
+if m:
+	url = "http://www.springerlink.com/" + m.group(1)
 
 handler=urllib2.HTTPHandler(debuglevel=0)
 opener = urllib2.build_opener(handler)
@@ -75,6 +82,10 @@ print "linkout\tDOI\t\t%s\t\t" % doi
 
 for div in root.cssselect("div.abstract-content"):
 	print "abstract\t%s" % div.xpath("string()").strip()
+	# Sometimes have abstracts in different languages, e.g.,
+	# http://link.springer.com/article/10.1007%2Fbf01975011
+	# Let's assume the 1st one is English.
+	break
 
 print "end_tsv"
 print "begin_ris"
@@ -84,4 +95,3 @@ print unicode(urllib2.urlopen(ris_url).read().strip(),"utf8")
 
 print "end_ris"
 print "status\tok"
-
