@@ -1,0 +1,78 @@
+plugin {
+	version {1}
+	name {Queen's University OJS}
+	url {http://library.queensu.ca/ojs/index.php/}
+	blurb {}
+	author {Tristan Henderson}
+	email {tnhh@tnhh.org}
+	language {perl}
+	regexp {http://library.queensu.ca/ojs/index.php/.*/article/view/.*}
+}
+
+format_linkout QUEENS {
+	return [list "Queen's University" "http://library.queensu.ca/ojs/index.php/${ckey_1}/article/view/${ikey_1}"]
+}
+
+
+test {http://library.queensu.ca/ojs/index.php/surveillance-and-society/article/view/networked} {
+    formatted_url {{Queen's University} http://library.queensu.ca/ojs/index.php/surveillance-and-society/article/view/networked}
+    linkout {QUEENS networked surveillance-and-society {} {}}
+    volume 10
+    issue 3/4
+    year 2012
+    month 12
+    day 22
+    type JOUR
+    issn 1477-7487
+    plugin_version 1
+    title {Networked Privacy}
+    journal {Surveillance & Society}
+    url {http://library.queensu.ca/ojs/index.php/surveillance-and-society/article/view/networked} 
+    start_page 348
+    end_page 350
+    status ok
+    author {Boyd Danah D {boyd, danah}}
+    plugin queens
+}
+
+test {http://library.queensu.ca/ojs/index.php/surveillance-and-society/article/view/3482} {
+    formatted_url {{Queen's University} http://library.queensu.ca/ojs/index.php/surveillance-and-society/article/view/3482}
+    linkout {QUEENS 3482 surveillance-and-society {} {}}
+    volume 8
+    issue 2
+    year 2010
+    month 12
+    day 18
+    type JOUR
+    issn 1477-7487
+    plugin_version 1
+    title {Participatory Sensing: Building Empowering Surveillance}
+    journal {Surveillance & Society}
+    url {http://library.queensu.ca/ojs/index.php/surveillance-and-society/article/view/3482} 
+    start_page 131
+    end_page 150
+    status ok
+    author {Shilton Katie K {Shilton, Katie}}
+    plugin queens
+}
+
+test {http://library.queensu.ca/ojs/index.php/encounters/article/view/4472} {
+    formatted_url {{Queen's University} http://library.queensu.ca/ojs/index.php/encounters/article/view/4472}
+    linkout {QUEENS 4472 encounters {} {}}
+    volume 13
+    year 2012
+    month 11
+    day 10
+    type JOUR
+    issn 1925-8992
+    plugin_version 1
+    title {Ubiquitous Learning and the Future of Teaching}
+    journal {Encounters on Education}
+    url {http://library.queensu.ca/ojs/index.php/encounters/article/view/4472}
+    start_page 3
+    end_page 14
+    status ok
+    author {Burbules Nicholas NC {Burbules, Nicholas C}}
+    plugin queens
+}
+
