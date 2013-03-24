@@ -380,7 +380,11 @@ proc parse_ris {rec} {
 		set ret(title) [string trim $ret(title)]
 	}
 
-	if {[info exists ret(journal)] && [info exists ret(title_secondary)] && $ret(journal) eq $ret(title_secondary)} {
+	#
+	# RefMan Spec not good here.  Current version has T2=Full Journal Name, J2= Abbr.
+	#
+	# [prev had extra cond.: && $ret(journal) eq $ret(title_secondary)]
+	if {[info exists ret(journal)] && [info exists ret(title_secondary)] } {
 		unset ret(title_secondary)
 	}
 
