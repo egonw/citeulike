@@ -55,7 +55,7 @@ ERR_STR_NO_DOI = 'No document object identifier found in the URL: '
 ERR_STR_REPORT = 'Please report the error to plugins@citeulike.org.'
 
 
-def process(serverRoot, linkoutType=None):
+def process(serverRoot, linkoutType=None, debug=False):
 	CITATION_SERVER_ROOT = 'http://%s/action/downloadCitation' % serverRoot
 
 	sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
@@ -66,6 +66,8 @@ def process(serverRoot, linkoutType=None):
 	url = url.strip()
 
 	# 'unparse' url to remove %HH escapes which confuse the DOI parser below
+	if debug:
+		print "DEBUG: url=", url
 	url = urllib2.unquote(url)
 
 	# parse the DOI from the url and exit gracefully if not found
@@ -81,7 +83,7 @@ def process(serverRoot, linkoutType=None):
 
 	# fetch the BibTeX entry for the DOI and exit gracefully in case of trouble
 	cj = cookielib.CookieJar()
-	opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+	opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj),urllib2.HTTPHandler(debuglevel=debug))
 
 	post_data = urllib.urlencode( { "doi" : doi,
 					"include" : "abs",
@@ -94,20 +96,25 @@ def process(serverRoot, linkoutType=None):
 	#direct=true&submit=Download+publication+citation+data&include=cit
 
 	try:
+		base_url = "http://%s/action/showCitFormats?doi=%s" % (serverRoot, url_doi)
+		if debug:
+			print "DEBUG: load base page=", base_url
 		# Cookie me...
-		opener.open("http://%s/action/showCitFormats?doi=%s" % (serverRoot, url_doi))
-		# ... and fetch the bibtex record
+		opener.open(base_url)
+		# ... and fetch the ris record
+		if debug:
+			print "DEBUG: fetching RIS", CITATION_SERVER_ROOT, post_data
 		f = opener.open(CITATION_SERVER_ROOT, post_data)
 	except:
 		print ERR_STR_PREFIX + ERR_STR_FETCH + CITATION_SERVER_ROOT + '.  ' + ERR_STR_TRY_AGAIN
 		return
 
-	bibtex_entry = f.read().strip()
+	ris_entry = f.read().strip()
 	# print "# http://%s/action/showCitFormats?doi=%s" % (serverRoot, url_doi)
 
 	# get rid of the session id in the url
 	url_pat = re.compile(r';jsessionid.*$',re.MULTILINE)
-	bibtex_entry = re.sub(url_pat,'',bibtex_entry)
+	ris_entry = re.sub(url_pat,'',ris_entry)
 
 	# print the results
 	print "begin_tsv"
@@ -118,6 +125,6 @@ def process(serverRoot, linkoutType=None):
 	print "doi\t" + doi
 	print "end_tsv"
 	print "begin_ris"
-	print bibtex_entry.decode("utf-8")
+	print ris_entry.decode("utf-8")
 	print "end_ris"
 	print "status\tok"

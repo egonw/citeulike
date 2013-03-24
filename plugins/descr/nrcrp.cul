@@ -1,0 +1,39 @@
+plugin {
+	version {1}
+	name {NRC Research Press}
+	url {http://www.nrcresearchpress.com/}
+	blurb {}
+	author {Fergus Gallagher}
+	email {fergus.gallagher@citeulike.org}
+	language {python}
+	regexp {http://www.nrcresearchpress.com/doi/abs}
+}
+
+format_linkout NRCRP {
+	return [list "NRC Research Press" \
+			"http://www.nrcresearchpress.com/doi/abs/${ckey_1}"]
+}
+
+
+test {http://www.nrcresearchpress.com/doi/abs/10.1139/cjp-2012-0524#.UU4j97I-sak} {
+	type JOUR
+	linkout {NRCRP {} 10.1139/cjp-2012-0524 {} {}}
+	linkout {DOI {} 10.1139/cjp-2012-0524 {} {}}
+	formatted_url {{NRC Research Press} http://www.nrcresearchpress.com/doi/abs/10.1139/cjp-2012-0524}
+	formatted_url {DOI http://dx.doi.org/10.1139/cjp-2012-0524}
+	year 2013
+	month 3
+	day 14
+	serial 0008-4204
+	url http://dx.doi.org/10.1139/cjp-2012-0524
+	plugin_version 1
+	doi 10.1139/cjp-2012-0524
+	publisher {NRC Research Press}
+	title_secondary {Canadian Journal of Physics}
+	title {Coupled quantum oscillators within independent quantum reservoirs}
+	journal {Can. J. Phys.}
+	abstract {The paper addresses the problem of open quantum systems. The energy of interaction of coupled dissipative systems is the main purpose of the study. Quantum Langevin equations for two quantum coupling oscillators within independent heat baths of quantum oscillators are obtained using a model Hamiltonian and corresponding Heisenberg equations of motion. Analytical expressions for mean energy of coupled oscillators and their mean energy of interaction are derived and analyzed. Nonmonotonic dependence of the interaction energy versus a coupling constant is demonstrated and suggested an explanation.}
+	author {Dorofeyev Illarion I {Dorofeyev, Illarion}}
+	plugin nrcrp
+	status ok
+}
