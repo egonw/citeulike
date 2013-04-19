@@ -50,7 +50,7 @@ url = sys.stdin.readline().strip()
 path = urllib2.unquote(urlparse(url).path)
 
 # strip off proxies:
-m = re.match(r'http://(?:.*?)(?:link.springer.com)[^/]*/(.*)$', url)
+m = re.match(r'http://(?:.*?)(?:(?:rd|link).springer.com)[^/]*/(.*)$', url)
 if m:
 	url = "http://link.springer.com/" + m.group(1)
 m = re.match(r'http://(?:.*?)(?:springerlink.com)[^/]*/(.*)$', url)
