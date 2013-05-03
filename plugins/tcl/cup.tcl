@@ -1,4 +1,5 @@
 #!/usr/bin/env tclsh
+package require http
 
 #
 # Copyright (c) 2005 Chris Hall, Oversity Limited.
@@ -37,6 +38,7 @@
 # don't use the proxy (this is a bit grim)
 set ::env(http_proxy_host) ""
 set ::env(http_proxy_port) ""
+set http::defaultCharset utf-8
 source util.tcl
 
 set url [gets stdin]
@@ -46,10 +48,19 @@ set url [gets stdin]
 #
 set page [url_get $url]
 
+set aid ""
+#
+# Look for an article id in the URL
+#
+regexp {aid=(\d+)} $url -> aid
 #
 # Look for an article id in the page's meta tags
 #
-if {![regexp {\<meta name="rft[_.]id" content="http\://journals.cambridge.org/action/displayAbstract\?aid=(\d+)"/\>} $page -> aid]} {
+if {$aid eq ""} {
+	regexp {\<meta name="rft[_.]id" content="http\://journals.cambridge.org/action/displayAbstract\?aid=(\d+)"/\>} $page -> aid
+}
+
+if {$aid eq ""} {
 	bail "Cannot find an article_id in the page"
 }
 
