@@ -1,6 +1,10 @@
 #!/usr/bin/env tclsh
 package require http
 
+# Really force loading of package
+
+catch { ::http::config }
+
 #
 # Copyright (c) 2005 Chris Hall, Oversity Limited.
 # All rights reserved.
