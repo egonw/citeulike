@@ -1,12 +1,13 @@
 #!/usr/bin/env python2.6
-import lxml.html, re
+import lxml.html, re, HTMLParser
+
 
 class InvalidArguments(Exception):
 	pass
 
 class MetaHeaders:
 
-	def __init__(self, url=None, page=None,name='name',content='content'):
+	def __init__(self, url=None, page=None,name='name',content='content', unescape_entities=False):
 		if page:
 			self.root = lxml.html.document_fromstring(page)
 		elif url:
@@ -14,14 +15,20 @@ class MetaHeaders:
 		else:
 			raise InvalidArguments, "Need a URL or an HTML page"
 		meta = {}
+		# Some sites (IEEE) triple escape entities, e.g., R&amp;amp;#x0026;D
+		if unescape_entities:
+			htmldecoder = HTMLParser.HTMLParser()
 		for m in self.root.cssselect("meta"):
 			attr=m.attrib
 			if attr.has_key(name) and attr.has_key(content) and attr[content] != "":
 				k = attr[name]
 				v = attr[content].strip()
+				if unescape_entities:
+					v = htmldecoder.unescape(htmldecoder.unescape(v))
 				if not meta.has_key(k):
 					meta[k] = []
 				meta[k].append(v)
+
 		self.meta = meta
 
 	def get_item(self, k):

@@ -47,7 +47,7 @@ plugin {
 	name {IEEE Digital Library}
 
 	# The link the front page of this service
-	url {http://www.computer.org/portal/site/csdl}
+	url {http://www.computer.org/}
 
 	# Any additional information which needs to be displayed to the user.
 	# E.g. "Experimental support"
@@ -57,10 +57,10 @@ plugin {
 	author {Robert Blake}
 
 	# Your email address
-	email {rblake@rblake.net}
+	email {fergus@citeulike.org}
 
 	# Language you wrote the plugin in
-	language {perl}
+	language {python}
 
 	# Regular expression to match URLs that the plugin is
 	# *potentially* interested in. Any URL matching this regexp
@@ -77,10 +77,10 @@ plugin {
 	# with different hostnames, so you should provide some leeway in your
 	# regexp if that applies to you.
 	#
-	# RB note: fixing the URL string so it can handle things like 
-	# http://blah.com.proxy.uni.edu/whatever.  We'll clean away the proxy info 
+	# RB note: fixing the URL string so it can handle things like
+	# http://blah.com.proxy.uni.edu/whatever.  We'll clean away the proxy info
 	# on the script side.
-	regexp {^https?://[^/]+\.computer\.org(.[^/]+)?/((persagen/.*DOI=[0-9./a-zA-Z]+)|(portal/web/csdl/doi/\d\d.\d\d\d\d/[^/]+)|(portal/web/csdl/abs/))}
+	regexp {^https?://[^/]+\.computer\.org(.[^/]+)?/csdl/}
 }
 
 #
@@ -113,22 +113,23 @@ format_linkout CSDL {
 # Please provide as comprehensive a set of tests as possible.
 # If you ever fix a bug in the parser, it is highly recommended that
 # you add the offending page as a test case.
-test {http://csdl2.computer.org/persagen/DLAbsToc.jsp?resourcePath=/dl/proceedings/&toc=comp/proceedings/ipdps/2007/0909/00/0909toc.xml&DOI=10.1109/IPDPS.2007.370586} {
+test {http://www.computer.org/csdl/proceedings/ipdps/2007/0909/00/04228314-abs.html} {
+    formatted_url {DOI http://dx.doi.org/10.1109/IPDPS.2007.370586}
     formatted_url {{IEEE Digital Library} http://doi.ieeecomputersociety.org/10.1109/IPDPS.2007.370586}
     volume 0
-    pages 396
-    linkout {CSDL {} 10.1109/IPDPS.2007.370586 {} {}}
+    start_page 396
     linkout {DOI {} 10.1109/IPDPS.2007.370586 {} {}}
+    linkout {CSDL {} 10.1109/IPDPS.2007.370586 {} {}}
+    doi 10.1109/IPDPS.2007.370586
     year 2007
-    type JOUR
-    doi {http://doi.ieeecomputersociety.org/10.1109/IPDPS.2007.370586}
-    publisher {IEEE Computer Society}
+    month 03
+    day 26
+    type INCONF
+    publisher {IEEE}
     title {Modeling of NAMD's Network Input/Output on Large PC Clusters}
-    journal ipdps
-    status ok
+    title_secondary	{Parallel and Distributed Processing Symposium, International}
     abstract {This study examined the interplay among processor speed, cluster interconnect and file I/O, using parallel applications to quantify interactions. We focused on a common case where multiple compute nodes communicate with a single master node for file accesses. We constructed a predictive model that used time characteristics critical for application performance to estimate the number of nodes beyond which further performance improvement became unattainable. Predictions were experimentally validated with NAMD [12, 14], a representative parallel application designed for molecular dynamics simulation. Such predictions can help guide decision making to improve machine allocations for parallel codes in large clusters.}
-    cite {10.1109/IPDPS.2007.370586}
-    author {Tran Nancy N {Nancy Tran}} 
+    author {Tran Nancy N {Nancy Tran}}
     author {Reed Daniel DA {Daniel A. Reed}}
-    address {Los Alamitos, CA, USA}
+    status ok
 }
