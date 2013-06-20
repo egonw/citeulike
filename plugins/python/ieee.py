@@ -73,7 +73,7 @@ url_head = s[0]
 url_tail = "&".join(s[1:])
 
 # Some IEEE URLs look like ./a/b?&param=value - we need to sort this out
-if url_tail[0] == '&':
+if len(url_tail)>0 and url_tail[0] == '&':
 	url_tail = url_tail[1:]
 
 url = url_head + "?" + url_tail
@@ -173,4 +173,3 @@ if abstract != "":
 print "linkout\tIEEE\t%d\t\t\t" % (ar_number)
 print "end_tsv"
 print "status\tok"
-
