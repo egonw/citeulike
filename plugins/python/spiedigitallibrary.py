@@ -36,8 +36,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-import socket, codecs, sys
-from urlparse import urlparse
+import socket, codecs, sys, cookielib, urllib2
+from urlparse import urlparse, parse_qs
 from cultools import urlparams, bail
 
 import metaheaders
@@ -49,43 +49,41 @@ url = sys.stdin.readline().strip()
 
 u = urlparse(url)
 
-# rewrite the URL - need ?isAuthorized=no to avoid redirect loop
-url = "%s://%s%s?isAuthorized=no" % (u.scheme, u.netloc, u.path)
-
+# urlparse('http://www.cwi.nl:80/%7Eguido/Python.html')
+# ParseResult(scheme='http', netloc='www.cwi.nl:80', path='/%7Eguido/Python.html',  params='', query='', fragment='')
+q = parse_qs(u.query)
+if (q.has_key("articleid")):
+	article_id = q["articleid"][0]
+else:
+	bail("Could not determine the articleId")
+	
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
+
+# http://proceedings.spiedigitallibrary.org/downloadCitation.aspx?format=ris&articleid=763979
+ris_file_url = "http://%s/downloadCitation.aspx?format=ris&articleid=%s" % (u.netloc, article_id)
+cookie_jar = cookielib.CookieJar()
+handlers = []
+handlers.append( urllib2.HTTPHandler(debuglevel=0) )
+handlers.append( urllib2.HTTPCookieProcessor(cookie_jar) )
+
+
+opener=urllib2.build_opener(*handlers)
+opener.addheaders = [("User-Agent", "CiteULike/1.0 +http://www.citeulike.org/")]
+urllib2.install_opener(opener)
+
+try:
+	ris_file = urllib2.urlopen(ris_file_url).read()
+except:
+	bail("Could not fetch RIS file (" + ris_file_url + ")")
 
 metaheaders = metaheaders.MetaHeaders(url)
 
 print "begin_tsv"
 
-
-if metaheaders.get_item("citation_conference"):
+if metaheaders.get_item("citation_conference") or metaheaders.get_item("citation_conference_title"):
 	print "type\tINCONF"
 else:
 	print "type\tJOUR"
-
-
-authors = metaheaders.get_multi_item("citation_author")
-if authors:
-	for a in authors:
-		print "author\t%s" % a
-
-metaheaders.print_item("title","citation_title")
-metaheaders.print_date("citation_date")
-metaheaders.print_item("volume","citation_volume")
-metaheaders.print_item("start_page","citation_firstpage")
-metaheaders.print_item("end_page","citation_lastpage")
-metaheaders.print_item("issue","citation_issue")
-metaheaders.print_item("serial","citation.issn")
-publisher = metaheaders.get_item("citation_publisher")
-if publisher:
-	publisher = publisher.replace("COPYRIGHT SPIE--","")
-	publisher = publisher.replace("Downloading of the abstract is permitted for personal use only.","")
-	print "publisher\t%s" % publisher.strip()
-
-metaheaders.print_item("abstract","description")
-metaheaders.print_item("journal","citation_journal_title")
-metaheaders.print_item("title_secondary","citation_conference")
 
 doi = metaheaders.get_item("citation_doi")
 if doi:
@@ -94,7 +92,8 @@ if doi:
 	print "linkout\tDOI\t\t%s\t\t" % (doi)
 else:
 	bail("Couldn't find an DOI")
-
 print "end_tsv"
+print "begin_ris"
+print "%s" % (ris_file)
+print "end_ris"
 print "status\tok"
-
