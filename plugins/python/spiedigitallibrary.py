@@ -43,6 +43,7 @@ from cultools import urlparams, bail
 import metaheaders
 
 socket.setdefaulttimeout(15)
+sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 
 # Read URL from stdin
 url = sys.stdin.readline().strip()
@@ -57,8 +58,6 @@ if (q.has_key("articleid")):
 else:
 	bail("Could not determine the articleId")
 	
-sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
-
 # http://proceedings.spiedigitallibrary.org/downloadCitation.aspx?format=ris&articleid=763979
 ris_file_url = "http://%s/downloadCitation.aspx?format=ris&articleid=%s" % (u.netloc, article_id)
 cookie_jar = cookielib.CookieJar()
