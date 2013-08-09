@@ -1,0 +1,41 @@
+plugin {
+	version {1}
+	name {World Scientific}
+	url {http://www.worldscientific.com/}
+	blurb {}
+	author {Fergus Gallagher}
+	email {fergus.gallagher@citeulike.org}
+	language {python}
+	regexp {www.worldscientific.com/doi/abs}
+}
+
+format_linkout WLDSCI {
+	return [list "World Scientific" \
+			"http://www.worldscientific.com/doi/abs/${ckey_1}"]
+}
+
+test {http://www.worldscientific.com/doi/abs/10.1142/S0217732306020913} {
+	serial 0217-7323
+	volume 21
+	linkout {WLDSCI {} 10.1142/S0217732306020913 {} {}} 
+	linkout {DOI {} 10.1142/S0217732306020913 {} {}}
+	year 2006
+	type JOUR
+	start_page 1501
+	url http://dx.doi.org/10.1142/S0217732306020913
+	end_page 1509
+	doi 10.1142/S0217732306020913
+	day 21
+	publisher {World Scientific Publishing Co.}
+	formatted_url {{World Scientific} http://www.worldscientific.com/doi/abs/10.1142/S0217732306020913} 
+	formatted_url {DOI http://dx.doi.org/10.1142/S0217732306020913}
+	issue 19
+	title {GENERALIZED STRONG CURVATURE SINGULARITIES AND WEAK COSMIC CENSORSHIP IN COSMOLOGICAL SPACETIMES}
+	journal {Mod. Phys. Lett. A}
+	abstract {This paper is a further development of the approach to weak cosmic censorship proposed by the authors in Ref. 5. We state and prove a modified version of that work's main result under significantly relaxed assumptions on the asymptotic structure of spacetime. The result, which imposes strong constraints on the occurrence of naked singularities of the strong curvature type, is in particular applicable to physically realistic cosmological models.}
+	month 6
+	author {Rudnicki Wiesław W {RUDNICKI, WIESŁAW}}
+	author {Budzyński Robert RJ {BUDZYŃSKI, ROBERT J.}}
+	author {Kondracki Witold W {KONDRACKI, WITOLD}}
+	status ok
+}
