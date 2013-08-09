@@ -1,0 +1,30 @@
+plugin {
+	version {1}
+	name {AMS Journals}
+	url {http://www.ams.org/journals/}
+	blurb {}
+	author {Fergus Gallagher}
+	email {fergus.gallagher@citeulike.org}
+	language {python}
+	regexp {http://www.ams.org/journals/}
+}
+
+
+test {http://www.ams.org/journals/mcom/1983-40-162/S0025-5718-1983-0689466-8/} {
+	volume 40
+	linkout {DOI {} 10.1090/S0025-5718-1983-0689466-8 {} {}}
+	year 1983
+	type JOUR
+	start_page 469
+	end_page 497
+	doi 10.1090/S0025-5718-1983-0689466-8
+	formatted_url {DOI http://dx.doi.org/10.1090/S0025-5718-1983-0689466-8}
+	issue 162
+	title {Numerical methods based on additive splittings for hyperbolic partial differential equations}
+	journal {Mathematics of Computation}
+	abstract {We derive and analyze several methods for systems of hyperbolic equations with wide ranges of signal speeds. These techniques are also useful for problems whose coefficients have large mean values about which they oscillate with small amplitude. Our methods are based on additive splittings of the operators into components that can be approximated independently on the different time scales, some of which are sometimes treated exactly. The efficiency of the splitting methods is seen to depend on the error incurred in splitting the exact solution operator. This is analyzed and a technique is discussed for reducing this error through a simple change of variables. A procedure for generating the appropriate boundary data for the intermediate solutions is also presented.}
+	issn 0025-5718
+	author {LeVeque Randall RJ {LeVeque, Randall J.}} 
+	author {Oliger Joseph J {Oliger, Joseph}}
+	status ok
+}
