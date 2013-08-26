@@ -205,6 +205,11 @@ def handle(url):
 			break
 
 	if not doi:
+		m = re.search(r'/doi/(10\.\d\d\d\d)_([^/]+)/', page) 
+		if m:
+			doi = "%s/%s" % (m.group(1), m.group(2))
+
+	if not doi:
 		raise ParseException, "Cannot find DOI in page"
 
 
@@ -259,4 +264,3 @@ if __name__ == "__main__":
 		line = traceback.tb_lineno(sys.exc_info()[2])
 		print "\t".join(["status", "error", "There was an internal error processing this request. Please report this to bugs@citeulike.org quoting error code %d." % line])
 		raise
-
