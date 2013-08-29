@@ -61,7 +61,9 @@ my $url2 = $url;
 #if ($url =~ m{^dx.doi.org}) {
 #	$url2 = $url."?locatt=mode:legacy";
 #}
-my $resp = $browser->head("$url2", @ns_headers) or do {
+
+# HEAD not always supported :-(
+my $resp = $browser->get("$url2", @ns_headers) or do {
 	print "OK\t$url\tNOT_CHANGED\tERROR\tEOL2\n";
 	exit 0;
 };
