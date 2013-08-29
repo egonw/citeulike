@@ -34,7 +34,8 @@ $browser->cookie_jar({}); # just in case someone needs it
 
 # some sites give a HTTP 400 to unknown headers
 my @ns_headers = (
-   'User-Agent' => 'Mozilla/4.76 [en] (Win98; U)',
+   'User-Agent' => 'Mozilla/5.0 (compatible; citeulike/1.0)',
+   'From' => 'plugins@citeulike.org',
    'Accept' => 'image/gif, image/x-xbitmap, image/jpeg,
         image/pjpeg, image/png, */*',
    'Accept-Charset' => 'iso-8859-1,*,utf-8',
@@ -83,5 +84,3 @@ if ($code == 200 ) {
 }
 
 print "OK\t$url\tNOT_CHANGED\tCODE=$code\tEOL4\n";
-
-
