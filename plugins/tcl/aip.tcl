@@ -1,5 +1,7 @@
 #!/usr/bin/env tclsh
 
+###### DEFUNCT - NOW PYTHON ######
+
 #
 # Copyright (c) 2005 Richard Cameron, CiteULike.org
 # All rights reserved.
