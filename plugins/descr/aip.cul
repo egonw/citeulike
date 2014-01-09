@@ -1,10 +1,7 @@
 #
-# Copyright (c) 2005 Richard Cameron, CiteULike.org
+# Copyright (c) 2014 CiteULike.org
 # All rights reserved.
 #
-# This code is derived from software contributed to CiteULike.org
-# by
-#    Michael Miller <citeulike@michmill.com>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -54,13 +51,13 @@ plugin {
 	blurb {}
 
 	# Your name
-	author {Michael Miller}
+	author {Fergus Gallagher}
 
 	# Your email address
-	email {citeulike@michmill.com}
+	email {fergus@citeulike.org}
 
 	# Language you wrote the plugin in
-	language {tcl}
+	language {python}
 
 	# Regular expression to match URLs that the plugin is
 	# *potentially* interested in. Any URL matching this regexp
@@ -79,23 +76,17 @@ plugin {
 	
 	# SEG  *might* now be using atypon. There's a separate atypon plugin for 
 	#  ...seg.org/doi/....
-	regexp {([lL]ibrary.seg.org|aip.org|medphys.org)/(resource|getabs|vsearch|link|(\w+/v\d))}
+	regexp {scitation.aip.org}
 }
 
 
 #
 # Linkout formatting
 #
+# Jan 2013.  These old-style links are now obsolete - they all now redirect to a http://scitation.aip.org page
+# The new plugin doesn't attempt to reconstruct these - just uses the DOI.
+#
 
-# CiteULike doesn't store URLs for articles.
-# Instead it stores the raw ingredients required to build the dynamically.
-# Each plugin is required to define a small procedure which does this formatting
-# See the HOWTO file for more details.
-#
-# The variables following variables are defined for your use
-# in the function: type ikey_1 ckey_1 ikey_2 ckey_2
-#
-# http://link.aip.org/link/APPLAB/v96/i9/p093112/s1
 format_linkout AIP {
 	return [list "Scitation (AIP)" \
 				"http://scitation.aip.org/getabs/servlet/GetabsServlet?prog=normal&id=${ckey_1}&idtype=cvips&gifs=yes" ]
@@ -115,150 +106,7 @@ format_linkout AIPP {
 # TESTS
 #
 
-# Each plugin MUST provide a set of tests. The motivation behind this is
-# that web scraping code is inherently fragile, and is likely to break whenever
-# the provider decides to redisign their site. CiteULike will periodically
-# run tests to see if anything has broken.
-
-# Please provide as comprehensive a set of tests as possible.
-# If you ever fix a bug in the parser, it is highly recommended that
-# you add the offending page as a test case.
-
-
-test {http://online.medphys.org/resource/1/mphya6/v38/i12/p6775_s1?bypassSSO=1} {
-	keywords {computer graphics; image reconstruction; image texture; list processing; medical image processing; optimisation; positron emission tomography}
-	volume 38
-	linkout {AIPP 38 MPH {} 6775}
-	linkout {DOI {} 10.1118/1.3661998 {} {}}
-	year 2011
-	start_page 6775
-	type JOUR
-	url http://link.aip.org/link/?MPH/38/6775/1
-	end_page 6786
-	doi 10.1118/1.3661998
-	publisher AAPM
-	formatted_url {{Scitation (AIP) (Permanent Link)} http://link.aip.org/link/?MPH/38/6775}
-	formatted_url {DOI http://dx.doi.org/10.1118/1.3661998}
-	issue 12
-	title {Fully 3D list-mode time-of-flight PET image reconstruction on GPUs using CUDA}
-	journal {Medical Physics}
-	abstract {Purpose: List-mode processing is an efficient way of dealing with the sparse nature of positron emission tomography (PET) data sets and is the processing method of choice for time-of-flight (ToF) PET image reconstruction. However, the massive amount of computation involved in forward projection and backprojection limits the application of list-mode reconstruction in practice, and makes it challenging to incorporate accurate system modeling.
-Methods: The authors present a novel formulation for computing line projection operations on graphics processing units (GPUs) using the compute unified device architecture (CUDA) framework, and apply the formulation to list-mode ordered-subsets expectation maximization (OSEM) image reconstruction. Our method overcomes well-known GPU challenges such as divergence of compute threads, limited bandwidth of global memory, and limited size of shared memory, while exploiting GPU capabilities such as fast access to shared memory and efficient linear interpolation of texture memory. Execution time comparison and image quality analysis of the GPU-CUDA method and the central processing unit (CPU) method are performed on several data sets acquired on a preclinical scanner and a clinical ToF scanner.
-Results: When applied to line projection operations for non-ToF list-mode PET, this new GPU-CUDA method is &gt;200 times faster than a single-threaded reference CPU implementation. For ToF reconstruction, we exploit a ToF-specific optimization to improve the efficiency of our parallel processing method, resulting in GPU reconstruction &gt;300 times faster than the CPU counterpart. For a typical whole-body scan with 75 × 75 × 26 image matrix, 40.7 million LORs, 33 subsets, and 3 iterations, the overall processing time is 7.7 s for GPU and 42 min for a single-threaded CPU. Image quality and accuracy are preserved for multiple imaging configurations and reconstruction parameters, with normalized root mean squared (RMS) deviation less than 1% between CPU and GPU-generated images for all cases.
-Conclusions: A list-mode ToF OSEM library was developed on the GPU-CUDA platform. Our studies show that the GPU reformulation is considerably faster than a single-threaded reference CPU method especially for ToF processing, while producing virtually identical images. This new method can be easily adapted to enable more advanced algorithms for high resolution PET reconstruction based on additional information such as depth of interaction (DoI), photon energy, and point spread functions (PSFs).}
-	author {Cui Jing JY {Jing yu Cui}}
-	author {Pratx Guillem G {Guillem Pratx}}
-	author {Prevrhal Sven S {Sven Prevrhal}}
-	author {Levin Craig CS {Craig S. Levin}}
-	status ok
-}
-
-# this one (now) redirects to an APS page
-test {http://scitation.aip.org/getabs/servlet/GetabsServlet?prog=normal&id=PRVDAQ000071000010103508000001&idtype=cvips&gifs=yes} {
-	volume 71
-	linkout {PROLA {} PRD/v71/i10/e103508 {} {}}
-	linkout {DOI {} 10.1103/PhysRevD.71.103508 {} {}}
-	year 2005
-	start_page 103508
-	type JOUR
-	doi 10.1103/PhysRevD.71.103508
-	publisher {American Physical Society}
-	formatted_url {{APS (abstract)} http://link.aps.org/abstract/PRD/v71/i10/e103508}
-	formatted_url {{APS (pdf)} http://link.aps.org/pdf/PRD/v71/i10/e103508}
-	formatted_url {DOI http://dx.doi.org/10.1103/PhysRevD.71.103508}
-	issue 10
-	title {Scaling of multitension cosmic superstring networks}
-	journal {Physical Review D}
-	abstract {Brane inflation in superstring theory ends when branes collide, initiating the hot big bang. Cosmic superstrings are produced during the brane collision. The cosmic superstrings produced in a D3-brane-antibrane inflationary scenario have a spectrum: (p,q) bound states of p fundamental (F) strings and q D-strings, where p and q are coprime. By extending the velocity-dependent one-scale network evolution equations for Abelian Higgs cosmic strings to allow a spectrum of string tensions, we construct a coupled (infinite) set of equations for strings that interact through binding and self-interactions. We apply this model to a network of (p,q) superstrings. Our numerical solutions show that (p,q) networks rapidly approach a stable scaling solution. We also extract the relative densities of each string type from our solutions. Typically, only a small number of the lowest tension states are populated substantially once scaling is reached. The model we study also has an interesting new feature: the energy released in (p,q) string binding is by itself adequate to allow the network to reach scaling. This result suggests that the scaling solution is robust. To demonstrate that this result is not trivial, we show that choosing a different form for string interactions can lead to network frustration.}
-	month May
-	author {Tye Henry SHH {S. H. Henry Tye}}
-	author {Wasserman Ira I {Ira Wasserman}}
-	author {Wyman Mark M {Mark Wyman}}
-	status ok
-}
-
-test {http://spiedl.aip.org/getabs/servlet/GetabsServlet?prog=normal&id=JEIME5000014000002029901000001&idtype=cvips&gifs=Yes&ver=dl} {
-	formatted_url {{Scitation (AIP)} http://scitation.aip.org/getabs/servlet/GetabsServlet?prog=normal&id=JEIME5000014000002029901000001&idtype=cvips&gifs=yes}
-	formatted_url {{Scitation (AIP) (Permanent Link)} http://link.aip.org/link/?JEI/14/029901}
-	formatted_url {DOI http://dx.doi.org/10.1117/1.1905634}
-	keywords  {vectors; mathematical operators; Fourier analysis; Fourier transforms; spectral analysis; wavelet transforms; group theory; image processing; diffraction; photons; stochastic processes; estimation theory; inverse problems; single photon emission computed tomography; speckle}
-	start_page  "029901"
-	volume  14
-	linkout {AIP {} JEIME5000014000002029901000001 {} {}}
-	linkout {AIPP 14 JEI {} 029901}
-	linkout {DOI {} 10.1117/1.1905634 {} {}}
-	year  2005
-	type  JOUR
-	url  {http://link.aip.org/link/?JEI/14/029901/1}
-	doi  {10.1117/1.1905634}
-	publisher  {SPIE}
-	issue  2
-	title  {Foundations of Image Science}
-	eid  {029901}
-	journal  {Journal of Electronic Imaging}
-	cite  {barrett:029901}
-	author {Barrett Harrison HH {Harrison H. Barrett}}
-	author {Myers Kyle KJ {Kyle J. Myers}}
-	author {Dhurjaty Sreeram S {Sreeram Dhurjaty}}
-	status ok
-
-}
-
-#
-# Hmmm.   This now gives a COMPLETELY DIFFERENT ARTICLE
-#
-
-skiptest {http://spiedl.aip.org/vsearch/servlet/VerityServlet?KEY=SPIEDL&smode=strresults&sort=rel&maxdisp=25&threshold=0&pjournals=SPIEDL&possible1=network&possible1zone=article&SMODE=strsearch&OUTLOG=NO&deliveryType=spiedl&viewabs=PSISDG&key=DISPLAY&docID=1&page=0&chapter=0} {
-	formatted_url {{Scitation (AIP)} http://scitation.aip.org/getabs/servlet/GetabsServlet?prog=normal&id=PSISDG004583000001000139000001&idtype=cvips&gifs=yes}
-	formatted_url {{Scitation (AIP) (Permanent Link)} http://link.aip.org/link/?PSI/4583/139}
-	volume  4583
-	linkout {AIP {} PSISDG004583000001000139000001 {} {}}
-	linkout {AIPP 4583 PSI {} 139}
-	year  2001
-	start_page  139
-	type  INCONF
-	end_page  148
-	url  {http://link.aip.org/link/?PSI/4583/139/1}
-	doi  {10.1117/12.445121}
-	publisher  {SPIE}
-	issue  1
-	editor  {Gu Wanyi W {Wanyi Gu}}
-	editor {Zhou Jianhui J {Jianhui Zhou}}
-	editor {Pan Jin JY {Jin Yi Pan}}
-	title  {Planning and deployment of DWDM systems: a reality}
-	journal  {Metro and Access Networks}
-	abstract {The new definition and implementation of new communication network architectures and elements in the present data-centric world are due to dramatic change in technology, explosive growth in bandwidth requirement and de-regulated, privatized and competitive telecommunication market. Network Convergence, Disruptive Technology and Convulsive Market are the basic forces who are pushing the future network towards Packet based Optical Core Network and varieties of Access Network along with integrated NMS. Well-known Moore's law governs the result of progress in silicon processing and accordingly the present capacity of network must be multiplied by 100 times in 10 years. To build a global network which is 100 times powerful than present one by scaling up today's technology can not be a practical solution due to requirement of 100 fold increase in cost, power and size. Today's two network (Low delay, fixed bandwidth, Poisson voice traffic based, circuit-switched PSTN/PLMN and variable delay, variable bandwidth, no-guaranteed QoS based packet switched internet) are converging towards two-layer network (IP and ATM in lower layer; DWDM in network layer). SDH Network which was well drafted before explosive data traffic and was best suitable for Interoperability, Survivability, Reliability and Manageability will be taken over by DWDM Network by 2005 due to 90% of data traffic. This paper describes the way to build the Communication Network (either by migration or by overlay) with an overview of the equipment and technologies required to design the DWDM Network. Service Providers are facing tough challenges for selection of emerging technologies and advances in network standard for bandwidth hungry, valued customers. The reduction of cost of services due to increased competition , explosive growth of internet and 10GbE Ethernet (which is being considered as an end-to-end network solution) have given surprise to many network architects and designers. To provide transparency to data-rate and data-format the gap between electrical layer and Optical backbone layer has to be filled. By partitioning the Optical Bandwidth of Optical Fibre Cable into the wavelengths (32 to 120) Wavelength Division Multiplexing can transport data rate from 10MB/s to 10GB/s on each wavelength. In this paper we will analyze the difficult strategies of suppliers and obstacles in the way of service providers to make DWDM a reality in the field either as Upgrade or Overlay or New Network. The difficult constraint of protection scheme with respect to compatibility with existing network and network under development has to sorted out along with present standard of Optical Fibre to carry DWDM signal in cost effective way to Access , Edge and Metro part of our network. The future of IP under DWDM is going to be key element for Network Planners in future. Fundamental limitation of bit manipulation in Photonic domain will have implication on the network design, cost and migration to all optical network because Photons are computer un-friendly and not mature enough to give memory and logic devices. In the environment of heterogeneous traffic the DWDM based All Optical Network should behave as per expectation of users whose primary traffic will be multi-media IP type. The quality of service (QoS), Virtual Path Network (VPN) over DWDM, OXC and intelligence at the edge will play a major role in future deployment of DWDM in our network . The development of improved fiber characteristics, EDFAs and Photonic component has led the carriers to go for Dense WDM Network.}
-	cite {mishra:139}
-	author {Mishra Data DS {Data S. Mishra}}
-	status ok
-	location {Beijing, China}
-}
-
-test {http://jap.aip.org/resource/1/japiau/v107/i5/p054315_s1} {
-	keywords {annealing; elemental semiconductors; germanium; hydrogen; ion implantation; nucleation; semiconductor thin films; surface roughness; thermal expansion; transmission electron microscopy; X-ray diffraction}
-	volume 107
-	linkout {AIP {} JAPIAU000107000005054315000001 {} {}}
-	linkout {AIPP 107 JAP {} 054315}
-	linkout {DOI {} 10.1063/1.3326942 {} {}}
-	year 2010
-	start_page 054315
-	type JOUR
-	url http://link.aip.org/link/?JAP/107/054315/1
-	doi 10.1063/1.3326942
-	publisher AIP
-	formatted_url {{Scitation (AIP)} http://scitation.aip.org/getabs/servlet/GetabsServlet?prog=normal&id=JAPIAU000107000005054315000001&idtype=cvips&gifs=yes}
-	formatted_url {{Scitation (AIP) (Permanent Link)} http://link.aip.org/link/?JAP/107/054315}
-	formatted_url {DOI http://dx.doi.org/10.1063/1.3326942}
-	issue 5
-	eid 054315
-	title {Low temperature exfoliation process in hydrogen-implanted germanium layers}
-	journal {Journal of Applied Physics}
-	abstract {The feasibility of transferring hydrogen-implanted germanium to silicon with a reduced thermal budget is demonstrated. Germanium samples were implanted with a splitting dose of 5×1016 H2+ cm−2 at 180 keV and a two-step anneal was performed. Surface roughness and x-ray diffraction pattern measurements, combined with cross-sectional TEM analysis of hydrogen-implanted germanium samples were carried out in order to understand the exfoliation mechanism as a function of the thermal budget. It is shown that the first anneal performed at low temperature ( ≤ 150 °C for 22 h) enhances the nucleation of hydrogen platelets significantly. The second anneal is performed at 300 °C for 5 min and is shown to complete the exfoliation process by triggering the formation of extended platelets. Two key results are highlighted: (i) in a reduced thermal budget approach, the transfer of hydrogen-implanted germanium is found to follow a mechanism similar to the transfer of hydrogen-implanted InP and GaAs, (ii) such a low thermal budget (&lt;300 °C) is found to be suitable for directly bonded heterogeneous substrates, such as germanium bonded to silicon, where different thermal expansion coefficients are involved.}
-	author {Ferain {} IP {I. P. Ferain}}
-	author {Byun {} KY {K. Y. Byun}}
-	author {Colinge {} CA {C. A. Colinge}}
-	author {Brightup {} S {S. Brightup}}
-	author {Goorsky {} MS {M. S. Goorsky}}
+test {http://scitation.aip.org/content/aapm/journal/medphys/38/12/10.1118/1.3661998} {
 	status ok
 }
 
