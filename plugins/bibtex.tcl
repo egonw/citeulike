@@ -94,7 +94,8 @@ proc parse_bibtex {bibtex_rec} {
 
 	# Run BibTeX on it
 	if {[catch {
-		set bibtex [open "|bibtex $bibdir/$fname" r]
+		# not $bibdir/$fname as by default bibtex is paranoid (google "openout_any = p")
+		set bibtex [open "|bibtex $fname" r]
 		set bibtex_stdout [read $bibtex]
 		close $bibtex
 	} msg]} {
