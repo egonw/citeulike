@@ -38,7 +38,7 @@ plugin {
 	# Note: Some universities provide mirrors of commericial publishers' sites
 	# with different hostnames, so you should provide some leeway in your
 	# regexp if that applies to you.
-	regexp {^http://(?:(?:www\.)?aclweb\.org/anthology(?:-new)?|acl\.ldc\.upenn\.edu|ucrel\.lancs\.ac\.uk/acl|acl\.eldoc\.ub\.rug\.nl/mirror|www\.cs\.mu\.oz\.au/acl)/[A-Z]/[A-Z]\d{2}/[A-Z]\d{2}-\d+(?:\.bib|\.pdf)?$}
+	regexp {^http://(?:(?:www\.)?aclweb\.org/anthology(?:-new)?|acl\.ldc\.upenn\.edu|ucrel\.lancs\.ac\.uk/acl|acl\.eldoc\.ub\.rug\.nl/mirror|www\.cs\.mu\.oz\.au/acl)(/+)[A-Z]/[A-Z]\d{2}/[A-Z]\d{2}-\d+(?:\.bib|\.pdf)?$}
 }
 
 
