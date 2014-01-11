@@ -99,7 +99,8 @@ $abstract_part = "abstract";
 # New (2008) Highwire URL format .
 if ($url =~ m{http://([^/]+)/content/}) {
 	($journal_site) = ($1);
-	$url =~ s/\.([a-z]+)$/.abstract/;
+	$url =~ s/(\.([a-z]+))+$/.abstract/;
+	print "URL: $url\n";
 	($url_abstract, $doi, $pmid, $body, $meta) = get_abstract_url($url);
 	if ($url_abstract) {
 		$source_abstract = $body;
