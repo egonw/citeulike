@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 
-use LWP::Simple;
+# use LWP::Simple;
+require LWP::UserAgent;
 use HTML::TreeBuilder;
 use Encode;
 
@@ -50,6 +51,9 @@ use Encode;
 #
 #	(b) http://www.nature.com/bjc/journal/v105/n2s/abs/bjc2011474a.html
 #
+
+ 
+ 
 binmode STDOUT, ":utf8";
 
 # Scrape the RIS file from the Nature.com site
@@ -61,7 +65,10 @@ if ($url =~ m{/doifinder/(.*)}) {
 	exit;
 }
 
-$page = get $url;
+
+
+$page = get($url);
+
 $page =~ s/\|\[(\w+)\]\|/&$1;/g;
 
 my $tree = HTML::TreeBuilder->new();
@@ -71,11 +78,10 @@ my $head = ($tree->look_down('_tag','head'))[0];
 my @meta = $head->look_down('_tag','meta');
 
 
-if ($url =~ m{/naturejobs/}) {
+if ($url =~ m{/naturejobs|ncomms/}) {
 	foreach $m (@meta) {
 		my $name = $m->attr("name");
 		my $content = $m->attr("content");
-		#print "$name = $content\n";
 		$name =~ /dc.identifier/i and do {
 			$content =~ s/doi://;
 			# sometimes see the DOI prefix twice!
@@ -228,7 +234,7 @@ if ($url =~ m{www.nature.com/cgi.*file=/([^/]+)/journal/v([^/]+)/n([^/]+)/([^/]+
 
 # Grab the RIS file
 
-$ris = get "http://www.nature.com/${journal}/journal/v${vol}/n${num}/ris/${article}.ris" || (print "status\terr\tCouldn't fetch the citation details from the Nature web site.\n" and exit);
+$ris = get("http://www.nature.com/${journal}/journal/v${vol}/n${num}/ris/${article}.ris") || (print "status\terr\tCouldn't fetch the citation details from the Nature web site.\n" and exit);
 
 
 # Not sure why they give us this crap in the "date_other" field. Kill it.
@@ -255,4 +261,14 @@ if ($ris =~ m{ER  - }) {
 	print "status\tok\n";
 } else {
 	print "status\terr\tCouldn't extract the details from Nature's 'export citation' link.\n";
+}
+
+
+sub get {
+	my $url = shift;
+	my $ua = LWP::UserAgent->new;
+	$ua->timeout(10);
+	my $response = $ua->get($url);
+	my $page = $response->decoded_content;
+	return $page;
 }
