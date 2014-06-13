@@ -201,8 +201,9 @@ def handle(url):
 		root = lxml.html.fromstring(page)
 		doi_nodes = root.cssselect("#doi")
 		for n in [e.text for e in doi_nodes]:
-			doi = re.sub(r'doi:','',n)
-			break
+			if n:
+				doi = re.sub(r'doi:','',n)
+				break
 
 	if not doi:
 		m = re.search(r'/doi/(10\.\d\d\d\d)_([^/]+)/', page) 
