@@ -3,6 +3,7 @@
 use warnings;
 #use LWP::Simple;
 use LWP 5.64;
+use Encode;
 
 #
 # Copyright (c) 2005 Richard Cameron, CiteULike.org
@@ -57,7 +58,7 @@ my @ns_headers = (
    'User-Agent' => 'Mozilla/4.76 [en] (Win98; U)',
    'Accept' => 'image/gif, image/x-xbitmap, image/jpeg,
         image/pjpeg, image/png, */*',
-   'Accept-Charset' => 'iso-8859-1,*,utf-8',
+   'Accept-Charset' => 'utf-8,iso-8859-1,*',
    'Accept-Language' => 'en-US',
   );
 
@@ -77,17 +78,15 @@ if (!$pii) {
 # sometime the () are url-encoded
 $pii = urldecode($pii);
 
-# print "$journal :: $pii\n";
+my $pii_enc = $pii;
+$pii_enc =~ s/\W//g;
 
-my $pii_enc = urlencode($pii);
-
-my $url_ris = "http://www.cell.com/citationexport?format=cite-abs&citation-type=RIS&pii=$pii_enc&action=download&Submit=Export";
+my $url_ris = "http://www.cell.com/action/downloadCitation?objectUri=pii:$pii_enc&direct=true&include=abs&submit=Export&downloadFileName=marlin_cell157_1363";
 
 my $response = $browser->get("$url_ris",@ns_headers) || (print "status\terr\tCould not retrieve information from the specified page. Try posting the article from the abstract page.\n" and exit);
 
 my $ris = $response->content;
-
-
+$ris = decode("utf-8",$ris);
 
 print "begin_tsv\n";
 print "linkout\tCELL\t\t$journal\t\t$pii\n";
