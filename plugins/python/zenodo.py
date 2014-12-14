@@ -53,7 +53,7 @@ except:
 #
 # DOI is in the page
 #
-metaheaders = metaheaders.MetaHeaders(httpUrl)
+metaheaders = metaheaders.MetaHeaders(page=page)
 doi = metaheaders.get_item("citation_doi")
 
 print "begin_tsv"
