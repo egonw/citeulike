@@ -1,0 +1,36 @@
+plugin {
+	version {1}
+	name {figshare}
+	url {http://www.figshare.com/}
+	blurb {}
+	author {Egon Willighagen}
+	email {egon.willighagen@gmail.com}
+	language {python}
+	regexp {http://figshare\.com/articles/}
+}
+
+format_linkout FIGSHR {
+	return [list "figshare" "http://figshare.com/articles/${ckey_1}/${ikey_1}"]
+}
+
+test {http://figshare.com/articles/Summary_of_the_Spring_2014_NSC_Database_Survey/1195888} {
+	linkout {DOI {} 10.6084/m9.figshare.1195888 {} {}}
+	linkout {FIGSHR 1195888 Summary_of_the_Spring_2014_NSC_Database_Survey {} {}}
+	year 2014
+	month 10
+	day 07
+	type GEN
+	plugin_version 1
+	publisher {figshare}
+	title {Summary of the Spring 2014 NSC Database Survey}
+	status ok
+	author {Mustad Axel AP {Axel P. Mustad}}
+	author {Smeets Bart B {Bart Smeets}}
+	author {Jeliazkova Nina N {Nina Jeliazkova}}
+	author {Jeliazkov Vedrin V {Vedrin Jeliazkov}}
+	author {Willighagen Egon E {Egon Willighagen}}
+	formatted_url {DOI http://dx.doi.org/10.6084/m9.figshare.1195888}
+	formatted_url {figshare http://figshare.com/articles/Summary_of_the_Spring_2014_NSC_Database_Survey/1195888}
+	abstract {The NanoSafety Cluster Database working group organized in Spring 2014 a survey for the community to summarize the current state of databases and including questions of a more technical nature. This survey is a first in a biannual continuous effort and attempt to collect, organise and share up-to-date information about NanoSafety related databases worldwide. For example, it included questions about application programming interfaces, database schema, supported input and output formats, etc. This document summarizes the responses we received before August 2014.}
+	plugin figshare
+}
