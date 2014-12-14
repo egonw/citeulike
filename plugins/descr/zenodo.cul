@@ -1,0 +1,54 @@
+plugin {
+	version {1}
+	name {zenodo}
+	url {http://zenodo.org/}
+	blurb {}
+	author {Egon Willighagen}
+	email {egon.willighagen@gmail.com}
+	language {python}
+	regexp {https?://zenodo\.org/record/(\d+)}
+}
+
+format_linkout ZENODO {
+	return [list "ZENODO" "http://zenodo.org/record/${ckey_1}"]
+}
+
+test {https://zenodo.org/record/12839} {
+	linkout {ZENODO {} 12839 {} {}}
+	linkout {DOI {} 10.5281/zenodo.12839 {} {}}
+	year 2014
+	month 11
+	day 24
+	type GEN
+	plugin_version 1
+	publisher {ZENODO}
+	title {BridgeDb: BridgeDb v2.0.0 released}
+	status ok
+	author {Brenninkmeijer Christian CY {Christian Y. Brenninkmeijer}}
+	author {Summer-Kutmon Martina M {Martina Summer-Kutmon}}
+	author {Willighagen Egon E {Egon Willighagen}}
+	author {Pico Alexander A {Alexander Pico}}
+	formatted_url {ZENODO http://zenodo.org/record/12839}
+	formatted_url {DOI http://dx.doi.org/10.5281/zenodo.12839}
+	plugin zenodo
+}
+
+test {http://zenodo.org/record/12839} {
+	linkout {ZENODO {} 12839 {} {}}
+	linkout {DOI {} 10.5281/zenodo.12839 {} {}}
+	year 2014
+	month 11
+	day 24
+	type GEN
+	plugin_version 1
+	publisher {ZENODO}
+	title {BridgeDb: BridgeDb v2.0.0 released}
+	status ok
+	author {Brenninkmeijer Christian CY {Christian Y. Brenninkmeijer}}
+	author {Summer-Kutmon Martina M {Martina Summer-Kutmon}}
+	author {Willighagen Egon E {Egon Willighagen}}
+	author {Pico Alexander A {Alexander Pico}}
+	formatted_url {ZENODO http://zenodo.org/record/12839}
+	formatted_url {DOI http://dx.doi.org/10.5281/zenodo.12839}
+	plugin zenodo
+}
