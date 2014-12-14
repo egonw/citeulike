@@ -1,0 +1,39 @@
+plugin {
+	version {1}
+	name {datadryad}
+	url {http://datadryad.org/}
+	blurb {}
+	author {Egon Willighagen}
+	email {egon.willighagen@gmail.com}
+	language {python}
+	regexp {https?://.*\.datadryad\.org/}
+}
+
+format_linkout DRYAD {
+	return [list "DRYAD" "http://www.datadryad.org/resource/doi:${ckey_1}"]
+}
+
+test {http://www.datadryad.org/resource/doi:10.5061/dryad.fr43s} {
+	linkout {DRYAD {} 10.5061/dryad.fr43s {} {}}
+	linkout {DOI {} 10.5061/dryad.fr43s {} {}}
+	year 2014
+	month 06
+	day 13
+	type GEN
+	plugin_version 1
+	publisher {Dryad Digital Repository}
+	title {Data from: Genome-wide SNP analysis reveals a genetic basis for sea-age variation in a wild population of Atlantic salmon (Salmo salar)}
+	status ok
+	author {Johnston Susan SE {Johnston, Susan E.}}
+	author {Orell Panu P {Orell, Panu}}
+	author {Pritchard Victoria VL {Pritchard, Victoria L.}}
+	author {Kent Matthew MP {Kent, Matthew P.}}
+	author {Lien Sigbjørn S {Lien, Sigbjørn}}
+	author {Niemelä Eero E {Niemelä, Eero}}
+	author {Erkinaro Jaakko J {Erkinaro, Jaakko}}
+	author {Primmer Craig C {Primmer, Craig}}
+	formatted_url {DRYAD http://www.datadryad.org/resource/doi:10.5061/dryad.fr43s}
+	formatted_url {DOI http://dx.doi.org/10.5061/dryad.fr43s}
+	abstract {Delaying sexual maturation can lead to larger body size and higher reproductive success, but carries an increased risk of death before reproducing. Classical life history theory predicts that trade-offs between reproductive success and survival should lead to the evolution of an optimal strategy in a given population. However, variation in mating strategies generally persists, and in general, there remains a poor understanding of genetic and physiological mechanisms underlying this variation. One extreme case of this is in the Atlantic salmon (Salmo salar), which can show variation in the age at which they return from their marine migration to spawn (i.e. their “sea age”). This results in large size differences between strategies, with direct implications for individual fitness. Here, we used an Illumina Infinium SNP-array to identify regions of the genome associated with variation in sea age in a large population of Atlantic salmon in Northern Europe, implementing individual-based genome-wide association studies (GWAS) and population-based FST outlier analyses. We identified several regions of the genome which vary in association with phenotype and/or selection between sea ages, with nearby genes having functions related to muscle development, metabolism, immune response and mate choice. In addition, we found that individuals of different sea ages belong to different, yet sympatric populations in this system, indicating that reproductive isolation may be driven by divergence between stable strategies. Overall, this study demonstrates how genome-wide methodologies can be integrated with samples collected from wild, structured populations to understand their ecology and evolution in a natural context.}
+	plugin datadryad
+}
