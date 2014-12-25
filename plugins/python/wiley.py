@@ -49,21 +49,29 @@ url = sys.stdin.readline().strip()
 # but I'll provisionally assume that a /<word> at the end is to be stripped.
 
 url = re.sub(r';jsession.*','', url)
+url2 = url
 
 #
 # ShareThis button on Wiley adds extra crud
 # http://onlinelibrary.wiley.com/doi/10.1111/j.1469-8749.1975.tb04699.x/abstract?sms_ss=citeulike&at_xt=4d5ab3a1f2298daf%2C0
 
 url = re.sub(r'\?.*','', url)
+url2 = re.sub(r'\#.*','', url2)
 
-
+print "URL " + url2
 m = re.search('http://onlinelibrary.wiley.com/doi/(10\.\d\d\d\d/(.+?))(/\w+)?$', url, re.IGNORECASE)
+m2 = re.search('http://onlinelibrary.wiley.com/resolve/doi\?DOI=(10\.\d\d\d\d(.+?))(/\w+)?$', url2, re.IGNORECASE)
 
-if not m:
+if not m and not m2:
 	print "status\terr\tCould not find doi in URL (" + url + ")"
 	sys.exit(1)
 
-doi = m.group(1)
+if m:
+	doi = m.group(1)
+if m2:
+	doi = m2.group(1)
+
+print "DOI: " + doi
 
 # need to url decode DOI
 doi = urllib.unquote(doi)

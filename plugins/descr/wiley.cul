@@ -6,8 +6,7 @@ plugin {
 	author {Kristinn B. Gylfason}
 	email {citeulike@askur.org}
 	language {python}
-	regexp {http://onlinelibrary.wiley.com/doi/(10\.\d\d\d\d/[^/]+)}
-
+	regexp {http://onlinelibrary.wiley.com(.*)doi(.*)(10\.\d\d\d\d[/|%2F][^/]+)}
 }
 
 # Defunct, but need for old linkouts?
@@ -64,5 +63,25 @@ test {http://onlinelibrary.wiley.com/doi/10.1002/(SICI)1099-0526(199703/04)2:4%3
 	journal {Complexity}
 	abstract {Economic decision making under uncertainty is universally characterized by aversion to risk. One of the most basic concepts in economic theory, risk aversion is usually explained by the concavity of the utility function, which, in turn, is based on a person's satiability for wealth. I use genetic algorithms to show that risk aversion, and some related consequences, emerge naturally as a result of evolutionary pressures. In analogy to the well-known hillclimbing metaphor, it is helpful in this context to characterize optimizing under uncertainty as “surfing in a fitness seascape.” © 1997 John Wiley & Sons, Inc.}
 	author {Szpiro {} GG {Szpiro, G. G.}}
+	status ok
+}
+
+test {http://onlinelibrary.wiley.com/resolve/doi?DOI=10.1002/anie.201409336} {
+	doi 10.1002/anie.201409336
+	serial 1521-3773
+	linkout {DOI {} 10.1002/anie.201409336 {} {}}
+	year 2014
+	month 12
+	day 23
+	type JOUR
+	doi 10.1002/anie.201409336
+	title {Krebs Cycle Metabolon: Structural Evidence of Substrate Channeling Revealed by Cross-Linking and Mass Spectrometry}
+	publisher {WILEY-VCH Verlag}
+	abstract {It has been hypothesized that the high metabolic flux in the mitochondria is due to the self-assembly of enzyme supercomplexes (called metabolons) that channel substrates from one enzyme to another, but there has been no experimental confirmation of this structure or the channeling. A structural investigation of enzyme organization within the Krebs cycle metabolon was accomplished by in vivo cross-linking and mass spectrometry. Eight Krebs cycle enzyme components were isolated upon chemical fixation, and interfacial residues between mitochondrial malate dehydrogenase, citrate synthase, and aconitase were identified. Using constraint protein docking, a low-resolution structure for the three-enzyme complex was achieved, as well as the two-fold symmetric octamer. Surface analysis showed formation of electrostatic channeling upon protein–protein association, which is the first structural evidence of substrate channeling in the Krebs cycle metabolon.}
+	author {Wu Fei F {Wu, Fei}}
+	author {Minteer Shelley S {Minteer, Shelley}}
+	journal {Angew. Chem. Int. Ed.}
+	formatted_url {DOI http://dx.doi.org/10.1002/anie.201409336}
+	url http://dx.doi.org/10.1002/anie.201409336
 	status ok
 }
