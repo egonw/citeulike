@@ -22,6 +22,8 @@ test {http://onlinelibrary.wiley.com/doi/10.1002/(SICI)1096-9071(199908)58:4%3C3
 	volume 58
 	linkout {DOI {} {10.1002/(SICI)1096-9071(199908)58:4<338::AID-JMV4>3.0.CO;2-5} {} {}}
 	year 1999
+	month 8
+	day 1
 	type JOUR
 	start_page 338
 	end_page 345
@@ -48,6 +50,8 @@ test {http://onlinelibrary.wiley.com/doi/10.1002/(SICI)1099-0526(199703/04)2:4%3
 	serial 1099-0526
 	linkout {DOI {} {10.1002/(SICI)1099-0526(199703/04)2:4<31::AID-CPLX8>3.0.CO;2-3} {} {}}
 	year 1997
+	day 1
+	month 3
 	type JOUR
 	start_page 31
 	url http://dx.doi.org/10.1002/(SICI)1099-0526(199703/04)2:4<31::AID-CPLX8>3.0.CO;2-3
