@@ -1,0 +1,37 @@
+plugin {
+	version {1}
+	name {frontiers}
+	url {http://journal.frontiersin.org/}
+	blurb {}
+	author {Egon Willighagen}
+	email {egon.willighagen@gmail.com}
+	language {python}
+	regexp {http://journal.frontiersin.org/Journal/}
+}
+
+format_linkout FRONT {
+	return [list "Frontiers" "http://journal.frontiersin.org/Journal/${ckey_1}"]
+}
+
+test {http://journal.frontiersin.org/Journal/10.3389/fnbot.2013.00021} {
+	linkout {DOI {} 10.3389/fnbot.2013.00021 {} {}}
+	linkout {FRONT {} 10.3389/fnbot.2013.00021 {} {}}
+	year 2013
+	month 12
+	day 04
+	type JOUR
+	plugin_version 1
+	publisher {Frontiers}
+	title {Gradient boosting machines, a tutorial}
+	author {Natekin Alexey A {Natekin, Alexey}}
+	author {Knoll Alois A {Knoll, Alois}}
+	formatted_url {DOI http://dx.doi.org/10.3389/fnbot.2013.00021}
+	formatted_url {Frontiers http://journal.frontiersin.org/Journal/10.3389/fnbot.2013.00021}
+	abstract {Gradient boosting machines are a family of powerful machine-learning techniques that have shown considerable success in a wide range of practical applications. They are highly customizable to the particular needs of the application, like being learned with respect to different loss functions. This article gives a tutorial introduction into the methodology of gradient boosting methods. A theoretical information is complemented with many descriptive examples and illustrations which cover all the stages of the gradient boosting model design. Considerations on handling the model complexity are discussed. A set of practical examples of gradient boosting applications are presented and comprehensively analyzed.}
+	plugin frontiers
+	volume 7
+	issn 1662-5218
+	start_page 21
+	journal {Frontiers in Neurorobotics}
+	status ok
+}
