@@ -1,4 +1,4 @@
-set f [open "highwire-journal-list.txt" "r"]
+set f [open "highwire-urls.txt" "r"]
 set r_lines [split [read $f] "\n"]
 set n_lines [list]
 foreach line $r_lines {

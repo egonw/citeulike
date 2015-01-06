@@ -14,6 +14,7 @@ binmode STDOUT, ":utf8";
 $url = "http://highwire.stanford.edu/lists/allsites.dtl";
 $source = get("$url") || (print "status\terr\t (1) Could not retrieve information from the journal page\n" and exit);
 
+
 # print "$source" and exit;
 
 my $tree = HTML::TreeBuilder->new();
@@ -44,7 +45,7 @@ open(my $fh2, ">", "highwire.names") or die "cannot open > highwire.names: $!";
 binmode $fh2, ":utf8";
 print $fh2 "[list ".join(" ",@names)."]\n";
 
-exit;
+# exit;
 
 while ($source =~ m/http:\/\/([\w.-]+)/g) {
 	$match = $1;
@@ -52,6 +53,8 @@ while ($source =~ m/http:\/\/([\w.-]+)/g) {
 		print "$match\n";
 	}
 }
+
+
 
 
 
