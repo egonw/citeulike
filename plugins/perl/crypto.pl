@@ -1,7 +1,14 @@
 #!/usr/bin/env perl
 
-use LWP::Simple;
+use LWP::UserAgent;
 use strict;
+use Encode;
+
+binmode STDOUT, ":utf8";
+
+my $ua = LWP::UserAgent->new;
+
+$ua->agent("CiteULike/1.0 +http://www.citeulike.org/");
 
 my $url = <>;
 
@@ -21,8 +28,25 @@ unless((($year, $id) = $url =~ m#eprint.iacr.org/(\d{4})/(\d+)#) ||
   exit;
 }
 
-my $data = get "http://eprint.iacr.org/$year/$id" or
+my $response = $ua->get("http://eprint.iacr.org/$year/$id") or
   (print "Couldn't fetch citation details from Cryptology ePrint Archive" and exit);
+
+my $headers = $response->headers;
+my $raw =$response->content;
+my $data = "";
+	my $ct = $headers->{"content-type"};
+	if ($ct) {
+		my ($enc) = ($ct =~ /;charset=([^;]+)/i);
+		if ($enc) {
+			# print "$ct :: $enc\n";
+			$data = decode($enc,$raw);
+		}
+	}
+	if (!$data)  {
+		#$ret = decode("iso-8859-1",$ris);
+		$data = decode("iso-8859-1",$raw);
+		#$data = decode("utf-8",$raw);
+	}
 
 # Report id marked as character key because the leading zeros are significant
 print "linkout\tIACR\t$year\t$id\t\t\n";
