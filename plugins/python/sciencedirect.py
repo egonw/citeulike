@@ -140,7 +140,6 @@ def handle(url):
 
 	response = browser.response()
 	page = response.get_data()
-	# print page
 
 	#
 	# Elsevier insist on user selecting a "preferred source" when the article is
@@ -207,6 +206,11 @@ def handle(url):
 
 	if not doi:
 		m = re.search(r'/doi/(10\.\d\d\d\d)_([^/]+)/', page) 
+		if m:
+			doi = "%s/%s" % (m.group(1), m.group(2))
+
+	if not doi:
+		m = re.search(r'\'(10\.\d\d\d\d)/([^\']+)\'', page) 
 		if m:
 			doi = "%s/%s" % (m.group(1), m.group(2))
 
