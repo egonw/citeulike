@@ -1,0 +1,36 @@
+plugin {
+	version {1}
+	name {scientificdata}
+	url {http://www.nature.com/sdata/}
+	blurb {}
+	author {Egon Willighagen}
+	email {egon.willighagen@gmail.com}
+	language {python}
+	regexp {http://www.nature.com/articles/sdata}
+}
+
+format_linkout SCIDAT {
+	return [list "Scientific Data" "http://www.nature.com/articles/sdata${ckey_1}"]
+}
+
+test {http://www.nature.com/articles/sdata201441} {
+	linkout {DOI {} 10.1038/sdata.2014.41 {} {}}
+	linkout {SCIDAT {} 201441 {} {}}
+	year 2014
+	month 11
+	day 25
+	type JOUR
+	plugin_version 1
+	publisher {Nature Publishing Group}
+	title {Simplified data access on human skeletal muscle transcriptome responses to differentiated exercise}
+	author {Vissing Kristian K {Kristian Vissing}}
+	author {Schjerling Peter P {Peter Schjerling}}
+	formatted_url {DOI http://dx.doi.org/10.1038/sdata.2014.41}
+	formatted_url {{Scientific Data} http://www.nature.com/articles/sdata201441}
+	abstract {Few studies have investigated exercise-induced global gene expression responses in human skeletal muscle and these have typically focused at one specific mode of exercise and not implemented non-exercise control models. However, interpretation on effects of differentiated exercise necessitate direct comparison between essentially different modes of exercise and the ability to identify true exercise effect, necessitate implementation of independent non-exercise control subjects. Furthermore, muscle transcriptome data made available through previous exercise studies can be difficult to extract and interpret by individuals that are inexperienced with bioinformatics procedures. In a comparative study, we therefore; (1) investigated the human skeletal muscle transcriptome responses to differentiated exercise and non-exercise control intervention, and; (2) set out to develop a straightforward search tool to allow for easy access and interpretation of our data. We provide a simple-to-use spread sheet containing transcriptome data allowing other investigators to easily see how mRNA of their gene(s) of interest behave in skeletal muscle following exercise, both endurance, resistance and non-exercise, to better aid hypothesis-driven question in this field of research.}
+	plugin scientificdata
+	volume 1
+	issn 2052-4463
+	journal {Scientific Data}
+	status ok
+}
