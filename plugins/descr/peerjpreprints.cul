@@ -1,0 +1,34 @@
+plugin {
+	version {1}
+	name {peerjpreprints}
+	url {http://peerj.com/}
+	blurb {}
+	author {Egon Willighagen}
+	email {egon.willighagen@gmail.com}
+	language {python}
+	regexp {https://peerj.com/preprints/}
+}
+
+format_linkout PEERJP {
+	return [list "PeerJ PrePrints" "https://peerj.com/preprints/${ckey_1}/"]
+}
+
+test {https://peerj.com/preprints/185v3/} {
+	linkout {DOI {} 10.7287/peerj.preprints.185v3 {} {}}
+	linkout {PEERJP {} 185v3 {} {}}
+	year 2014
+	month 03
+	day 16
+	type REP
+	plugin_version 1
+	publisher {PeerJ Inc.}
+	title {Accessing biological data in R with semantic web technologies}
+	author {Willighagen Egon E {Egon Willighagen}}
+	formatted_url {DOI http://dx.doi.org/10.7287/peerj.preprints.185v3}
+	formatted_url {{PeerJ PrePrints} https://peerj.com/preprints/185v3/}
+	abstract {Background. Semantic Web technologies are increasingly used in biological database systems. The improved expressiveness shows advantages in tracking provenance and allowing knowledge to be more explicitly annotated. The list of semantic web standards needs a complementary set of tools to handle data in those formats to use them in bioinformatics workflows.Methods. The approach proposed in this paper uses the Apache Jena library to create an environment where semantic web technologies can be used in the statistical environment R. The code is exposed as two R packages available from the Comprehensive R Archive Network (CRAN). The RJava library and a custom convenience class is used to bridge between R and the Jena library.Results. We here present three examples showing how the Resource Description Framework (RDF) and SPARQL query standards can be employed in R. The first example takes input on BRCA1 SNPs from a BioMart and converts this into a RDF data set. The second example runs a query on an experimental remote SPARQL end point provided by Uniprot, and searches textual annotations of proteins encoded by the BRCA1 gene. The third example shows how the package can be used to handle RDF returned by OpenTox web services.Discussion. The two provided library bring basic semantic web technologies to R. This paper only shows examples from the biology domain, but we believe the approaches are generally applicable. It currently only exposes a subset of key Apache Jena, but the rrdf package makes it easy to make more of the library's functionality, such as the shortest path finding. The rrdf libraries are freely available from the CRAN under the Affero GNU Public License version 3: http://cran.r-project.org/web/packages/rrdf/.}
+	plugin peerjpreprints
+	issn 2167-9843
+	journal {PeerJ PrePrints}
+	status ok
+}
