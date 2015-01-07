@@ -65,7 +65,7 @@ if metaheaders.get_item("citation_title"):
 	authors = metaheaders.get_multi_item("citation_author")
 	if authors:
 		for a in authors:
-			print "author\t%s" % a
+			print "author\t%s" % a.encode('utf-8')
 	metaheaders.print_date("citation_publication_date")
 	zenodoURL = metaheaders.get_item("citation_abstract_html_url")
 

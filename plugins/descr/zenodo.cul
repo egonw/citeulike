@@ -52,3 +52,48 @@ test {http://zenodo.org/record/12839} {
 	formatted_url {DOI http://dx.doi.org/10.5281/zenodo.12839}
 	plugin zenodo
 }
+
+test {http://zenodo.org/record/13368#.VJ1BpdW_HaQ.citeulike} {
+	year 2014
+	linkout {ZENODO {} 13368 {} {}}
+	linkout {DOI {} 10.5281/zenodo.13368 {} {}}
+	type GEN
+	publisher ZENODO
+	day 24
+	title {cdk: CDK Release 1.5.9}
+	status ok
+	month 12
+	author {Willighagen Egon E {Egon Willighagen}}
+	author {Spjuth Ola O {Ola Spjuth}}
+	author {Rafeli {} {} rafeli}
+	author {Köhler Uli U {Uli Köhler}}
+	author {LuisF {} F LuisFF}
+	author {Stueker Oliver O {Oliver Stueker}}
+	author {Szisz Daniel D {Daniel Szisz}}
+	author {Stephan Ralf R {Ralf Stephan}}
+	author {Torrance Gilleain G {gilleain torrance}}
+	author {Wei Yap YC {Yap Chun Wei}}
+	author {Guha Rajarshi R {Rajarshi Guha}}
+	author {Ngn {} {} ngn}
+	author {KlasJoensson {} {} KlasJoensson}
+	author {Sambitgaan {} {} sambitgaan}
+	author {Mbv31602 {} {} mbv31602}
+	author {Onkarshinde {} {} onkarshinde}
+	author {Berg Arvid A {Arvid Berg}}
+	author {Alvarsson Jonathan J {Jonathan Alvarsson}}
+	author {AndyHowlettGitHub {} {} AndyHowlettGitHub}
+	author {Tomas-Pluskal {} {} tomas-pluskal}
+	author {Beisken Stephan S {Stephan Beisken}}
+	author {Williamson Mark M {Mark Williamson}}
+	author {May John J {John May}}
+	author {Mäsak Carl C {Carl Mäsak}}
+	author {PeterOdeus {} {} PeterOdeus}
+	author {Aclarkxyz {} {} aclarkxyz}
+	author {Harmon Cyrus C {Cyrus Harmon}}
+	author {Coder {} X CoderX}
+	author {Katsubo Dmitry D {Dmitry Katsubo}}
+	author {Rahman Syed SA {Syed Asad Rahman}}
+	formatted_url {ZENODO http://zenodo.org/record/13368}
+	formatted_url {DOI http://dx.doi.org/10.5281/zenodo.13368}
+	plugin zenodo
+}
