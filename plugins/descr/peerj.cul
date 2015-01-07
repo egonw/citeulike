@@ -1,0 +1,38 @@
+plugin {
+	version {1}
+	name {peerj}
+	url {http://peerj.com/}
+	blurb {}
+	author {Egon Willighagen}
+	email {egon.willighagen@gmail.com}
+	language {python}
+	regexp {https://peerj.com/articles/}
+}
+
+format_linkout PEERJ {
+	return [list "PeerJ" "https://peerj.com/articles/${ckey_1}/"]
+}
+
+test {https://peerj.com/articles/198/} {
+	linkout {DOI {} 10.7717/peerj.198 {} {}}
+	linkout {PEERJ {} 198 {} {}}
+	year 2013
+	month 10
+	day 31
+	type JOUR
+	plugin_version 1
+	publisher {PeerJ Inc.}
+	title {Predicting pKa for proteins using COSMO-RS}
+	author {Andersson Martin MP {Martin Peter Andersson}}
+	author {Jensen Jan JH {Jan Halborg Jensen}}
+	author {{Susan Louise Svane Stipp} {} {} {Susan Louise Svane Stipp}}
+	formatted_url {DOI http://dx.doi.org/10.7717/peerj.198}
+	formatted_url {PeerJ https://peerj.com/articles/198/}
+	abstract {We have used the COSMO-RS implicit solvation method to calculate the equilibrium constants, pKa, for deprotonation of the acidic residues of the ovomucoid inhibitor protein, OMTKY3. The root mean square error for comparison with experimental data is only 0.5 pH units and the maximum error 0.8 pH units. The results show that the accuracy of pKa prediction using COSMO-RS is as good for large biomolecules as it is for smaller inorganic and organic acids and that the method compares very well to previous pKa predictions of the OMTKY3 protein using Quantum Mechanics/Molecular Mechanics. Our approach works well for systems of about 1000 atoms or less, which makes it useful for small proteins as well as for investigating portions of larger proteins such as active sites in enzymes.}
+	plugin peerj
+	volume 1
+	issn 2167-8359
+	start_page e198
+	journal {PeerJ}
+	status ok
+}
