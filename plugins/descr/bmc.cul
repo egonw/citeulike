@@ -17,13 +17,13 @@ plugin {
 	blurb {Experimental support}
 
 	# Your name
-	author {Alf Eaton}
+	author {Egon Willighagen}
 
 	# Your email address
-	email {alf@hubmed.org}
+	email {egonw@users.sf.net}
 
 	# Language you wrote the plugin in
-	language {perl}
+	language {python}
 
 	# Regular expression to match URLs that the plugin is
 	# *potentially* interested in. Any URL matching this regexp
@@ -36,10 +36,6 @@ plugin {
 
 	regexp {^http://((www\.)?(biomedcentral|genomebiology|physmathcentral).com/[0-9A-Z.-]+/)|((www.actavetscand.com|www.aidsrestherapy.com|www.almob.org|alzres.com|www.ann-clinmicrob.com|www.annals-general-psychiatry.com|www.asir-journal.com|arthritis-research.com|www.apfmj.com|www.anzhealthpolicy.com|www.aejournal.net|www.behavioralandbrainfunctions.com|www.biodatamining.org|www.biology-direct.com|www.biomedical-engineering-online.com|www.bpsmedicine.com|www.biotechnologyforbiofuels.com|breast-cancer-research.com|www.cancerci.com|www.cbmjournal.com|www.cardiab.com|www.cardiovascularultrasound.com|www.biosignaling.com|www.celldiv.com|www.cerebrospinalfluidresearch.com|www.journal.chemistrycentral.com|www.capmh.com|www.cmjournal.org|www.chiroandosteo.com|www.clinicalmolecularallergy.com|www.comparative-hepatology.com|www.conflictandhealth.com|www.resource-allocation.com|www.coughjournal.com|ccforum.com|www.dmsjournal.com|www.diagnosticpathology.org|www.dynamic-med.com|www.ete-online.com|www.ehjournal.net|www.epi-perspectives.com|www.epigeneticsandchromatin.com|www.etsmjournal.com|www.fibrogenesis.com|www.frontiersinzoology.com|www.gvt-journal.com|www.gsejournal.org|genomebiology.com|genomemedicine.com|www.geochemicaltransactions.com|www.globalizationandhealth.com|www.gutpathogens.com|www.harmreductionjournal.com|www.head-face-med.com|www.headandneckoncology.org|www.hqlo.com|www.health-policy-systems.com|www.hccpjournal.com|www.human-resources-health.com|www.immunityageing.com|www.immunome-research.com|www.implementationscience.com|www.infectagentscancer.com|www.intarchmed.com|www.internationalbreastfeedingjournal.com|www.equityhealthj.com|www.ijbnpa.org|www.ij-healthgeographics.com|www.ijmhs.com|www.issoonline.com|www.ijponline.net|www.jangiogenesis.com|www.jbioleng.org|jbiol.com|www.jbiomedsci.com|www.jbiomedsem.com|www.jbppni.com|www.cardiothoracicsurgery.org|jcmr-online.com|www.jcheminf.com|www.jcircadianrhythms.com|www.ethnobiomed.com|www.jeccr.com|www.jfootankleres.com|www.jhoonline.org|www.jibtherapies.com|www.journal-inflammation.com|www.jmolecularsignaling.com|www.jnanobiotechnology.com|www.jnrbm.com|www.jneuroengrehab.com|www.jneuroinflammation.com|www.occup-med.com|www.josr-online.com|www.ovarianresearch.com|www.jsystchem.com|www.jiasociety.org|www.jissn.com|www.translational-medicine.com|www.traumamanagement.org|www.lipidworld.com|www.malariajournal.com|www.microbialcellfactories.com|www.mobilednajournal.com|www.molecularautism.com|www.molecularbrain.com|www.molecular-cancer.com|www.molecularcytogenetics.org|www.molecularneurodegeneration.com|www.molecularpain.com|www.neuraldevelopment.com|www.nonlinearbiomedphys.com|www.nutritionandmetabolism.com|www.nutritionj.com|www.ojrd.com|www.om-pc.com|www.parasitesandvectors.com|www.particleandfibretoxicology.com|www.pathogeneticsjournal.com|www.pssjournal.com|www.ped-rheum.com|www.peh-med.com|www.plantmethods.com|www.physmathcentral.com/pmcbiophys|www.pophealthmetrics.com|www.proteomesci.com|www.ro-journal.com|www.rbej.com|www.reproductive-health-journal.com|respiratory-research.com|www.retrovirology.com|www.salinesystems.org|www.sjtrem.com|www.scoliosisjournal.com|www.silencejournal.com|www.scfbm.org|www.smarttjournal.com|stemcellres.com|www.substanceabusepolicy.com|www.tbiomed.com|www.thrombosisjournal.com|www.thyroidresearchjournal.com|www.tobaccoinduceddiseases.com|www.trialsjournal.com|www.virologyj.com|www.wjes.org|www.wjso.com)/content)}
 }
-
-
-
-
 
 #
 # TESTS
@@ -65,18 +61,55 @@ test {http://www.biomedcentral.com/1746-6148/1/5/} {
 	issue 1
 	title {The CD11a partner in Sus scrofa lymphocyte function-associated antigen-1 (LFA-1): mRNA cloning, structure analysis and comparison with mammalian homologues}
 	journal {BMC Veterinary Research}
-	url {http://www.biomedcentral.com/1746-6148/1/5}
-	author {Bergh Philippe PV {Philippe Vanden Bergh}}
+	url {http://dx.doi.org/10.1186/1746-6148-1-5}
+	author {{Vanden Bergh} Philippe PGAC {Philippe GAC Vanden Bergh}}
 	author {Fett Thomas T {Thomas Fett}}
-	author {Zecchinon Laurent L {Laurent Zecchinon}}
-	author {Thomas Anne A {Anne Thomas}}
-	author {Desmecht Daniel D {Daniel Desmecht}}
+	author {Zecchinon Laurent LLM {Laurent LM Zecchinon}}
+	author {Thomas Anne AVT {Anne VT Thomas}}
+	author {Desmecht Daniel DJM {Daniel JM Desmecht}}
 	start_page  5
 	volume 1
 	doi    {10.1186/1746-6148-1-5}
 	issn   1746-6148
 	status ok
+	day 10
+	publisher {BioMed Central Ltd}
+	month 10
 	abstract {BACKGROUND:Lymphocyte function-associated antigen-1 (LFA-1, CD11a/CD18, alphaLbeta2), the most abundant and widely expressed beta2-integrin, is required for many cellular adhesive interactions during the immune response. Many studies have shown that LFA-1 is centrally involved in the pathogenesis of several diseases caused by Repeats-in-toxin (RTX) -producing bacteria.RESULTS:The porcine-LFA-1 CD11a (alpha) subunit coding sequence was cloned, sequenced and compared with the available mammalian homologues in this study. Despite some focal differences, it shares all the main characteristics of these latter. Interestingly, as in sheep and humans, an allelic variant with a triplet insertion resulting in an additional Gln-744 was consistently identified, which suggests an allelic polymorphism that might be biologically relevant.CONCLUSION:Together with the pig CD18-encoding cDNA, which has been available for a long time, the sequence data provided here will allow the successful expression of porcine CD11a, thus giving the first opportunity to express the Sus scrofa beta2-integrin LFA-1 in vitro as a tool to examine the specificities of inflammation in the porcine species.}
 }
 
+test {http://www.biomedcentral.com/1471-2229/14/370/abstract} {
+	volume 14
+	formatted_url {Pubmed http://view.ncbi.nlm.nih.gov/pubmed/25524329}
+	formatted_url {Hubmed http://www.hubmed.org/display.cgi?uids=25524329}
+	formatted_url {DOI http://dx.doi.org/10.1186/s12870-014-0370-8}
+	linkout {PMID 25524329 {} {} {}}
+	linkout {DOI {} 10.1186/s12870-014-0370-8 {} {}}
+	year 2014
+	start_page 370
+	type JOUR
+	url http://dx.doi.org/10.1186/s12870-014-0370-8
+	plugin_version 1
+	doi 10.1186/s12870-014-0370-8
+	day 19
+	publisher {BioMed Central Ltd}
+	issue 1
+	title {Transcriptomic analysis of the late stages of grapevine (Vitis vinifera cv. Cabernet Sauvignon) berry ripening reveals significant induction of ethylene signaling and flavor pathways in the skin}
+	journal {BMC Plant Biology}
+	status ok
+	abstract {Grapevine berry, a nonclimacteric fruit, goes through three developmental stages, the last one is the ripening stage, when the berry changes color and dramatically increases in sugar. Flavors derived from terpenoid and fatty acid metabolism develop at the very end of this ripening stage. Whole-genome microarray analysis was used to assess the transcriptomic response of pulp and skin of Cabernet Sauvignon berries in the late stages of ripening between 22 and 37 °Brix.}
+	issn 1471-2229
+	author {Cramer Grant GR {Grant R Cramer}}
+	author {Ghan Ryan R {Ryan Ghan}}
+	author {Schlauch Karen KA {Karen A Schlauch}}
+	author {Tillett Richard RL {Richard L Tillett}}
+	author {Heymann Hildegarde H {Hildegarde Heymann}}
+	author {Ferrarini Alberto A {Alberto Ferrarini}}
+	author {Delledonne Massimo M {Massimo Delledonne}}
+	author {Zenoni Sara S {Sara Zenoni}}
+	author {Fasoli Marianna M {Marianna Fasoli}}
+	author {Pezzotti Mario M {Mario Pezzotti}}
+	month 12
+	plugin bmc
+}
 
