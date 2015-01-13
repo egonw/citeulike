@@ -1,6 +1,8 @@
 #
 # Copyright (c) 2005 Richard Cameron, CiteULike.org
 # Copyright (c) 2008 Aidan Heerdegen, CiteULike.org
+# Copyright (c) 2014 Egon Willighagen <egonw@users.sf.net>
+#
 # All rights reserved.
 #
 # This code is derived from software contributed to CiteULike.org
@@ -52,16 +54,16 @@ plugin {
 
 	# Any additional information which needs to be displayed to the user.
 	# E.g. "Experimental support"
-	blurb {}
+	blurb {Replacement of the older Perl plugin by Aidan Heerdegen.}
 
 	# Your name
-	author {Aidan Heerdegen}
+	author {Egon Willighagen}
 
 	# Your email address
-	email {aidan.heerdegen@gmail.com}
+	email {egon.willighagen@gmail.com}
 
 	# Language you wrote the plugin in
-	language {perl}
+	language {python}
 
 	# Regular expression to match URLs that the plugin is
 	# *potentially* interested in. Any URL matching this regexp
@@ -79,10 +81,12 @@ plugin {
 	# regexp if that applies to you.
 	#
 	# We'll accept URLs from iucr and DOIs from 10.1107
-	regexp {(scripts.iucr.org/cgi-bin/paper?([0-9a-zA-Z]+))|(dx.doi.org/10.1107/[0-9a-zA-Z]+)}
+	regexp {(scripts.iucr.org/cgi-bin/paper?([0-9a-zA-Z]+))|(dx.doi.org/10.1107/[0-9a-zA-Z]+)|(journals.iucr.org)}
 }
 
 # http://scripts.iucr.org/cgi-bin/paper?S002188980302209X
+# http://journals.iucr.org/j/issues/2009/04/00/kk5039/index.html
+# http://dx.doi.org/10.1107/S002188980302209X
 
 #
 # Linkout formatting
@@ -134,19 +138,23 @@ test {http://scripts.iucr.org/cgi-bin/paper?S002188980302209X} {
     start_page 1440
     end_page 1447
     issue 6 
-    title {Diffuse neutron scattering in benzil, C${\sb 14$D${\sb 10}$O${\sb 2}$, using the time-of-flight Laue technique}}
+    title {Diffuse neutron scattering in benzil, C14D10O2, using the time-of-flight Laue technique}
     journal {Journal of Applied Crystallography}
     url http://dx.doi.org/10.1107/S002188980302209X
     doi 10.1107/S002188980302209X
     journal {Journal of Applied Crystallography}
     cite {Welberry:he5274}
-    author {Welberry {} TR {T. R. Welberry}}
-    author {Goossens {} DJ {D. J. Goossens}} 
-    author {David {} WIF {W. I. F. David}} 
-    author {Gutmann {} MJ {M. J. Gutmann}} 
-    author {Bull {} MJ {M. J. Bull}} 
-    author {Heerdegen {} AP {A. P. Heerdegen}}
-    month Dec
+    author {Welberry {} TR {Welberry, T.R.}}
+    author {Goossens {} DJ {Goossens, D.J.}}
+    author {David {} WIF {David, W.I.F.}}
+    author {Gutmann {} MJ {Gutmann, M.J.}}
+    author {Bull {} MJ {Bull, M.J.}}
+    author {Heerdegen {} AP {Heerdegen, A.P.}}
+    month 12
+    day 01
+    publisher {International Union of Crystallography}
+    issn 0021-8898
+    abstract {Diffuse neutron scattering data have been recorded for the molecular crystal d-benzil, C14D10O2, using the time-of-flight Laue technique on the SXD and PRISMA instruments at ISIS. Using SXD it was possible to access a large fraction of the total three-dimensional reciprocal space out to a Q value of 15 Å-1, using only four individual exposures and by making use of the Laue symmetry of the crystal. By segregating the scattered data according to the incident neutron energy used, patterns were obtained from those neutrons in the range of 20 meV to 150 meV, which showed little sign of inelastic effects and so could be compared with previously analysed X-ray data. For neutron energies of <20 meV, interesting inelastic effects were observed, which have been used to obtain an estimate for the energy of phonons associated with a vibrational mode in which an intramolecular mode couples to a low-energy shearing motion of the hydrogen-bonded network linking neighbouring molecules. The estimated value of 8.95 cm-1 (1.11 meV) for this mode is less than the lowest energy mode reported from spectroscopic measurements for hydrogenous benzil (16 cm-1). A model previously derived from analysis of X-ray data observed over a limited range of Q has been used to calculate neutron patterns over the full Q range. Comparison with the present neutron data has shown that while the model gives a good description of the form of the diffuse patterns, the magnitudes of the atomic displacements are underestimated by a factor of 2.25.}
     status ok
 }
 
@@ -163,7 +171,7 @@ test {http://dx.doi.org/10.1107/S002188980302209X} {
     start_page 1440
     end_page 1447
     issue 6 
-    title {Diffuse neutron scattering in benzil, C${\sb 14$D${\sb 10}$O${\sb 2}$, using the time-of-flight Laue technique}}
+    title {Diffuse neutron scattering in benzil, C14D10O2, using the time-of-flight Laue technique}
     journal {Journal of Applied Crystallography}
     url http://dx.doi.org/10.1107/S002188980302209X
     doi 10.1107/S002188980302209X
@@ -175,7 +183,9 @@ test {http://dx.doi.org/10.1107/S002188980302209X} {
     author {Gutmann {} MJ {M. J. Gutmann}} 
     author {Bull {} MJ {M. J. Bull}} 
     author {Heerdegen {} AP {A. P. Heerdegen}}
-    month Dec
+    month 12
+    day 15
+    issn 0021-8898
     status ok
 }
 
@@ -196,14 +206,18 @@ test {http://scripts.iucr.org/cgi-bin/paper?S0108767306030091} {
     doi 10.1107/S0108767306030091
     issue 6
     title {Discrete tomography of planar model sets}
-    journal {Acta Crystallographica Section A}
+    journal {Acta Crystallographica Section A: Foundations of Crystallography}
     cite Baake:sh5047
-    author {Baake Michael M {Michael Baake}}
-    author {Gritzmann Peter P {Peter Gritzmann}}
-    author {Huck Christian C {Christian Huck}}
-    author {Langfeld Barbara B {Barbara Langfeld}}
-    author {Lord Katja K {Katja Lord}}
-    month Nov
+    author {Baake {} M {Baake, M.}}
+    author {Gritzmann {} P {Gritzmann, P.}}
+    author {Huck {} C {Huck, C.}}
+    author {Langfeld {} B {Langfeld, B.}}
+    author {Lord {} K {Lord, K.}}
+    month 11
+    day 01
+    publisher {International Union of Crystallography}
+    issn 0108-7673
+    abstract {Discrete tomography is a well-established method to investigate finite point sets, in particular finite subsets of periodic systems. Here, we start to develop an efficient approach for the treatment of finite subsets of mathematical quasicrystals. To this end, the class of cyclotomic model sets is introduced, and the corresponding consistency, reconstruction and uniqueness problems of the discrete tomography of these sets are discussed.}
     status ok
 }
 
@@ -223,11 +237,14 @@ test {http://scripts.iucr.org/cgi-bin/paper?S0567740868001718} {
     issue  1
     title  {On the rigid-body motion of molecules in crystals}
     url http://dx.doi.org/10.1107/S0567740868001718
-    journal  {Acta Crystallographica Section B}
+    journal  {Acta Crystallographica Section B: Structural Crystallography and Crystal Chemistry}
     cite  Schomaker:a06012
-    author {Schomaker {} V {V. Schomaker}}
-    author {Trueblood {} KN {K. N. Trueblood}}
-    month  Jan
+    author {Schomaker {} V {Schomaker, V.}} 
+    author {Trueblood {} KN {Trueblood, K.N.}}
+    month  01
+    day 23
+    publisher {International Union of Crystallography}
+    issn 0567-7408
     status ok
 }
 
@@ -249,8 +266,12 @@ test {http://scripts.iucr.org/cgi-bin/paper?S0365110X48000296} {
     title {Bond-length variations in aromatic systems}
     journal {Acta Crystallographica}
     cite Robertson:a00029
-    author {Robertson {} JM {J. M. Robertson}}
-    month Jul
+    author {Robertson {} JM {Robertson, J.M.}}
+    month 07
+    day 02
+    publisher {International Union of Crystallography}
+    issn 0365-110X
+    abstract {Carbon–carbon bond-length measurements have been made, by the method of X-ray crystal analysis, on pyrene, C16H10, 1:2:5:6-dibenzanthracene, C22H14, coronene, C24H12, and 1:12 benzperylene, C22H12. In all these cases definite evidence has been obtained that the bond lengths vary to a small extent in different parts of the molecules. The variation in many cases is not much greater than the possible experimental error, and so it would not be reasonable at this stage to base any very detailed calculations on these findings. In each case the result of the measurements has been compared with that obtained by taking a linear sum of all the Kekulé structures and deriving the bond lengths by means of the empirical Pauling-Brockway curve. It is found that this simple treatment gives a surprisingly good qualitative account of the results, especially for coronene and pyrene. The high symmetry of these molecules may simplify the problem, otherwise it is difficult to understand how a treatment which takes no account of the very numerous first and second excited structures can give even this measure of agreement. The chemical properties of these hydrocarbons are discussed in relation to the bond-length data, but no very precise correlation can be made. Application of the Fries rule, which states that structures with benzenoid rings are more important than structures with quininoid rings, tends to improve the agreements in the case of pyrene.}
     status ok
 }
 
@@ -270,18 +291,22 @@ test {http://scripts.iucr.org/cgi-bin/paper?S090744490705024X} {
     plugin_version 1
     doi 10.1107/S090744490705024X
     issue 1
-    title {Iterative model building, structure refinement and density modification with the {\it PHENIX AutoBuild wizard}}
-    journal {Acta Crystallographica Section D}
+    title {Iterative model building, structure refinement and density modification with the PHENIX AutoBuild wizard}
+    journal {Acta Crystallographica Section D: Biological Crystallography}
     cite Terwilliger:ba5109
-    author {Terwilliger Thomas TC {Thomas C. Terwilliger}}
-    author {Ralf {} {} {Ralf W. Grosse Kunstleve}}
-    author {Afonine Pavel PV {Pavel V. Afonine}}
-    author {Moriarty Nigel NW {Nigel W. Moriarty}}
-    author {Zwart Peter PH {Peter H. Zwart}}
-    author {Hung Li LW {Li Wei Hung}}
-    author {Read Randy RJ {Randy J. Read}}
-    author {Adams Paul PD {Paul D. Adams}}
-    month Jan
+    author {Terwilliger {} TC {Terwilliger, T.C.}}
+    author {Grosse-Kunstleve {} RW {Grosse-Kunstleve, R.W.}}
+    author {Afonine {} PV {Afonine, P.V.}}
+    author {Moriarty {} NW {Moriarty, N.W.}}
+    author {Zwart {} PH {Zwart, P.H.}}
+    author {Hung {} LW {Hung, L.-W.}}
+    author {Read {} RJ {Read, R.J.}}
+    author {Adams {} PD {Adams, P.D.}}
+    month 01
+    day 01
+    publisher {International Union of Crystallography}
+    issn 0907-4449
+    abstract {The PHENIX AutoBuild wizard is a highly automated tool for iterative model building, structure refinement and density modification using RESOLVE model building, RESOLVE statistical density modification and phenix.refine structure refinement. Recent advances in the AutoBuild wizard and phenix.refine include automated detection and application of NCS from models as they are built, extensive model-completion algorithms and automated solvent-molecule picking. Model-completion algorithms in the AutoBuild wizard include loop building, crossovers between chains in different models of a structure and side-chain optimization. The AutoBuild wizard has been applied to a set of 48 structures at resolutions ranging from 1.1 to 3.2 Å, resulting in a mean R factor of 0.24 and a mean free R factor of 0.29. The R factor of the final model is dependent on the quality of the starting electron density and is relatively independent of resolution.}
     status ok
 }
 
@@ -301,13 +326,17 @@ test {http://scripts.iucr.org/cgi-bin/paper?S1600536801007346} {
     plugin_version 1
     doi 10.1107/S1600536801007346
     issue 7
-    title {A powder diffraction study of Sr${\sb 3$Al${\sb 10}$SiO${\sb 20}$}}
-    journal {Acta Crystallographica Section E}
+    title {A powder diffraction study of Sr3Al10SiO20}
+    journal {Acta Crystallographica Section E: Structure Reports Online}
     cite Kubota:br6017
-    author {Kubota Shunichi S {Shunichi Kubota}}
-    author {Yamane Hisanori H {Hisanori Yamane}}
-    author {Shimada Masahiko M {Masahiko Shimada}}
-    month Jul
+    author {Kubota {} S {Kubota, S.}}
+    author {Yamane {} H {Yamane, H.}}
+    author {Shimada {} M {Shimada, M.}}
+    month 07
+    day 01
+    publisher {International Union of Crystallography}
+    issn 1600-5368
+    abstract {In tristrontium decaaluminium silicon icosaoxide, Sr3Al10SiO20, (Al,Si)O4 tetrahedra and AlO6 octahedra form a framework. Sr atoms occupy two large cavities of the framework. Sr2 and Al4 are on sites of 2/m symmetry, Al3 is on a twofold axis and Sr1 is on a mirror plane. The remaining Al and Si atoms are disordered over tetrahedral sites on general positions.}
     status ok
 }
 
@@ -326,15 +355,19 @@ test {http://scripts.iucr.org/cgi-bin/paper?S1744309105017690} {
     url http://dx.doi.org/10.1107/S1744309105017690
     doi 10.1107/S1744309105017690
    issue 7
-    title {The structure at 1.7 {\AA{} resolution of the protein product of the At2g17340 gene from {\it Arabidopsis thaliana}}}
-    journal {Acta Crystallographica Section F}
+    title {The structure at 1.7 Å resolution of the protein product of the At2g17340 gene from Arabidopsis thaliana}
+    journal {Acta Crystallographica Section F: Structural Biology and Crystallization Communications}
     cite Bitto:gx5063
-    author {Bitto Eduard E {Eduard Bitto}}
-    author {Bingman Craig CA {Craig A. Bingman}}
-    author {Allard Simon STM {Simon T. M. Allard}}
-    author {Wesenberg Gary GE {Gary E. Wesenberg}}
-    author {Phillips George GN {George N. Phillips, Jr}}
-    month Jul
+    author {Bitto {} E {Bitto, E.}}
+    author {Bingman {} CA {Bingman, C.A.}}
+    author {Allard {} STM {Allard, S.T.M.}}
+    author {Wesenberg {} GE {Wesenberg, G.E.}}
+    author {Phillips {} GN {Phillips, G.N.}}
+    month 07
+    day 01
+    publisher {International Union of Crystallography}
+    abstract {The crystal structure of the At2g17340 protein from A. thaliana was determined by the multiple-wavelength anomalous diffraction method and was refined to an R factor of 16.9% (Rfree = 22.1%) at 1.7 Å resolution. At2g17340 is a member of the Pfam01937.11 protein family and its structure provides the first insight into the structural organization of this family. A number of fully and highly conserved residues defined by multiple sequence alignment of members of the Pfam01937.11 family were mapped onto the structure of At2g17340. The fully conserved residues are involved in the coordination of a metal ion and in the stabilization of loops surrounding the metal site. Several additional highly conserved residues also map into the vicinity of the metal-binding site, while others are clearly involved in stabilizing the hydrophobic core of the protein. The structure of At2g17340 represents a new fold in protein conformational space.}
+    issn 1744-3091
     status ok
 }
 
@@ -356,17 +389,21 @@ test {http://scripts.iucr.org/cgi-bin/paper?S0909049595009769} {
     title {Microfocus X-ray Diffraction of Spherulites of Poly-3-hydroxybutyrate}
     journal {Journal of Synchrotron Radiation}
     cite Mahendrasingam:hi0025
-    author {Mahendrasingam {} A {A. Mahendrasingam}}
-    author {Martin {} C {C. Martin}}
-    author {Fuller {} W {W. Fuller}}
-    author {Blundell {} DJ {D. J. Blundell}}
-    author {Mackerron {} D {D. MacKerron}}
-    author {Rule {} RJ {R. J. Rule}}
-    author {Oldman {} RJ {R. J. Oldman}}
-    author {Liggat {} J {J. Liggat}} 
-    author {Riekel {} C {C. Riekel}} 
-    author {{Engstr\"om} {} P {P. Engstr\"om}}
-    month Nov
+    author {Mahendrasingam {} A {Mahendrasingam, A.}}
+    author {Martin {} C {Martin, C.}}     
+    author {Fuller {} W {Fuller, W.}}
+    author {Blundell {} DJ {Blundell, D.J.}}
+    author {MacKerron {} D {MacKerron, D.}}
+    author {Rule {} RJ {Rule, R.J.}}
+    author {Oldman {} RJ {Oldman, R.J.}}
+    author {Liggat {} J {Liggat, J.}} 
+    author {Riekel {} C {Riekel, C.}}
+    author {Engström {} P {Engström, P.}}
+    month 11
+    issn 0909-0495
+    day 01
+    publisher {International Union of Crystallography}
+    abstract {The microfocus X-ray beamline at the European Synchrotron Radiation Facility has been used to investigate the variation in molecular orientation and crystallinity in spherulites of the organic polymer poly-3-hydroxybutyrate (PHB). This is the first report of the correlation of optical and X-ray measurements on spherulitic polymer films where X-ray diffraction patterns have been recorded and displayed continuously in real time while the specimen was tracked in steps of 10 μm across an incident X-ray beam with a diameter as small as 10 μm.}
     status ok
 }
 
@@ -385,12 +422,51 @@ test {http://scripts.iucr.org/cgi-bin/paper?S0108270107018471} {
     url http://dx.doi.org/10.1107/S0108270107018471
     doi 10.1107/S0108270107018471
     issue 6
-    title {{\it trans-Dichloridotetra\-kis(3,5-dimethyl\-pyridine)copper(II)}}
-    journal {Acta Crystallographica Section C}
+    title {trans-Dichloridotetra­kis(3,5-dimethyl­pyridine)copper(II)}
+    journal {Acta Crystallographica Section C: Crystal Structure Communications}
     cite Martone:gz3084
-    author {Martone Daniel DP {Daniel P. Martone}} 
-    author {Maverick Andrew AW {Andrew W. Maverick}} 
-    author {Fronczek Frank FR {Frank R. Fronczek}}
-    month Jun
+    author {Martone {} DP {Martone, D.P.}}
+    author {Maverick {} AW {Maverick, A.W.}}
+    author {Fronczek {} FR {Fronczek, F.R.}}
+    month 06
+    issn 0108-2701
+    publisher {International Union of Crystallography}
+    day 15
+    abstract {The title compound, [CuCl2(C7H9N)4], lies on a site of crystallographic 42 (D4) symmetry in the space group P4/­nnc, and is isomorphous with the Ni and Co analogues. The Cu and Cl atoms thus lie on a fourfold axis, and the 3,5-­lutidine ligands lie on twofold axes. The Cu-Cl distance is 2.7649 (7) Å and the Cu-N distance is 2.0510 (12) Å. The space group of the Co analogue is revised from Pnnn to P4/­nnc.}
+    status ok
+}
+
+test {http://journals.iucr.org/j/issues/2009/04/00/kk5039/} {
+    volume 42
+    linkout {IUCR {} S0021889809016690 {} {}}
+    linkout {DOI {} 10.1107/S0021889809016690 {} {}}
+    year 2009
+    type JOUR
+    start_page 726
+    end_page 729
+    url http://dx.doi.org/10.1107/S0021889809016690
+    doi 10.1107/S0021889809016690
+    day 01
+    publisher {International Union of Crystallography}
+    issue 4
+    title {Crystallography Open Database – an open-access collection of crystal structures}
+    journal {Journal of Applied Crystallography}
+    status ok
+    abstract {The Crystallography Open Database (COD), which is a project that aims to gather all available inorganic, metal–organic and small organic molecule structural data in one database, is described. The database adopts an open-access model. The COD currently contains ∼80 000 entries in crystallographic information file format, with nearly full coverage of the International Union of Crystallography publications, and is growing in size and quality.}
+    author {Gražulis {} S {Gražulis, S.}}
+    author {Chateigner {} D {Chateigner, D.}}
+    author {Downs {} RT {Downs, R.T.}}
+    author {Yokochi {} AFT {Yokochi, A.F.T.}}
+    author {Quirós {} M {Quirós, M.}}
+    author {Lutterotti {} L {Lutterotti, L.}}
+    author {Manakova {} E {Manakova, E.}}
+    author {Butkus {} J {Butkus, J.}}
+    author {Moeck {} P {Moeck, P.}}
+    author {{Le Bail} {} A {Le Bail, A.}}
+    month 08
+    plugin iucr
+    issn 0021-8898
+    formatted_url {IUCR http://scripts.iucr.org/cgi-bin/paper?S0021889809016690}
+    formatted_url {DOI http://dx.doi.org/10.1107/S0021889809016690}
     status ok
 }
