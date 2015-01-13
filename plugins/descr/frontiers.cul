@@ -35,3 +35,25 @@ test {http://journal.frontiersin.org/Journal/10.3389/fnbot.2013.00021} {
 	journal {Frontiers in Neurorobotics}
 	status ok
 }
+
+test {http://journal.frontiersin.org/Journal/10.3389/fendo.2014.00235/abstract} {
+	volume 5
+	linkout {DOI {} 10.3389/fendo.2014.00235 {} {}}
+	linkout {FRONT {} 10.3389/fendo.2014.00235 {} {}}
+	year 2015
+	type JOUR
+	start_page 235
+	plugin_version 1
+	day 09
+	publisher Frontiers
+	title {O-GlcNAcylation and inflammation: a vast territory to explore}
+	journal {Frontiers in Endocrinology}
+	status ok
+	abstract {O-GlcNAcylation is a reversible post-translational modification that regulates the activities of cytosolic and nuclear proteins according to glucose availability. This modification appears to participate in several hyperglycemia-associated complications. An important feature of metabolic diseases such as diabetes and obesity is the presence of a low-grade chronic inflammation that causes numerous complications. Hyperglycemia associated with the metabolic syndrome is known to promote inflammatory processes through different mechanisms including oxidative stress and abnormally elevated protein O-GlcNAcylation. However, the role of O-GlcNAcylation on inflammation remains contradictory. O-GlcNAcylation associated with hyperglycemia has been shown to increase NFκB transcriptional activity through different mechanisms. This could contribute in inflammation-associated diabetic complications. However, in other conditions such as acute vascular injury, O-GlcNAc also exerts anti-inflammatory effects via inhibition of the NFκB pathway, suggesting a complex regulation of inflammation by O-GlcNAc. Moreover, whereas macrophages and monocytes exposed to high glucose for a long term period developed a pro-inflammatory phenotype, the impact of O-GlcNAcylation in these cells remains unclear. A future challenge will be to clearly establish the role of O-GlcNAcylation in pro- and anti-inflammatory functions in macrophages.}
+	issn 1664-2392
+	author {Baudoin Léa L {Baudoin, Léa}}
+	author {Issad Tarik T {ISSAD, Tarik}}
+	month 01
+	formatted_url {DOI http://dx.doi.org/10.3389/fendo.2014.00235}
+	formatted_url {Frontiers http://journal.frontiersin.org/Journal/10.3389/fendo.2014.00235}
+}
