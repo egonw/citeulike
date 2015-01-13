@@ -1,4 +1,4 @@
-plugin {
+﻿plugin {
 	version {1}
 	name {scientificdata}
 	url {http://www.nature.com/sdata/}
@@ -33,4 +33,21 @@ test {http://www.nature.com/articles/sdata201441} {
 	issn 2052-4463
 	journal {Scientific Data}
 	status ok
+}
+
+test {http://www.nature.com/articles/sdata201449} {
+	volume 1
+	linkout {DOI {} 10.1038/sdata.2014.49 {} {}}
+	linkout {SCIDAT {} 201449 {} {}}
+	year 2014
+	type JOUR
+	publisher {Nature Publishing Group}
+	day 09
+	title {An open science resource for establishing reliability and reproducibility in functional connectomics}
+	journal {Scientific Data}
+	status ok
+	issn 2052-4463
+	month 12
+	formatted_url {DOI http://dx.doi.org/10.1038/sdata.2014.49}
+	formatted_url {{Scientific Data} http://www.nature.com/articles/sdata201449}
 }
