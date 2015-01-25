@@ -16,8 +16,8 @@ test {http://elife.elifesciences.org/content/1/e00051} {
 	linkout {DOI {} 10.7554/eLife.00051 {} {}}
 	formatted_url {DOI http://dx.doi.org/10.7554/eLife.00051}
 	year 2012
-	month 01
-	day 01
+	month 12
+	day 13
 	doi 10.7554/eLife.00051
 	volume 1
 	publisher {eLife Sciences Publications Limited}
