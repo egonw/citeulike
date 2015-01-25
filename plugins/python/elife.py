@@ -67,7 +67,7 @@ for f in key_map.keys():
 	v = v.strip()
 	print "%s\t%s"  % (f,v)
 
-authors = metaheaders.get_multi_item("DC.Contributor")
+authors = metaheaders.get_multi_item("citation_author")
 if authors:
 	for a in authors:
 		print "author\t%s" % a
