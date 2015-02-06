@@ -50,6 +50,10 @@ def fetch_record(url):
 		# It's definitely an old style one
 		return fetch_old_ris(hostname, doi)
 
+	# nasty workaround
+	if "journals.plos.org/ploscompbiol" in url:
+		hostname = "www.ploscompbiol.org"
+
 	(type, record) = fetch_new_ris(hostname, doi)
 	if re.search('\s*TY  - ', record):
 		return (type, record)
