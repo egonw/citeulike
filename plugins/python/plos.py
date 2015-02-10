@@ -54,6 +54,21 @@ def fetch_record(url):
 	if "journals.plos.org/ploscompbiol" in url:
 		hostname = "www.ploscompbiol.org"
 
+	if "journals.plos.org/plosbiology" in url:
+		hostname = "www.plosbiology.org"
+
+	if "journals.plos.org/plosmedicine" in url:
+		hostname = "www.plosmedicine.org"
+
+	if "journals.plos.org/plosgenetics" in url:
+		hostname = "www.plosgenetics.org"
+
+	if "journals.plos.org/plospathogens" in url:
+		hostname = "www.plospathogens.org"
+
+	if "journals.plos.org/plosntds" in url:
+		hostname = "www.plosntds.org"
+
 	(type, record) = fetch_new_ris(hostname, doi)
 	if re.search('\s*TY  - ', record):
 		return (type, record)
