@@ -24,8 +24,10 @@ import re, sys, urlparse, urllib2
 from cultools import urlparams, bail
 import socket
 import metaheaders
+import codecs
 
 socket.setdefaulttimeout(15)
+sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 
 #
 # Read URL from stdin and check it's OK

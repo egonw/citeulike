@@ -34,3 +34,22 @@ test {http://figshare.com/articles/Summary_of_the_Spring_2014_NSC_Database_Surve
 	abstract {The NanoSafety Cluster Database working group organized in Spring 2014 a survey for the community to summarize the current state of databases and including questions of a more technical nature. This survey is a first in a biannual continuous effort and attempt to collect, organise and share up-to-date information about NanoSafety related databases worldwide. For example, it included questions about application programming interfaces, database schema, supported input and output formats, etc. This document summarizes the responses we received before August 2014.}
 	plugin figshare
 }
+
+test {http://figshare.com/articles/CRAWDAD_wireless_network_data_citation_bibliography/1203646} {
+	year 2015
+	linkout {DOI {} 10.6084/m9.figshare.1203646 {} {}}
+	linkout {FIGSHR 1203646 CRAWDAD_wireless_network_data_citation_bibliography {} {}}
+	formatted_url {DOI http://dx.doi.org/10.6084/m9.figshare.1203646}
+	formatted_url {figshare http://figshare.com/articles/CRAWDAD_wireless_network_data_citation_bibliography/1203646}
+	type GEN
+	plugin_version 1
+	publisher figshare
+	day 02
+	title {CRAWDAD wireless network data citation bibliography}
+	status ok
+	abstract {This BibTeX file contains the corpus of papers that cite CRAWDAD wireless network datasets, as used in the paper:}
+	month 01
+	author {Henderson Tristan T {Tristan Henderson}}
+	author {Kotz David D {David Kotz}}
+	plugin figshare
+}
