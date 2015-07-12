@@ -76,7 +76,7 @@ test {http://www.ploscompbiol.org/article/info%3Adoi%2F10.1371%2Fjournal.pcbi.10
     url         {http://dx.plos.org/10.1371/journal.pcbi.1000087}
     linkout     {DOI {} 10.1371/journal.pcbi.1000087 {} {}}
     formatted_url   {DOI http://dx.doi.org/10.1371/journal.pcbi.1000087}
-    abstract    {Oscillatory activity plays a critical role in regulating biological processes at levels ranging from subcellular, cellular, and network to the whole organism, and often involves a large number of interacting elements. We shed light on this issue by introducing a novel approach called partial Granger causality to reliably reveal interaction patterns in multivariate data with exogenous inputs and latent variables in the frequency domain. The method is extensively tested with toy models, and successfully applied to experimental datasets, including (1) gene microarray data of HeLa cell cycle; (2) in vivo multi-electrode array (MEA) local field potentials (LFPs) recorded from the inferotemporal cortex of a sheep; and (3) in vivo LFPs recorded from distributed sites in the right hemisphere of a macaque monkey.}
+    abstract    {Oscillatory activity plays a critical role in regulating biological processes at levels ranging from subcellular, cellular, and network to the whole organism, and often involves a large number of interacting elements. We shed light on this issue by introducing a novel approach called partial Granger causality to reliably reveal interaction patterns in multivariate data with exogenous inputs and latent variables in the frequency domain. The method is extensively tested with toy models, and successfully applied to experimental datasets, including (1) gene microarray data of HeLa cell cycle; (2) in vivo multi-electrode array (MEA) local field potentials (LFPs) recorded from the inferotemporal cortex of a sheep; and (3) in vivo LFPs recorded from distributed sites in the right hemisphere of a macaque monkey. When predicting the structure of a network (a gene network, a protein network, a metabolic network or a neuronal network) based upon simultaneously recorded multi-variable temporal data, a major tool is either the Bayesian network or the Granger causality. We focused on the Granger causality, and it has become increasingly important in recent years because of the huge body of temporal data available in, for example, molecular biology (microarray gene data) and physiology (multi-electrode array recordings of multi-neurons). However, all methods of estimating the Granger causality tend to ignore latent variables, which are ubiquitous in experimental data. Here, we have developed a method that can eliminate the influence of latent variables in predicting the network structure. The method is then extended to the frequency domain. The ability of the method to eliminate the influence of latent variables is extensively verified in toy models and then applied to a gene circuit, a neuronal network, and a network of brain areas. Both in the time and frequency domains, our approach can be used to detect a network structure when multi-dimensional temporal data are available.}
     status      ok
 }
 
@@ -105,7 +105,7 @@ test {http://biology.plosjournals.org/perlserv/?request=get-document&doi=10.1371
 }
 
 
-test {http://medicine.plosjournals.org/perlserv/?request=get-document&doi=10.1371/journal.pmed.0020168} {
+test {http://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.0020168} {
     linkout         {DOI {} 10.1371/journal.pmed.0020168 {} {}}
     formatted_url   {DOI http://dx.doi.org/10.1371/journal.pmed.0020168}
     volume          {2}
@@ -139,14 +139,15 @@ test {http://www.plosgenetics.org/article/info:doi/10.1371/journal.pgen.0010005}
     month           {7}
     day             {25}
     title           {Evidence for Domesticated and Wild Populations of Saccharomyces cerevisiae}
-    journal         {PLoS Gen}
+    journal         {PLoS Genet}
     author          {Fay Justin JC {Fay, Justin C}}
     author          {Benavides Joseph JA {Benavides, Joseph A}}
     type            {JOUR}
-    url             {http://dx.plos.org/10.1371/journal.pgen.0010005}
+    url             {http://dx.doi.org/10.1371/journal.pgen.0010005}
+    doi             {10.1371/journal.pgen.0010005}
     publisher       {Public Library of Science}
     status          ok
-    abstract        {Saccharomyces cerevisiae is predominantly found in association with human activities, particularly the production of alcoholic beverages. S. paradoxus, the closest known relative of S. cerevisiae, is commonly found on exudates and bark of deciduous trees and in associated soils. This has lead to the idea that S. cerevisiae is a domesticated species, specialized for the fermentation of alcoholic beverages, and isolates of S. cerevisiae from other sources simply represent migrants from these fermentations. We have surveyed DNA sequence diversity at five loci in 81 strains of S. cerevisiae that were isolated from a variety of human and natural fermentations as well as sources unrelated to alcoholic beverage production, such as tree exudates and immunocompromised patients. Diversity within vineyard strains and within saké strains is low, consistent with their status as domesticated stocks. The oldest lineages and the majority of variation are found in strains from sources unrelated to wine production. We propose a model whereby two specialized breeds of S. cerevisiae have been created, one for the production of grape wine and one for the production of saké wine. We estimate that these two breeds have remained isolated from one another for thousands of years, consistent with the earliest archeological evidence for winemaking. We conclude that although there are clearly strains of S. cerevisiae specialized for the production of alcoholic beverages, these have been derived from natural populations unassociated with alcoholic beverage production, rather than the opposite.}
+    abstract        {Saccharomyces cerevisiae is predominantly found in association with human activities, particularly the production of alcoholic beverages. S. paradoxus, the closest known relative of S. cerevisiae, is commonly found on exudates and bark of deciduous trees and in associated soils. This has lead to the idea that S. cerevisiae is a domesticated species, specialized for the fermentation of alcoholic beverages, and isolates of S. cerevisiae from other sources simply represent migrants from these fermentations. We have surveyed DNA sequence diversity at five loci in 81 strains of S. cerevisiae that were isolated from a variety of human and natural fermentations as well as sources unrelated to alcoholic beverage production, such as tree exudates and immunocompromised patients. Diversity within vineyard strains and within saké strains is low, consistent with their status as domesticated stocks. The oldest lineages and the majority of variation are found in strains from sources unrelated to wine production. We propose a model whereby two specialized breeds of S. cerevisiae have been created, one for the production of grape wine and one for the production of saké wine. We estimate that these two breeds have remained isolated from one another for thousands of years, consistent with the earliest archeological evidence for winemaking. We conclude that although there are clearly strains of S. cerevisiae specialized for the production of alcoholic beverages, these have been derived from natural populations unassociated with alcoholic beverage production, rather than the opposite. The budding yeast, Saccharomyces cerevisiae, has been used to make bread, beer, and wine for thousands of years. To investigate the evolutionary history of this species, the authors examined DNA sequence variation from a large collection of yeast strains isolated from a variety of sources, including saké wine, grape wine, clinical samples, tree exudates, and fruit. The DNA sequence diversity among these strains shows that both saké and grape wine strains form two distinct groups that have remained isolated for a substantial period of time. The data suggest that S. cerevisiae consists of both “wild” and “domesticated” populations and that at least two independent domestication events lead to extant grape wine and saké wine strains.}
 }
 
 
@@ -173,9 +174,32 @@ test {http://www.ploscompbiol.org/article/info:doi/10.1371/journal.pcbi.0010061}
     abstract        {Quasispecies are clouds of genotypes that appear in a population at mutation–selection balance. This concept has recently attracted the attention of virologists, because many RNA viruses appear to generate high levels of genetic variation that may enhance the evolution of drug resistance and immune escape. The literature on these important evolutionary processes is, however, quite challenging. Here we use simple models to link mutation–selection balance theory to the most novel property of quasispecies: the error threshold—a mutation rate below which populations equilibrate in a traditional mutation–selection balance and above which the population experiences an error catastrophe, that is, the loss of the favored genotype through frequent deleterious mutations. These models show that a single fitness landscape may contain multiple, hierarchically organized error thresholds and that an error threshold is affected by the extent of back mutation and redundancy in the genotype-to-phenotype map. Importantly, an error threshold is distinct from an extinction threshold, which is the complete loss of the population through lethal mutations. Based on this framework, we argue that the lethal mutagenesis of a viral infection by mutation-inducing drugs is not a true error catastophe, but is an extinction catastrophe.}
 }
 
-
-
-
-
-
+test {http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0119248} {
+    linkout         {DOI {} 10.1371/journal.pone.0119248 {} {}}
+    formatted_url   {DOI http://dx.doi.org/10.1371/journal.pone.0119248}
+    volume          {10}
+    issue           {4}
+    start_page      {e0119248}
+    end_page        {}
+    year            {2015}
+    month           {4}
+    day             {29}
+    title           {A Higher Level Classification of All Living Organisms}
+    journal         {PLoS ONE}
+    author          {Ruggiero Michael MA {Ruggiero, Michael A.}}
+    author	    {Gordon Dennis DP {Gordon, Dennis P.}}
+    author	    {Orrell Thomas TM {Orrell, Thomas M.}}
+    author	    {Bailly Nicolas N {Bailly, Nicolas}}
+    author	    {Bourgoin Thierry T {Bourgoin, Thierry}}
+    author	    {Brusca Richard RC {Brusca, Richard C.}}
+    author	    {Cavalier-Smith Thomas T {Cavalier-Smith, Thomas}}
+    author	    {Guiry Michael MD {Guiry, Michael D.}}
+    author	    {Kirk Paul PM {Kirk, Paul M.}}
+    type            {JOUR}
+    url             {http://dx.doi.org/10.1371/journal.pone.0119248}
+    doi             {10.1371/journal.pone.0119248}
+    publisher       {Public Library of Science}
+    status          ok
+    abstract        {We present a consensus classification of life to embrace the more than 1.6 million species already provided by more than 3,000 taxonomists’ expert opinions in a unified and coherent, hierarchically ranked system known as the Catalogue of Life (CoL). The intent of this collaborative effort is to provide a hierarchical classification serving not only the needs of the CoL’s database providers but also the diverse public-domain user community, most of whom are familiar with the Linnaean conceptual system of ordering taxon relationships. This classification is neither phylogenetic nor evolutionary but instead represents a consensus view that accommodates taxonomic choices and practical compromises among diverse expert opinions, public usages, and conflicting evidence about the boundaries between taxa and the ranks of major taxa, including kingdoms. Certain key issues, some not fully resolved, are addressed in particular. Beyond its immediate use as a management tool for the CoL and ITIS (Integrated Taxonomic Information System), it is immediately valuable as a reference for taxonomic and biodiversity research, as a tool for societal communication, and as a classificatory “backbone” for biodiversity databases, museum collections, libraries, and textbooks. Such a modern comprehensive hierarchy has not previously existed at this level of specificity.}
+}
 

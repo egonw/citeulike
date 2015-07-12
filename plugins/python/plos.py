@@ -69,20 +69,20 @@ def fetch_record(url):
 	if "journals.plos.org/plosntds" in url:
 		hostname = "www.plosntds.org"
 
+        if "journals.plos.org/plosone" in url:
+                hostname = "www.plosone.org"
+
 	(type, record) = fetch_new_ris(hostname, doi)
 	if re.search('\s*TY  - ', record):
 		return (type, record)
 
-	# See if it's an old style "perlserv" record just in case
-	return fetch_old_ris(hostname, doi)
-
+        return ()
 
 def strip_markup(text):
 	p = re.compile( '<[^>]+>')
 	return p.sub("", text)
 
 def fetch_new_ris(hostname, doi):
-
 	url = "http://%s/article/getRisCitation.action?articleURI=info:doi/%s" % (hostname, urllib.quote(doi))
 
 	record = unicode(urlopen(url).read().strip(), "utf8")
@@ -90,19 +90,6 @@ def fetch_new_ris(hostname, doi):
 	record = record.replace("10.1371%2F", "10.1371/")
 	record = decode_entities(record)
 	return ("ris", record)
-
-def fetch_old_ris(hostname, doi):
-	""" Fetch the older style RIS record """
-	index_url = "http://%s/perlserv/?request=cite-builder&doi=%s" % (hostname, urllib.quote(doi))
-	index_page = urlopen(index_url).read()
-	m = re.search(r'<a href="([^"]+)">Reference Manager Format</a>', index_page)
-
-	if not m:
-		bail("Failed to fetch RIS download in %s" % index_url)
-
-	ris_url = "http://%s/perlserv/%s" % (hostname, decode_entities(m.group(1)))
-	ris = unicode(urlopen(ris_url).read().strip(), "utf8")
-	return ("ris", decode_entities(ris.replace("10.1371%2F", "10.1371/")))
 
 def emit(*k):
 	print u"\t".join([unicode(x) for x in k]).encode("utf8")
