@@ -1,4 +1,5 @@
 # Copyright (c) 2005 Richard Cameron, CiteULike.org
+#               2016 Egon Willighagen
 # All rights reserved.
 #
 # This code is derived from software contributed to CiteULike.org
@@ -66,7 +67,8 @@ test {http://dx.doi.org/10.1103/PhysRev.47.777} {
 	start_page		{777}
 	end_page		{780}
 	year			{1935}
-	month			{05}
+	month			{5}
+	day			{15}
 	title			{Can Quantum-Mechanical Description of Physical Reality Be Considered Complete?}
 	journal			{Physical Review}
 	author			{Einstein {} A {Einstein, A.}} 
@@ -75,6 +77,7 @@ test {http://dx.doi.org/10.1103/PhysRev.47.777} {
 	type			{JOUR}
 	url				http://dx.doi.org/10.1103/PhysRev.47.777
 	doi             10.1103/PhysRev.47.777
+	use_crossref		{1}
 	status 			ok
 }
 
@@ -99,6 +102,7 @@ test {http://dx.doi.org/10.1086/591837} {
 	doi             10.1086/591837
 	pub_id			10.1086/591837
 	pub_id_type		doi
+	use_crossref		{1}
 	status 			ok
 }
 
