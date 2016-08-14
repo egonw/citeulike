@@ -49,7 +49,7 @@ plugin {
 	author {Fergus Gallagher}
 	email {fergus.gallagher@citeulike.org}
 	language {perl}
-	regexp {http://dx\.doi\.org/.*}
+	regexp {http[s]?://(dx\.)?doi\.org/.*}
 }
 
 # Linkout formatting
@@ -106,6 +106,55 @@ test {http://dx.doi.org/10.1086/591837} {
 	status 			ok
 }
 
+test {http://doi.org/10.1086/591837} {
+	linkout			{DOI {} 10.1086/591837 {} {}}
+	formatted_url   {DOI http://dx.doi.org/10.1086/591837}
+	volume			{689}
+	issue			{1}
+	issn			{0004-637X}
+	start_page		{436}
+	end_page		{460}
+	year			{2008}
+	month			{12}
+	day				{10}
+	title			{Keck Laser Guide Star Adaptive Optics Monitoring of 2MASS J15344984−2952274AB: First Dynamical Mass Determination of a Binary T Dwarf}
+	journal			{The Astrophysical Journal}
+	author			{Liu Michael MC {Liu, Michael C.}}
+	author			{Dupuy Trent TJ {Dupuy, Trent J.}}
+	author			{Ireland Michael MJ {Ireland, Michael J.}}
+	type			{JOUR}
+	url				http://doi.org/10.1086/591837
+	doi             10.1086/591837
+	pub_id			10.1086/591837
+	pub_id_type		doi
+	use_crossref		{1}
+	status 			ok
+}
+
+test {https://doi.org/10.1086/591837} {
+	linkout			{DOI {} 10.1086/591837 {} {}}
+	formatted_url   {DOI http://dx.doi.org/10.1086/591837}
+	volume			{689}
+	issue			{1}
+	issn			{0004-637X}
+	start_page		{436}
+	end_page		{460}
+	year			{2008}
+	month			{12}
+	day				{10}
+	title			{Keck Laser Guide Star Adaptive Optics Monitoring of 2MASS J15344984−2952274AB: First Dynamical Mass Determination of a Binary T Dwarf}
+	journal			{The Astrophysical Journal}
+	author			{Liu Michael MC {Liu, Michael C.}}
+	author			{Dupuy Trent TJ {Dupuy, Trent J.}}
+	author			{Ireland Michael MJ {Ireland, Michael J.}}
+	type			{JOUR}
+	url				https://doi.org/10.1086/591837
+	doi             10.1086/591837
+	pub_id			10.1086/591837
+	pub_id_type		doi
+	use_crossref		{1}
+	status 			ok
+}
 
 
 

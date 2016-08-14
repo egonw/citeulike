@@ -41,12 +41,14 @@ binmode STDOUT, ":utf8";
 $in_url = <>;
 chomp($in_url);
 
-if (! $in_url =~ m{^http://dx\.doi\.org/}i ) {
+if (! $in_url =~ m{^http[s]?://(dx\.)?doi\.org/}i ) {
 	print "status\terr\t$in_url is not a DOI\n";
 	exit;
 }
 
-($doi) = $in_url =~ m{^http://dx\.doi\.org/(.*)}i;
+($dx, $doi) = $in_url =~ m{^http[s]?://(dx\.)?doi\.org/(.*)}i;
+
+$dx = ""; # not sure how to ignore the first group
 
 print "begin_tsv\n";
 print "linkout\tDOI\t\t$doi\t\t\n";
