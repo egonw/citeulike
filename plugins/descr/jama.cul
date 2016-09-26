@@ -1,43 +1,110 @@
+#
+# Copyright (C) 2005 Richard Cameron, CiteULike.org
+# All rights reserved.
+#
+# This code is derived from software contributed to CiteULike.org
+# by
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. All advertising materials mentioning features or use of this software
+#    must display the following acknowledgement:
+#        This product includes software developed by
+#		 CiteULike <http://www.citeulike.org> and its
+#		 contributors.
+# 4. Neither the name of CiteULike nor the names of its
+#    contributors may be used to endorse or promote products derived
+#    from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY CITEULIKE.ORG AND CONTRIBUTORS
+# ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+# TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS
+# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
+
+# Each plugin needs a description so the driver can advertise the details
+# to the users on the site
 plugin {
+	# Integer version number for the plugin code. When this number is incremented,
+	# CiteULike may reparse all existing articles with the new code.
 	version {1}
-	name {Journal of the American Veterinary Medical Association}
-	url {http://avmajournals.avma.org/}
+
+	# The name of the plugin, as displayed on the "CiteULike supports..." page
+	name {The Journal of the American Medical Association}
+
+	# The link the front page of this service
+	url {http://jama.jamanetwork.com}
+
+	# Any additional information which needs to be displayed to the user.
+	# E.g. "Experimental support"
 	blurb {}
-	author {Fergus Gallagher}
-	email {fergus.gallagher@citeulike.org}
-	language {python}
-	regexp {avmajournals.avma.org}
+
+	# Your name
+	author {Chris Hall}
+
+	# Your email address
+	email {chris@citeulike.org}
+
+	# Language you wrote the plugin in
+	language {tcl}
+
+	# Regular expression to match URLs that the plugin is
+	# *potentially* interested in. Any URL matching this regexp
+	# will cause your parser to be invoked. Currently, this will
+	# require fork()ing a process, so you should try to reduce the number
+	# of false positives by making your regexp as restrictive as possible.
+	#
+	# If it is not possible to determine whether or not your plugin is
+	# interested purely on the basis of the URL, you will have a chance
+	# to refine this decision in your code. For now, try to make a reasonable
+	# approximation - like, check for URLs on the right hostname
+	#
+	# Note: Some universities provide mirrors of commericial publishers' sites
+	# with different hostnames, so you should provide some leeway in your
+	# regexp if that applies to you.
+	#
+	regexp {http://[^.]+[.]jamanetwork.com/article.aspx}
 }
 
-format_linkout JAVMA {
-	return [list "Journal of the American Veterinary Medical Association" \
-			"http://avmajournals.avma.org/doi/abs/${ckey_1}"]
-}
+
+#
+# Linkout formatting
+#
+
+# CiteULike doesn't store URLs for articles.
+# Instead it stores the raw ingredients required to build the dynamically.
+# Each plugin is required to define a small procedure which does this formatting
+# See the HOWTO file for more details.
+#
+# The variables following variables are defined for your use
+# in the function: type ikey_1 ckey_1 ikey_2 ckey_2
+#
 
 
-test {http://avmajournals.avma.org/doi/abs/10.2460/javma.236.2.192} {
-	formatted_url {{Journal of the American Veterinary Medical Association} http://avmajournals.avma.org/doi/abs/10.2460/javma.236.2.192}
-	formatted_url {DOI http://dx.doi.org/10.2460/javma.236.2.192}
-	volume 236
-linkouts ->
-	linkout {JAVMA {} 10.2460/javma.236.2.192 {} {}}
-	linkout {DOI {} 10.2460/javma.236.2.192 {} {}}
-	type JOUR
-	url {http://dx.doi.org/10.2460/javma.236.2.192}
-	doi {10.2460/javma.236.2.192}
-	year 2010
-	start_page 192
-	end_page 192
-	day 15
-	issue 2
-	title {Effect of exercise and osteochondral injury on synovial fluid and serum concentrations of carboxy-terminal telopeptide fragments of type II collagen in racehorses}
-	journal {Journal of the American Veterinary Medical Association}
-	abstract {doi: 10.2460/javma.236.2.192 Objective—To investigate the effects of exercise and osteochondral injury on concentrations of carboxy-terminal telopeptide fragments of type II collagen (CTX-II) in synovial fluid (SF) and serum of Thoroughbred racehorses and to compare findings with radiographic and arthroscopic scores of joint injury severity. Animals—78 Thoroughbreds with (n = 38) and without (40) osteochondral injury. Procedures—Serum and metacarpophalangeal or carpal joint SF samples were collected from noninjured horses before and at the end of 5 to 6 months of race training (pre- and postexercise samples, respectively) and from horses with osteochondral injury (1 joint assessed/horse). Synovial fluid and serum CTX-II concentrations were determined by use of an ELISA. Radiographic and arthroscopic scores of joint injury severity were determined for the injured horses. Results—The CTX-II concentrations in SF and SF:serum CTX-II ratio were significantly higher for horses with joint injuries, compared with pre- and postexercise findings in noninjured horses. Serum CTX-II concentrations in postexercise and injured-horse samples were significantly lower than values in pre-exercise samples. On the basis of serum and SF CTX-II concentrations and SF:serum CTX-II ratio, 64% to 93% of serum and SF samples were correctly classified into their appropriate group (pre-exercise, postexercise, or injured-joint samples). In horses with joint injuries, arthroscopic scores were positively correlated with radiographic scores, but neither score correlated with SF or serum CTX-II concentration. Conclusions and Clinical Relevance—Results suggest that serum and SF CTX-II concentrations and SF:serum CTX-II ratio may be used to detect cartilage degradation in horses with joint injury. (Am J Vet Res 2010;71:33–40)}
-	author {Cleary Orlaith OB {Cleary, Orlaith B.}}
-	author {Trumble Troy TN {Trumble, Troy N.}}
-	author {Merritt Kelly KA {Merritt, Kelly A.}}
-	author {Brown Murray MP {Brown, Murray P.}}
-	month 1
-	status ok
-}
+#
+# TESTS
+#
 
+# Each plugin MUST provide a set of tests. The motivation behind this is
+# that web scraping code is inherently fragile, and is likely to break whenever
+# the provider decides to redisign their site. CiteULike will periodically
+# run tests to see if anything has broken.
+
+# Please provide as comprehensive a set of tests as possible.
+# If you ever fix a bug in the parser, it is highly recommended that
+# you add the offending page as a test case.
+
+test { none } { none }
