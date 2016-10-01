@@ -145,6 +145,45 @@ proc url_get {url {once_only 0} {mode 0}} {
 }
 
 
+#
+# Simplified version of above url_get which uses 'wget' to do the dirty work
+#
+proc url_wget {url} {
+
+	set WGET          /usr/local/bin/wget
+	set WGET_UA      "CiteULike Plugin - contact plugins@citeulike.org"
+	set WGET_TIMEOUT 60
+
+	set cmd [list $WGET --quiet --no-check-certificate -O -]
+
+	# Override user agent string with http config one if it is set
+	if {[info exists ::http::http(-useragent)]} {
+		set WGET_UA $::http::http(-useragent)
+	}
+
+	# set wget options
+	if {[info exists WGET_UA]} {
+		lappend cmd -U $WGET_UA
+	}
+	if {[info exists WGET_TIMEOUT] && $WGET_TIMEOUT ne""} {
+		lappend cmd -T $WGET_TIMEOUT
+	}
+
+	lappend cmd $url
+
+	set err [catch {
+		set fd [open [concat "|" $cmd] "r+"]
+		set page [read $fd]
+		close $fd
+	} m]
+
+	if {$err} {
+		error "Failed to fetch page ($url) with [concat $cmd]"
+	}
+
+	return $page
+}
+
 
 proc bail {error} {
 	puts "status\terr\t$error"

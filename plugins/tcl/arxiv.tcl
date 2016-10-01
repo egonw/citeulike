@@ -77,7 +77,9 @@ puts "begin_tsv"
 puts [join [list linkout ARXIV {} $id {} {}] "\t"]
 
 set arxiv_url "http://arxiv.org/abs/$id"
-set page [url_get $arxiv_url]
+
+# CJH, 2016-10-01 use url_wget (util.tcl) to fetch now arxiv.org is redirecting to https
+set page [url_wget $arxiv_url]
 
 # Again. An almighty mess. The alternative is to parse the
 # BibTeX record on the ucdavis "front" to arxiv, but this code is
