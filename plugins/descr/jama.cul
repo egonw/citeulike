@@ -43,7 +43,7 @@ plugin {
 	version {1}
 
 	# The name of the plugin, as displayed on the "CiteULike supports..." page
-	name {The Journal of the American Medical Association}
+	name {Journal of the American Medical Association}
 
 	# The link the front page of this service
 	url {http://jama.jamanetwork.com}
