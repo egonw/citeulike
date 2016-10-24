@@ -148,26 +148,74 @@ proc url_get {url {once_only 0} {mode 0}} {
 #
 # Simplified version of above url_get which uses 'wget' to do the dirty work
 #
-proc url_wget {url} {
+proc url_wget {url {args [list]}} {
 
-	set WGET          /usr/local/bin/wget
-	set WGET_UA      "CiteULike Plugin - contact plugins@citeulike.org"
-	set WGET_TIMEOUT 60
+	set WGET_local    /usr/local/bin/wget
+	set WGET_ssh      /usr/bin/wget
+	set WGET_ssh_host lurch
+	set WGET_UA       "CiteULike Plugin - contact plugins@citeulike.org"
+	set WGET_TIMEOUT  60
 
-	set cmd [list $WGET --quiet --no-check-certificate -O -]
 
+	#
 	# Override user agent string with http config one if it is set
+	#
 	if {[info exists ::http::http(-useragent)]} {
 		set WGET_UA $::http::http(-useragent)
 	}
 
+	#
+	# Default to no ssh
+	#
+	set use_ssh 0
+
+	#
+	# process args as name/value pairs
+	#
+	foreach {n v} $args {
+		if {$n eq "ssh"} {
+			if {$v eq "yes"} {
+				set use_ssh 1
+			}
+		}
+		if {$n eq "timeout"} {
+			set WGET_TIMEOUT $v
+		}
+		if {$n eq "useragent"} {
+			set WGET_UA $v
+		}
+	}
+
+	#
+	# If we're using ssh to run a remote wget, there are nasty quoting issues - a
+	# user-agent with spaces in it will get double-parsed and seen as separate words
+	# by the remote wget process and break everything. So, we bodge...
+	#
+	if {$use_ssh} {
+		if {[info exists WGET_UA]} {
+			set WGET_UA '$WGET_UA'
+		}
+	}
+
+	set cmd [list]
+
+	if {$use_ssh} {
+		lappend cmd ssh $WGET_ssh_host $WGET_ssh
+	} else {
+		lappend cmd $WGET_local
+	}
+
+	#
 	# set wget options
+	#
 	if {[info exists WGET_UA]} {
 		lappend cmd -U $WGET_UA
 	}
 	if {[info exists WGET_TIMEOUT] && $WGET_TIMEOUT ne""} {
 		lappend cmd -T $WGET_TIMEOUT
 	}
+
+	lappend cmd --quiet --no-check-certificate -O -
 
 	lappend cmd $url
 
@@ -178,7 +226,7 @@ proc url_wget {url} {
 	} m]
 
 	if {$err} {
-		error "Failed to fetch page ($url) with [concat $cmd]"
+		error "Failed to fetch page ($url) with [concat $cmd] : $::errorInfo"
 	}
 
 	return $page
