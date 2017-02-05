@@ -60,7 +60,7 @@ def canon_url(url):
 # Make up crossref metadata URL (just need the DOI)
 #
 def crossref_xml_url(doi):
-	url = "http://www.crossref.org/openurl/?id=doi:" + doi
+	url = "http://doi.crossref.org/openurl/?id=doi:" + doi
 	url += "&noredirect=true"
 	# see http://www.crossref.org/help/Content/05_Interfacing_with_the_CrossRef_system/Using_the_Open_URL_Resolver.htm
 	# key is either "username:password" or "<email>"

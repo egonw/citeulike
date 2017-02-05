@@ -490,7 +490,7 @@ proc CROSSREF::load {doi} {
 
 	set qs [::http::formatQuery id doi:$doi noredirect true pid $key format unixref]
 
-	set url "http://www.crossref.org/openurl/?$qs"
+	set url "http://doi.crossref.org/openurl/?$qs"
 
 	puts "CROSSREF::load  $url"
 
