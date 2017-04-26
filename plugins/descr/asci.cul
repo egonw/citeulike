@@ -67,8 +67,7 @@ plugin {
 	# require fork()ing a process, so you should try to reduce the number
 	# of false positives by making your regexp as restrictive as possible.
 	#
-
-	regexp {http://(insight|www).jci.org)}
+	regexp {http://(insight|www).jci.org}
 }
 
 #
