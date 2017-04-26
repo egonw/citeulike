@@ -75,7 +75,11 @@ plugin {
 #
 
 format_linkout DOI {
-	return [list "DOI" "http://dx.doi.org/10.1172/${ikey_1}"]
+	return [list "DOI" "http://dx.doi.org/10.1172/${ckey_1}"]
+}
+
+format_linkout JCI {
+	return [list "JCI" "http://www.jci.org/articles/view/${ikey_1}"]
 }
 
 #
